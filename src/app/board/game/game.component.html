@@ -1,0 +1,65 @@
+<div class="row h-100" *ngIf="game|async; else loading; let gs;">
+  <svg version="1.1" class="board p-0 col-12"
+       *ngIf="gs.isStarted()" appViewbox [viewBoxX]="gs.board.x" [viewBoxY]="gs.board.y"
+       [viewBoxWidth]="gs.board.width" [viewBoxHeight]="gs.board.height" [zoom]="gs.board.zoom">
+
+    <!-- Board grid -->
+    <svg:g appGridBoard z-index="-10" [gridX]="gs.board.x" [gridY]="gs.board.y"></svg:g>
+
+    <!-- Departure area -->
+    <svg:rect z-index="-8" *ngIf="gs.currentPlayer.isWaitingToStart()" class="departure-area"
+      [attr.x]="gs.board.departureArea.x * caseWidth"
+      [attr.y]="gs.board.departureArea.y * caseHeight"
+      [attr.width]="gs.board.departureArea.width * caseWidth"
+      [attr.height]="gs.board.departureArea.height * caseHeight"
+      [ngClass]="{'departure-area-green': gs.board.isInDeparture(gs.currentPlayer), 'departure-area-red': !gs.board.isInDeparture(gs.currentPlayer)}"></svg:rect>
+
+    <svg:line *ngFor="let line of gs.currentPlayer.checkLines;let i = index"
+          style="stroke: #FFFFFF;stroke-width: 0.3;" [ngStyle]="{'opacity': 1 / (i + 1)}"
+          appCheckLine [checkLine]="line"
+          z-index="-9"></svg:line>
+
+    <!-- Element -->
+    <svg:g *ngFor="let elt of elements|orderBy:'y';let i = index">
+      <g *ngIf="isBuoy(elt)" class="buoy-container" style="{{ 'animation-delay: ' + (0 - i) + 's' }}">
+        <image appBuoy xlink:href="" class="buoy" style="{{ 'animation-delay: ' + (0 - i) + 's' }}"
+               [svgParams]="{'buoy-color': elt.color}"
+               [x]="elt.x"
+               [y]="elt.y"></image>
+      </g>
+
+      <g appSeaElement [seaElement]="elt" *ngIf="isSeaElement(elt)">
+      </g>
+
+      <g appBoat [boat]="elt.boat" *ngIf="isBoat(elt.boat) && (elt.isStarted() || (elt.isWaitingToStart() && gs.isCurrentPlayer(elt)))">
+      </g>
+    </svg:g>
+  </svg>
+
+  <div class="col-2 player-ranking" [ngClass]="{'offset-10': gs.isWaiting()}">
+    <ul class="list-group">
+      <li class="list-group-item text-center" *ngIf="gs.players?.length > 0">
+        En course
+      </li>
+      <li class="list-group-item" *ngIf="gs.players?.length === 0">Aucun joueur</li>
+      <li class="list-group-item" *ngFor="let player of gs.players">
+        <span [ngStyle]="{'color': player.boat.color}">
+          <i class="fa fa-chevron-right" *ngIf="gs.isCurrentPlayer(player)"></i>
+          {{ player.boat.boatNumber }} - {{ player.name }}
+        </span>
+      </li>
+    </ul>
+    <ul class="list-group mt-2">
+      <li class="list-group-item text-center" *ngIf="gs.players?.length > 0">
+        Arrivé(s)
+      </li>
+    </ul>
+    <ng-template #loading></ng-template>
+  </div>
+
+  <div class="start-button-container d-flex justify-content-center align-items-center" *ngIf="gs.isWaiting()">
+    <button (click)="start(gs)" class="btn-primary-regatta-120-30">start</button>
+  </div>
+
+</div>
+

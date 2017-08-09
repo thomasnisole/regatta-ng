@@ -1,0 +1,15 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+@import "styles/variables";
+@import "styles/header";
+@import "styles/regatta-primary-button";
+@import "styles/color";
+
+html, body {
+  height: 100%;
+  background-color: $bgColor;
+}
+
+a {
+  color: $flashColor;
+}

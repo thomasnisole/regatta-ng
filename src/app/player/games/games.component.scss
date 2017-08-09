@@ -1,0 +1,16 @@
+ul.list-group {
+  margin: 0 15px;
+  li {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 10px;
+    a {
+      display: block;
+      font-size: 1.5em;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    a i {
+      float: right;
+    }
+  }
+}

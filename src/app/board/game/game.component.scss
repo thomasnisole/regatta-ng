@@ -1,0 +1,97 @@
+$departureAreaGreenFillColor: rgba(34, 178, 76, .2);
+$departureAreaGreenStrokeColor: rgba(34, 178, 76, .4);
+
+$departureAreaRedFillColor: rgba(172, 27, 33, .6);
+$departureAreaRedStrokeColor: rgba(172, 27, 33, .9);
+
+.board {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(0, 113, 171);
+
+  .departure-area {
+    stroke-width: 1;
+
+    &.departure-area-green {
+      fill: $departureAreaGreenFillColor;
+      stroke: $departureAreaGreenStrokeColor;
+    }
+
+    &.departure-area-red {
+      fill: $departureAreaRedFillColor;
+      stroke: $departureAreaRedStrokeColor;
+    }
+  }
+
+  .buoy-container {
+    animation: bob 2s infinite;
+  }
+
+  .buoy {
+    animation: swing 3s infinite;
+  }
+
+  @keyframes bob {
+    0% {
+      transform: translate(0, 0);
+      animation-timing-function: ease-in-out;
+    }
+    50% {
+      transform: translate(0, -2px);
+      animation-timing-function: ease-in-out;
+    }
+    100% {
+      transform: translate(0, 0);
+      animation-timing-function: ease-in-out;
+    }
+  }
+
+  @keyframes swing {
+    0% {
+      transform: rotate(-7deg);
+      transform-origin: 50% 85%;
+      animation-timing-function: ease-in-out;
+    }
+    50% {
+      transform: rotate(7deg);
+      transform-origin: 50% 85%;
+      animation-timing-function: ease-in-out;
+    }
+    100% {
+      transform: rotate(-7deg);
+      transform-origin: 50% 85%;
+      animation-timing-function: ease-in-out;
+    }
+  }
+}
+
+.start-button-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, .5);
+  top: 0;
+  left: 0;
+}
+
+.player-ranking {
+  padding: 0;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 200px;
+  position: absolute;
+  display: block;
+  right: 0;
+  top: 0;
+
+  .list-group-item {
+    border-radius: 0;
+
+    &:first-child {
+      font-weight: bold;
+    }
+    &:not(:first-child) {
+      font-size: 14px;
+    }
+  }
+}

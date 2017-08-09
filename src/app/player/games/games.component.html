@@ -1,0 +1,7 @@
+<h1 class="h2 header">Rejoindre une partie</h1>
+<ul class="list-group">
+  <li class="list-group-item justify-content-between" *ngFor="let game of games|async">
+    <a routerLink="{{ game.id }}">{{ game.name }}</a>
+    <span class="badge badge-default badge-pill">{{ game.players ? game.players.length : 0 }}</span>
+  </li>
+</ul>

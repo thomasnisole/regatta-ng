@@ -1,0 +1,50 @@
+@mixin vertical-align(){
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin horizontal-align(){
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@mixin circle(){
+  border-radius : 100%;
+}
+
+@mixin circleSize($value){
+  height: $value;
+  width: $value;
+  min-width: $value;
+}
+
+@mixin resetButtonStyle(){
+  border: none;
+  background: transparent;
+}
+
+@mixin regattaPrimaryButton($sizeButton, $sizeFont){
+  @include resetButtonStyle();
+  @include circle();
+  @include circleSize($sizeButton);
+  background-color: $bgButtonFlash;
+  z-index: 1000;
+  color: #fff;
+  font-size: $sizeFont;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+
+.btn-primary-regatta-100-30 {
+  @include regattaPrimaryButton(100px, 30px);
+}
+
+
+.btn-primary-regatta-120-30 {
+  @include regattaPrimaryButton(120px, 30px);
+}
