@@ -23,6 +23,6 @@ export class Board extends Rectangle {
       return false;
     }
 
-    return player.boat.isInAnotherRectangle(this.departureArea);
+    return player.boat.getCongestion().isInAnotherRectangle(this.departureArea);
   }
 }

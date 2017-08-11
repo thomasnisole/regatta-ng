@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {GamesComponent} from './games/games.component';
 import {RegisterComponent} from './register/register.component';
+import {PlayComponent} from './play/play.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
           {
             path: 'register',
             component: RegisterComponent
+          },
+          {
+            path: 'play',
+            component: PlayComponent
           }
         ]
       }

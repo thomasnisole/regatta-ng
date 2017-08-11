@@ -1,0 +1,14 @@
+@import "../../../styles/variables.scss";
+
+svg {
+  max-height: 755px;
+}
+rect.possibility {
+  fill: transparent;
+  stroke: #ccc;
+  stroke-width: 0.1;
+
+  &.card-selectable{
+    fill: #ccc;
+  }
+}

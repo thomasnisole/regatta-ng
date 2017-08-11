@@ -1,0 +1,27 @@
+<div *ngIf="player|async; else loading; let p;" class="play-board d-flex flex-column">
+  <app-card-preview style="height: 10%;"></app-card-preview>
+
+  <swiper class="flex-grow-2">
+    <div class="swiper-wrapper">
+      <app-card class="swiper-slide" *ngFor="let card of p.cards"
+                [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(card)"></app-card>
+    </div>
+  </swiper>
+
+  <app-action-nav-bar *ngIf="game.isCurrentPlayer(p)"
+                      [flagIsVisible]="p.isWaitingToStart()"
+                      [clearIsVisible]="game.previewCards?.length > 0"
+                      [trapIsVisible]="gameFlowService.canTrap(p)"
+                      [trashIsVisible]="gameFlowService.canDropCard(p)"
+                      [playIsVisible]="gameFlowService.canMove(p)"
+                      [tackIsVisible]="gameFlowService.canTack(p)"
+                      [terminateIsVisible]="gameFlowService.canTerminate(p)"
+                      (onStart)="placeRemoteIsVisible.isVisible = true;"
+                      (onMoveMap)="moveRemoteIsVisible.isVisible = true;"></app-action-nav-bar>
+
+  <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
+  <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="p"></app-place-boat-remote>
+</div>
+
+<ng-template #loading>
+</ng-template>

@@ -5,6 +5,7 @@ import {UserService} from './service/user.service';
 import {PlayerService} from './service/player.service';
 import {AuthService} from './service/auth.service';
 import {LevelParserService} from './service/level-parser.service';
+import {GameFlowService} from './service/game-flow.service';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {LevelParserService} from './service/level-parser.service';
   providers: [
     AuthService,
     GameService,
+    GameFlowService,
     LevelParserService,
     PlayerService,
     UserService

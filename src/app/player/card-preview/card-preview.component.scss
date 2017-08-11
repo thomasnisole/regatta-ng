@@ -1,0 +1,26 @@
+@import "../../../styles/variables.scss";
+
+ul.card-preview {
+  background-color: $primaryColor;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  > li.card-preview-item {
+    height: 100%;
+    display: block;
+    position: relative;
+
+    img {
+      margin-right: 2px;
+      height: 100%;
+      position: relative;
+      display: block;
+
+      &.current-card {
+        border: solid 3px white;
+      }
+    }
+  }
+}

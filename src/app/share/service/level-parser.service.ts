@@ -15,6 +15,7 @@ import {Observable} from 'rxjs/Observable';
 import {Player} from '../model/player';
 import {environment} from '../../../environments/environment';
 import {GameStatus} from '../model/game-status.enum';
+import {Card} from '../model/card';
 
 @Injectable()
 export class LevelParserService {
@@ -26,6 +27,7 @@ export class LevelParserService {
   public parse(game: Game): Observable<Game> {
     return this.db.object('/game-types/level1').map(
       (data) => {
+        console.log(data);
         game.board = new Board();
         game.board.x = 0;
         game.board.y = 0;
@@ -33,6 +35,8 @@ export class LevelParserService {
         game.board.height = environment.board.viewboxHeight;
         game.board.zoom = environment.board.viewboxHeight;
         game.currentPlayer = game.players[0];
+        game.board.buoys = [];
+        game.board.seaElements = [];
 
         const rect: Rectangle = new Rectangle();
         rect.x = data.board.departureArea.x;
@@ -45,6 +49,13 @@ export class LevelParserService {
 
         _.each(data.board.buoys, (buoy: any) => game.board.buoys.push(this.makeBuoy(buoy)));
         _.each(data.board.seaElements, (seaElement: any) => game.board.seaElements.push(this.makeSeaElement(seaElement)));
+        game.cards = [];
+        _.each(data.board.cardTypes, (cardType: any) => {
+          for (let i = 0; i < cardType.count; i++) {
+            game.cards.push(this.makeCard(cardType));
+          }
+        });
+        game.cards = _.shuffle(game.cards);
 
         this.makeLineBuoys(game.board, data.board.arrival);
 
@@ -55,6 +66,7 @@ export class LevelParserService {
           player.boat.height = data.board.boatLength;
           player.boat.orientation = data.board.boatOrientation;
           player.checkLines = this.checkLines.slice();
+          player.cards = game.cards.splice(0, environment.cardsCountPerPlayer);
         });
 
         game.status = GameStatus.STARTED;
@@ -116,5 +128,18 @@ export class LevelParserService {
     seaElement.src = data.src;
 
     return seaElement;
+  }
+
+  private makeCard(data: any): Card {
+    const card: Card = new Card();
+    card.height = data.height;
+    card.width = data.width;
+    card.name = data.name;
+    card.options = data.options;
+    card.possibilities = data.possibilities;
+    card.svgParams = data.svgParams;
+    card.type = data.type;
+
+    return card;
   }
 }

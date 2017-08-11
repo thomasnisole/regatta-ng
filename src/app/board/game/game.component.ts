@@ -27,6 +27,8 @@ export class GameComponent implements OnInit {
 
   public elements: Point[];
 
+  private g: Game;
+
   public constructor(
     private activatedRoute: ActivatedRoute,
     private gameService: GameService) { }
@@ -35,7 +37,12 @@ export class GameComponent implements OnInit {
     this.activatedRoute.params.subscribe(
       (params: any) => this.game = this.gameService
         .findById(params['id'])
-        .do((game: Game) => this.makeElements(game))
+        .do((game: Game) => {
+        this.g = game;
+          if (game.isStarted()) {
+            this.makeElements(game);
+          }
+        })
     );
   }
 

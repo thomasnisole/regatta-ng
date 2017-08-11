@@ -3,9 +3,11 @@ import {Board} from './board';
 import {JsonProperty} from 'json-typescript-mapper';
 import {dateConverter} from '../converter/date-converter';
 import {FbObjectsToArrayConverter} from '../converter/fb-objects-to-array';
-import {GameStatus} from "./game-status.enum";
+import {GameStatus} from './game-status.enum';
 import {enumConverter} from '../converter/enum-converter';
 import {Boat} from './boat';
+import * as _ from 'underscore/underscore';
+import {Card} from './card';
 
 export class Game {
   public static readonly STATES: {
@@ -14,7 +16,7 @@ export class Game {
     FINISHED: 'finished'
   };
 
-  @JsonProperty('$key')
+  @JsonProperty({name: '$key', excludeToJson: true})
   public id: string = void 0;
 
   @JsonProperty('name')
@@ -35,6 +37,12 @@ export class Game {
   @JsonProperty('board')
   public board: Board = void 0;
 
+  @JsonProperty('cards')
+  public cards: Card[] = [];
+
+  @JsonProperty('previewCards')
+  public previewCards: Card[] = [];
+
   @JsonProperty({name: 'createdAt', clazz: Date, customConverter: dateConverter})
   public createdAt: Date = new Date();
 
@@ -53,12 +61,20 @@ export class Game {
     return this.status === GameStatus.STARTED;
   }
 
+  public getCurrentPlayer(): Player {
+    return _.find(this.players, (player: Player) => this.isCurrentPlayer(player));
+  }
+
+  public getPlayer(userId: string): Player {
+    return _.find(this.players, (player: Player) => player.userId === userId);
+  }
+
   public isCurrentPlayer(player: Player): boolean {
     if (!this.currentPlayer) {
       return false;
     }
 
-    return player.boat.boatNumber === this.currentPlayer.boat.boatNumber;
+    return player.userId === this.currentPlayer.userId;
   }
 
   public isCurrentBoat(boat: Boat): boolean {

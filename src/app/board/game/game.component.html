@@ -7,14 +7,14 @@
     <svg:g appGridBoard z-index="-10" [gridX]="gs.board.x" [gridY]="gs.board.y"></svg:g>
 
     <!-- Departure area -->
-    <svg:rect z-index="-8" *ngIf="gs.currentPlayer.isWaitingToStart()" class="departure-area"
+    <svg:rect z-index="-8" *ngIf="gs.getCurrentPlayer().isWaitingToStart()" class="departure-area"
       [attr.x]="gs.board.departureArea.x * caseWidth"
       [attr.y]="gs.board.departureArea.y * caseHeight"
       [attr.width]="gs.board.departureArea.width * caseWidth"
       [attr.height]="gs.board.departureArea.height * caseHeight"
-      [ngClass]="{'departure-area-green': gs.board.isInDeparture(gs.currentPlayer), 'departure-area-red': !gs.board.isInDeparture(gs.currentPlayer)}"></svg:rect>
+      [ngClass]="{'departure-area-green': gs.board.isInDeparture(gs.getCurrentPlayer()), 'departure-area-red': !gs.board.isInDeparture(gs.getCurrentPlayer())}"></svg:rect>
 
-    <svg:line *ngFor="let line of gs.currentPlayer.checkLines;let i = index"
+    <svg:line *ngFor="let line of gs.getCurrentPlayer().checkLines;let i = index"
           style="stroke: #FFFFFF;stroke-width: 0.3;" [ngStyle]="{'opacity': 1 / (i + 1)}"
           appCheckLine [checkLine]="line"
           z-index="-9"></svg:line>

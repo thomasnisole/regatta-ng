@@ -7,6 +7,7 @@ import {serialize} from 'json-typescript-mapper';
 import {Boat} from '../model/boat';
 import {Orientation} from '../model/orientation.enum';
 import {PlayerStatus} from '../model/player-status.enum';
+import {removeUndefined} from '../utils';
 
 @Injectable()
 export class PlayerService {
@@ -28,6 +29,34 @@ export class PlayerService {
     player.boat.width = 0;
     player.boat.height = 0;
 
-    this.db.list('/games/' + game.id + '/players/').push(serialize(player));
+    this.db
+      .list('/games/' + game.id + '/players/')
+      .push(removeUndefined(serialize(player)));
+  }
+
+  public moveBoat(boat: Boat, deltaX: number, deltaY: number, deltaAngle: number) {
+    boat.x += deltaX;
+    boat.y += deltaY;
+    boat.orientation += deltaAngle;
+
+    if (boat.orientation > 270) {
+      boat.orientation = Orientation.TOP;
+    } else if (boat.orientation < 0) {
+      boat.orientation = Orientation.LEFT;
+    }
+  }
+
+  public startPlayer(player: Player, game: Game) {
+    if (game.board.isInDeparture(player)) {
+      player.status = PlayerStatus.WAITING_TO_PLAY;
+    }
+
+    return player.isStarted();
+  }
+
+  public update(player: Player, game: Game) {
+    this.db
+      .object('/games/' + game.id + '/players/' + player.id)
+      .update(removeUndefined(serialize(player)));
   }
 }

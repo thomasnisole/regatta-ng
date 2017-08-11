@@ -4,6 +4,7 @@ import {enumConverter} from '../converter/enum-converter';
 import {PlayerStatus} from './player-status.enum';
 import {Boat} from './boat';
 import {Line} from './line';
+import {Card} from './card';
 
 export class Player extends FbIdentifiable {
 
@@ -22,6 +23,9 @@ export class Player extends FbIdentifiable {
   @JsonProperty({name: 'checkLines', clazz: Line})
   public checkLines: Line[] = [];
 
+  @JsonProperty('cards')
+  public cards: Card[] = [];
+
   public y: number;
 
   public isWaitingToStart(): boolean {
@@ -29,10 +33,6 @@ export class Player extends FbIdentifiable {
   }
 
   public isStarted(): boolean {
-    return this.status === PlayerStatus.STARTED;
-  }
-
-  public isFinished(): boolean {
-    return this.status === PlayerStatus.FINISHED;
+    return this.status > PlayerStatus.WAITING_TO_START;
   }
 }

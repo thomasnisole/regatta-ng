@@ -10,11 +10,16 @@ import 'rxjs/add/operator/do';
 import * as _ from 'underscore/underscore';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
+import {removeUndefined} from '../utils';
+import {environment} from '../../../environments/environment';
+import {Player} from '../model/player';
 
 @Injectable()
 export class GameService {
 
-  public constructor(private db: AngularFireDatabase, private levelParser: LevelParserService){ }
+  public constructor(
+    private db: AngularFireDatabase,
+    private levelParser: LevelParserService) { }
 
   public findAllWaiting(): Observable<Game[]> {
     return this.db
@@ -39,13 +44,11 @@ export class GameService {
     const game = new Game();
     game.name = name;
     game.password = password;
-    delete game.id;
-    delete game.board;
 
     return Observable.create(observer => {
       this.db
         .list('/games')
-        .push(serialize(game))
+        .push(removeUndefined(serialize(game)))
         .then((o: DataSnapshot) => {
           game.id = o.key;
           observer.next(game);
@@ -59,10 +62,7 @@ export class GameService {
         .parse(game)
         .subscribe(
         (completeGame: Game) => {
-          const gameSeria = serialize(completeGame);
-          delete gameSeria.$key;
-
-          console.log(gameSeria);
+          const gameSeria = removeUndefined(serialize(completeGame));
 
           this.db
             .object('/games/' + completeGame.id)
@@ -73,5 +73,29 @@ export class GameService {
         }
       );
     });
+  }
+
+  public moveMap(game: Game, deltaX: number, deltaY: number) {
+    game.board.x += deltaX;
+    game.board.y += deltaY;
+  }
+
+  public zoomMap(game: Game, deltaZoom: number) {
+    game.board.zoom += deltaZoom;
+  }
+
+  public resetOnCurrentPlayer(game: Game) {
+    const player: Player = game.getCurrentPlayer();
+    game.board.x =
+      player.boat.x - (game.board.width / environment.board.caseDimensions.width) / 2;
+    game.board.x *= environment.board.caseDimensions.width;
+    game.board.y =
+      player.boat.y - (game.board.height / environment.board.caseDimensions.height) / 2;
+    game.board.y *= environment.board.caseDimensions.height;
+    game.board.zoom = environment.board.viewboxHeight;
+  }
+
+  public update(game: Game) {
+    this.db.object('/games/' + game.id).update(removeUndefined(serialize(game)));
   }
 }

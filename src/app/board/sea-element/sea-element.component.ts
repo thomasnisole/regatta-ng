@@ -19,7 +19,7 @@ export class SeaElementComponent implements OnInit {
   }
 
   public get href(): string {
-    return environment.svgServerUrl + this.seaElement.src;
+    return environment.svgServerUrl + encodeURIComponent(this.seaElement.src);
   }
 
   public get seaElementX(): number {

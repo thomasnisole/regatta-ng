@@ -5,6 +5,7 @@ import 'rxjs/add/observable/of';
 import {deserialize, serialize} from 'json-typescript-mapper';
 import {AuthService} from './auth.service';
 import {AngularFireDatabase} from 'angularfire2/database';
+import {removeUndefined} from '../utils';
 
 @Injectable()
 export class UserService {
@@ -26,7 +27,7 @@ export class UserService {
 
         this.user = deserialize(User, user);
 
-        this.db.object('/users/' + user.uid).update(serialize(this.user));
+        this.db.object('/users/' + user.uid).update(removeUndefined(serialize(this.user)));
 
         this.user.id = user.uid;
 

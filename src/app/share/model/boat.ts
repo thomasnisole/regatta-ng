@@ -46,16 +46,16 @@ export class Boat extends Rectangle {
       case Orientation.RIGHT:
         rect.x = this.x - ((this.height - 1) / 2);
         rect.y = this.y;
-        rect.width = this.height - 1;
-        rect.height = this.width - 1;
+        rect.width = this.height;
+        rect.height = this.width;
         break;
 
       case Orientation.TOP:
       case Orientation.BOTTOM:
         rect.x = this.x;
         rect.y = this.y - ((this.height - 1) / 2);
-        rect.width = this.width - 1;
-        rect.height = this.height - 1;
+        rect.width = this.width;
+        rect.height = this.height;
 
         break;
     }

@@ -1,0 +1,10 @@
+<app-remote (onLeft)="moveLeft()"
+            (onRight)="moveRight()"
+            (onTop)="moveTop()"
+            (onBottom)="moveBottom()"
+            (onZoomIn)="zoomIn()"
+            (onZoomOut)="zoomOut()"
+            (onReset)="reset()"
+            (onDblClick)="isVisible = !isVisible"
+            [isVisible]="isVisible">
+</app-remote>

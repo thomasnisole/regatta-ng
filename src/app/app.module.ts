@@ -10,6 +10,8 @@ import {AngularFireDatabaseModule} from 'angularfire2/database';
 import {AngularFireAuthModule} from 'angularfire2/auth';
 import {ShareModule} from './share/share.module';
 import {UserGuard} from './user.guard';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {SwiperModule} from 'angular2-useful-swiper';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {UserGuard} from './user.guard';
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     BrowserModule,
-    ShareModule
+    NgbModule.forRoot(),
+    ShareModule,
+    SwiperModule
   ],
   providers: [UserGuard],
   bootstrap: [AppComponent]
