@@ -6,4 +6,12 @@
   max-height: 100%;
   max-width: 100%;
   background-color: $bgColor;
+
+  app-card-preview {
+    height: 10%;
+  }
+
+  swiper {
+    height: 80%;
+  }
 }

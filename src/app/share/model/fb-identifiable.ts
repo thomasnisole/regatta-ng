@@ -1,3 +1,3 @@
 export abstract class FbIdentifiable {
-  public id: number;
+  public id: string;
 }

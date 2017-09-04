@@ -8,6 +8,7 @@ import {User} from '../../share/model/user';
 import {Player} from '../../share/model/player';
 import {GameFlowService} from '../../share/service/game-flow.service';
 import {Card} from "../../share/model/card";
+import {PlayerService} from '../../share/service/player.service';
 
 @Component({
   selector: 'app-play',
@@ -26,7 +27,8 @@ export class PlayComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private gameService: GameService,
     private userService: UserService,
-    protected gameFlowService: GameFlowService) { }
+    protected gameFlowService: GameFlowService,
+    private playerService: PlayerService) { }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -37,10 +39,18 @@ export class PlayComponent implements OnInit {
           .flatMap((user: User) => this.gameService
             .findById(params['id'])
             .do((game: Game) => this.game = game)
-            .map((game: Game) => game.getPlayer(user.id))
+            .map((game: Game) => game.getPlayerByUserId(user.id))
           );
       }
     );
+  }
+
+  public tack(player: Player, degres: number): void {
+    this.playerService.tack(player, degres);
+    this.playerService.update(player, this.game);
+
+    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+    this.gameService.update(this.game);
   }
 
   public canDisplayPossibilities(card: Card): boolean {

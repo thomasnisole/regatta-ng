@@ -34,7 +34,8 @@ export class GameFlowService {
           PlayerStatus.MOVE_SW_PLAYED,
           PlayerStatus.MOVE_CLOUD_PLAYED,
           PlayerStatus.CARD_DROPPED,
-          PlayerStatus.TRAP_PLAYED
+          PlayerStatus.TRAP_PLAYED,
+          PlayerStatus.TACKED
         ],
         player.status
       ) !== -1;

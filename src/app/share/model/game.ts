@@ -65,8 +65,12 @@ export class Game {
     return _.find(this.players, (player: Player) => this.isCurrentPlayer(player));
   }
 
-  public getPlayer(userId: string): Player {
+  public getPlayerByUserId(userId: string): Player {
     return _.find(this.players, (player: Player) => player.userId === userId);
+  }
+
+  public getPlayerByPlayerId(playerId: string): Player {
+    return _.find(this.players, (player: Player) => player.id === playerId);
   }
 
   public isCurrentPlayer(player: Player): boolean {

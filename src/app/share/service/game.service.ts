@@ -13,6 +13,7 @@ import DataSnapshot = firebase.database.DataSnapshot;
 import {removeUndefined} from '../utils';
 import {environment} from '../../../environments/environment';
 import {Player} from '../model/player';
+import {PlayerStatus} from '../model/player-status.enum';
 
 @Injectable()
 export class GameService {
@@ -93,6 +94,11 @@ export class GameService {
       player.boat.y - (game.board.height / environment.board.caseDimensions.height) / 2;
     game.board.y *= environment.board.caseDimensions.height;
     game.board.zoom = environment.board.viewboxHeight;
+  }
+
+  public changeCurrentPlayer(nextPlayerId: string, game: Game) {
+    game.currentPlayer = game.getPlayerByPlayerId(nextPlayerId);
+    game.getCurrentPlayer().status = PlayerStatus.WAITING_TO_PLAY;
   }
 
   public update(game: Game) {

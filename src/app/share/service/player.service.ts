@@ -54,6 +54,11 @@ export class PlayerService {
     return player.isStarted();
   }
 
+  public tack(player: Player, degres: number): void {
+    this.moveBoat(player.boat, 0, 0, degres);
+    player.status = PlayerStatus.TERMINATED;
+  }
+
   public update(player: Player, game: Game) {
     this.db
       .object('/games/' + game.id + '/players/' + player.id)

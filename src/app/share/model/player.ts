@@ -26,6 +26,9 @@ export class Player extends FbIdentifiable {
   @JsonProperty('cards')
   public cards: Card[] = [];
 
+  @JsonProperty('nextPlayer')
+  public nextPlayer: string = void 0;
+
   public y: number;
 
   public isWaitingToStart(): boolean {

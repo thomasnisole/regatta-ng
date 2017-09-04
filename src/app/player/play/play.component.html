@@ -1,5 +1,5 @@
 <div *ngIf="player|async; else loading; let p;" class="play-board d-flex flex-column">
-  <app-card-preview style="height: 10%;"></app-card-preview>
+  <app-card-preview></app-card-preview>
 
   <swiper class="flex-grow-2">
     <div class="swiper-wrapper">
@@ -17,7 +17,8 @@
                       [tackIsVisible]="gameFlowService.canTack(p)"
                       [terminateIsVisible]="gameFlowService.canTerminate(p)"
                       (onStart)="placeRemoteIsVisible.isVisible = true;"
-                      (onMoveMap)="moveRemoteIsVisible.isVisible = true;"></app-action-nav-bar>
+                      (onMoveMap)="moveRemoteIsVisible.isVisible = true;"
+                      (onTackBabord)="tack(p, -90)" (onTackTribord)="tack(p, 90)"></app-action-nav-bar>
 
   <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
   <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="p"></app-place-boat-remote>
