@@ -26,18 +26,4 @@ export class GameFlowService {
   public canTack(player: Player): boolean {
     return player.status === PlayerStatus.WAITING_TO_PLAY;
   }
-
-  public canTerminate(player: Player): boolean {
-    return _.indexOf(
-        [
-          PlayerStatus.MOVE_PLAYED,
-          PlayerStatus.MOVE_SW_PLAYED,
-          PlayerStatus.MOVE_CLOUD_PLAYED,
-          PlayerStatus.CARD_DROPPED,
-          PlayerStatus.TRAP_PLAYED,
-          PlayerStatus.TACKED
-        ],
-        player.status
-      ) !== -1;
-  }
 }

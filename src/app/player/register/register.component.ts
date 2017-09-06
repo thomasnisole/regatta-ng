@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {Game} from '../../share/model/game';
 import {GameService} from '../../share/service/game.service';
@@ -8,6 +8,7 @@ import {User} from '../../share/model/user';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
 import {PlayerService} from '../../share/service/player.service';
+import {Player} from '../../share/model/player';
 
 @Component({
   selector: 'app-register',
@@ -53,7 +54,8 @@ export class RegisterComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private gameService: GameService,
     private userService: UserService,
-    private playerService: PlayerService) { }
+    private playerService: PlayerService,
+    private router: Router) { }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -68,6 +70,10 @@ export class RegisterComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    this.playerService.create(this.gameToJoin, this.user, this.boatNumber, this.selectedColor);
+    this.playerService
+      .create(this.gameToJoin, this.user, this.boatNumber, this.selectedColor)
+      .subscribe(
+        (player: Player) => this.router.navigate(['/player/games', this.gameToJoin.id, 'play'])
+      );
   }
 }

@@ -7,8 +7,11 @@ import {Game} from '../../share/model/game';
 import {User} from '../../share/model/user';
 import {Player} from '../../share/model/player';
 import {GameFlowService} from '../../share/service/game-flow.service';
-import {Card} from "../../share/model/card";
+import {Card} from '../../share/model/card';
 import {PlayerService} from '../../share/service/player.service';
+import * as _ from 'underscore/underscore';
+import {ToastsManager} from 'ng2-toastr';
+import {serialize} from 'json-typescript-mapper';
 
 @Component({
   selector: 'app-play',
@@ -51,6 +54,26 @@ export class PlayComponent implements OnInit {
 
     this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
     this.gameService.update(this.game);
+  }
+
+  public dropCards(player: Player): void {
+    const cardsToDrop: Card[] = _.filter(player.cards, (card: Card) => card.selectedToDrop);
+
+    this.playerService.dropCards(player, this.game, cardsToDrop);
+    this.playerService.takeCards(player, this.game, cardsToDrop.length);
+
+    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+    this.gameService.update(this.game);
+  }
+
+  public canTerminateCurrentAction(player: Player, mode: string): boolean {
+    if (mode === 'trash') {
+      const cardsToDrop = _.filter(player.cards, (card: Card) => card.selectedToDrop);
+
+      return cardsToDrop.length <= 3 && cardsToDrop.length > 0;
+    }
+
+    return false;
   }
 
   public canDisplayPossibilities(card: Card): boolean {

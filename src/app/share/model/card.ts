@@ -9,7 +9,7 @@ export class Card {
   public name: string = void 0;
 
   @JsonProperty('svgParams')
-  public svgParams: object = void 0;
+  public svgParams: any[] = void 0;
 
   @JsonProperty({name: 'type', customConverter: enumConverter})
   public type: CardType = void 0;
@@ -18,11 +18,13 @@ export class Card {
   public options: OptionCard[] = void 0;
 
   @JsonProperty('possibilities')
-  public possibilities: object = void 0;
+  public possibilities: any[] = void 0;
 
   @JsonProperty('width')
   public width: number = void 0;
 
   @JsonProperty('height')
   public height: number = void 0;
+
+  public selectedToDrop: boolean = void 0;
 }

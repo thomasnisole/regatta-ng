@@ -28,7 +28,6 @@ export class ActionNavBarComponent implements OnInit {
   @Input()
   public terminateIsVisible: boolean;
 
-  @Input()
   public mode: string;
 
   @Output()
@@ -55,6 +54,9 @@ export class ActionNavBarComponent implements OnInit {
   @Output()
   public onClearPreview: EventEmitter<void> = new EventEmitter<void>();
 
+  @Output()
+  public onModeChange: EventEmitter<string> = new EventEmitter<string>();
+
   public currentAction: EventEmitter<void>;
 
   public constructor() { }
@@ -62,20 +64,24 @@ export class ActionNavBarComponent implements OnInit {
   public ngOnInit(): void {
     this.currentAction = this.onPlay;
     this.mode = 'play';
+    this.onModeChange.emit(this.mode);
   }
 
   public changeToPlayMode(): void {
     this.mode = 'play';
     this.currentAction = this.onPlay;
+    this.onModeChange.emit(this.mode);
   }
 
   public changeToTrashMode(): void {
     this.mode = 'trash';
     this.currentAction = this.onTrash;
+    this.onModeChange.emit(this.mode);
   }
 
   public changeToTrapMode(): void {
     this.mode = 'trap';
     this.currentAction = this.onTrap;
+    this.onModeChange.emit(this.mode);
   }
 }

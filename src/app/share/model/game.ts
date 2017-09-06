@@ -37,10 +37,13 @@ export class Game {
   @JsonProperty('board')
   public board: Board = void 0;
 
-  @JsonProperty('cards')
+  @JsonProperty({name: 'cards', clazz: Card})
   public cards: Card[] = [];
 
-  @JsonProperty('previewCards')
+  @JsonProperty({name: 'droppedCards', clazz: Card})
+  public droppedCards: Card[] = [];
+
+  @JsonProperty({name: 'previewCards', clazz: Card})
   public previewCards: Card[] = [];
 
   @JsonProperty({name: 'createdAt', clazz: Date, customConverter: dateConverter})

@@ -12,3 +12,22 @@ rect.possibility {
     fill: #ccc;
   }
 }
+
+.card-overlay {
+  .select-card-button {
+    background: $overlayBgColor;
+    color: #bbb;
+    border: solid 1px #fff;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+
+    &.active {
+      color: #fff;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

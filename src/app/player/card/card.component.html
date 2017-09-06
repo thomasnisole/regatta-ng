@@ -28,4 +28,11 @@
     <svg:image [attr.xlink:href]="href" x="5" y="5" width="55" height="70" preserveAspectRatio="none">
     </svg:image>
   </svg:g>
+
+  <svg:foreignObject width="28" height="24" x="18.5" y="28"
+                 *ngIf="isInTrashMode" class="card-overlay">
+    <xhtml:button class="select-card-button" [ngClass]="{ 'active': card.selectedToDrop }" (click)="card.selectedToDrop = !card.selectedToDrop">
+      <i class="fa fa-check"></i>
+    </xhtml:button>
+  </svg:foreignObject>
 </svg>

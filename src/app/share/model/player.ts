@@ -23,7 +23,7 @@ export class Player extends FbIdentifiable {
   @JsonProperty({name: 'checkLines', clazz: Line})
   public checkLines: Line[] = [];
 
-  @JsonProperty('cards')
+  @JsonProperty({name: 'cards', clazz: Card})
   public cards: Card[] = [];
 
   @JsonProperty('nextPlayer')

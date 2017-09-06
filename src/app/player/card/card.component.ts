@@ -16,6 +16,9 @@ export class CardComponent implements OnInit {
   @Input()
   public canDisplayPossibilities: boolean;
 
+  @Input()
+  public isInTrashMode: boolean;
+
   private params: string;
 
   public constructor() { }

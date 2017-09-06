@@ -12,6 +12,7 @@ import {ShareModule} from './share/share.module';
 import {UserGuard} from './user.guard';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SwiperModule} from 'angular2-useful-swiper';
+import {ToastModule} from 'ng2-toastr';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {SwiperModule} from 'angular2-useful-swiper';
     BrowserModule,
     NgbModule.forRoot(),
     ShareModule,
-    SwiperModule
+    SwiperModule,
+    ToastModule.forRoot()
   ],
   providers: [UserGuard],
   bootstrap: [AppComponent]
