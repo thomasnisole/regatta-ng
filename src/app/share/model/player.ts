@@ -5,6 +5,7 @@ import {PlayerStatus} from './player-status.enum';
 import {Boat} from './boat';
 import {Line} from './line';
 import {Card} from './card';
+import * as _ from 'underscore/underscore';
 
 export class Player extends FbIdentifiable {
 
@@ -37,5 +38,9 @@ export class Player extends FbIdentifiable {
 
   public isStarted(): boolean {
     return this.status > PlayerStatus.WAITING_TO_START;
+  }
+
+  public hasPreviewedCards(): boolean {
+    return _.filter(this.cards, (c: Card) => c.previewPossibility).length > 0;
   }
 }

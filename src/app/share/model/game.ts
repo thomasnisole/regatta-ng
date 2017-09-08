@@ -43,9 +43,6 @@ export class Game {
   @JsonProperty({name: 'droppedCards', clazz: Card})
   public droppedCards: Card[] = [];
 
-  @JsonProperty({name: 'previewCards', clazz: Card})
-  public previewCards: Card[] = [];
-
   @JsonProperty({name: 'createdAt', clazz: Date, customConverter: dateConverter})
   public createdAt: Date = new Date();
 

@@ -26,5 +26,11 @@ export class Card {
   @JsonProperty('height')
   public height: number = void 0;
 
+  @JsonProperty('previewOrder')
+  public previewOrder: number = void 0;
+
+  @JsonProperty('previewPossibility')
+  public previewPossibility: number = void 0;
+
   public selectedToDrop: boolean = void 0;
 }

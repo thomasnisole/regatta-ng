@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {Player} from '../model/player';
 import * as _ from 'underscore/underscore';
 import {PlayerStatus} from '../model/player-status.enum';
+import {Card} from '../model/card';
+import {CardType} from '../model/card-type.enum';
 
 @Injectable()
 export class GameFlowService {
@@ -20,7 +22,10 @@ export class GameFlowService {
   }
 
   public canMove(player: Player): boolean {
-    return player.status === PlayerStatus.WAITING_TO_PLAY;
+    return _.indexOf(
+        [PlayerStatus.WAITING_TO_PLAY, PlayerStatus.MOVE_SW_PLAYED],
+        player.status
+      ) !== -1;
   }
 
   public canTack(player: Player): boolean {

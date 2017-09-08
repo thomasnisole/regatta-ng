@@ -1,5 +1,5 @@
 <ul class="card-preview m-0">
-  <li *ngFor="let card of cards" class="card-preview-item">
-    <img class="card" [attr.src]="">
+  <li *ngFor="let card of cardsToDisplay" class="card-preview-item">
+    <img class="card" [attr.src]="getHref(card)">
   </li>
 </ul>

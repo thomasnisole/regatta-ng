@@ -10,8 +10,7 @@ import {GameFlowService} from '../../share/service/game-flow.service';
 import {Card} from '../../share/model/card';
 import {PlayerService} from '../../share/service/player.service';
 import * as _ from 'underscore/underscore';
-import {ToastsManager} from 'ng2-toastr';
-import {serialize} from 'json-typescript-mapper';
+import {CardType} from '../../share/model/card-type.enum';
 
 @Component({
   selector: 'app-play',
@@ -76,7 +75,41 @@ export class PlayComponent implements OnInit {
     return false;
   }
 
-  public canDisplayPossibilities(card: Card): boolean {
+  public canDisplayPossibilities(player: Player, card: Card, mode: string): boolean {
+    if (card.type === CardType.TRAP) {
+      return false;
+    }
+
+    if (mode !== 'play') {
+      return false;
+    }
+
+    if (!this.gameFlowService.canMove(player)) {
+      return false;
+    }
+
+    if (_.filter(player.cards, (c: Card) => c.previewPossibility).length >= 2) {
+      return false;
+    }
+
+    if (card.previewPossibility) {
+      return false;
+    }
+
     return true;
+  }
+
+  public previewCard(card: Card, player: Player): void {
+    card.previewOrder = _.filter(player.cards, (c: Card) => c.previewPossibility).length;
+    this.playerService.update(player, this.game);
+  }
+
+  public clearPreview(player: Player): void {
+    _.each(player.cards, (card: Card) => {
+      card.previewPossibility = void 0;
+      card.previewOrder = void 0;
+    });
+
+    this.playerService.update(player, this.game);
   }
 }

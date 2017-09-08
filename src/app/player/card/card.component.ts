@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
 import {environment} from '../../../environments/environment';
@@ -21,7 +21,11 @@ export class CardComponent implements OnInit {
 
   private params: string;
 
-  public constructor() { }
+  @Output()
+  public clickOnPossibility: EventEmitter<Card> = new EventEmitter<Card>();
+
+  public constructor() {
+  }
 
   public ngOnInit(): void {
     this.params = '';
@@ -36,5 +40,15 @@ export class CardComponent implements OnInit {
 
   public isPossibilitySelectable(index: number): boolean {
     return _.indexOf(Object.keys(this.card.possibilities), String(index)) !== -1;
+  }
+
+  public onClickOnPossibility(possibility: number) {
+    if (!this.isPossibilitySelectable(possibility)) {
+      return;
+    }
+
+    this.card.previewPossibility = possibility;
+
+    this.clickOnPossibility.emit(this.card);
   }
 }
