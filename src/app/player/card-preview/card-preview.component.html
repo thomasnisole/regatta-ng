@@ -1,5 +1,10 @@
 <ul class="card-preview m-0">
-  <li *ngFor="let card of cardsToDisplay" class="card-preview-item">
-    <img class="card" [attr.src]="getHref(card)">
-  </li>
+  <ng-container *ngFor="let card of cardsToDisplay">
+    <li class="card-preview-item">
+      <img class="card" [attr.src]="getHref(card)">
+    </li>
+    <li class="card-preview-item" *ngIf="card.hasCloudOption() && card.previewPossibilities.length === 2">
+      <img class="card" [attr.src]="getHref(card)">
+    </li>
+  </ng-container>
 </ul>

@@ -13,7 +13,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { RemoteComponent } from './remote/remote.component';
 import { PlaceBoatRemoteComponent } from './place-boat-remote/place-boat-remote.component';
 import { MoveMapRemoteComponent } from './move-map-remote/move-map-remote.component';
-import { CardComponent } from './card/card.component';
+import { CardToPlayComponent } from './card-to-play/card-to-play.component';
 import {SwiperModule} from 'angular2-useful-swiper';
 
 @NgModule({
@@ -35,7 +35,7 @@ import {SwiperModule} from 'angular2-useful-swiper';
     RemoteComponent,
     PlaceBoatRemoteComponent,
     MoveMapRemoteComponent,
-    CardComponent
+    CardToPlayComponent
   ]
 })
 export class PlayerModule {}

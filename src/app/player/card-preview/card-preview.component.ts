@@ -20,7 +20,7 @@ export class CardPreviewComponent implements OnInit {
   }
 
   public get cardsToDisplay(): Card[] {
-    return _.sortBy(_.filter(this.cards, (c: Card) => c.previewPossibility), 'previewOrder');
+    return _.sortBy(_.filter(this.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
   }
 
   public getHref(card: Card): string {

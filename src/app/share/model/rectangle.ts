@@ -10,7 +10,6 @@ export class Rectangle extends Point {
   public height: number = void 0;
 
   public isInAnotherRectangle(rect: Rectangle): boolean {
-    console.log(this, rect);
     const rectX2 = rect.x + rect.width;
     const rectY2 = rect.y + rect.height;
 

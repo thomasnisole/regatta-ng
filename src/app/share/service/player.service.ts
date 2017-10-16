@@ -11,11 +11,13 @@ import {removeUndefined} from '../utils';
 import {Card} from '../model/card';
 import * as _ from 'underscore/underscore';
 import {Observable} from 'rxjs/Observable';
+import {CardService} from './card.service';
+import {Point} from '../model/point';
 
 @Injectable()
 export class PlayerService {
 
-  public constructor(private db: AngularFireDatabase) { }
+  public constructor(private db: AngularFireDatabase, private cardService: CardService) { }
 
   public create(game: Game, user: User, boatNumber: number, color: any): Observable<Player> {
     const player = new Player();
@@ -85,6 +87,63 @@ export class PlayerService {
 
     player.cards = player.cards.concat(game.cards.splice(0, nbrCard));
     player.status = PlayerStatus.TERMINATED;
+  }
+
+  public previewCard(player: Player, card: Card): void {
+    const previewedCard = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), (c: Card) => c.previewOrder);
+    card.previewOrder = previewedCard.length;
+    let departure: Point;
+    let firstTime: boolean = true;
+    const indexPossibility = _.last(card.previewPossibilities);
+
+    if (previewedCard.length > 1 || (previewedCard.length === 1 && card.previewPossibilities.length > 1)) {
+      const lastCard: Card = previewedCard[previewedCard.length > 1 ? previewedCard.length - 2 : 0];
+      const b: Boat = _.clone(player.boat);
+      b.orientation = card.lastOrientationDeparture = card.lastOrientationArriving = lastCard.lastOrientationArriving;
+      const arriving = this.cardService.findBoatFromArriving(lastCard, b);
+      b.x = arriving.x;
+      b.y = arriving.y;
+      departure = this.cardService.findDepartureFromBoat(b);
+    } else {
+      departure = this.cardService.findDepartureFromBoat(player.boat);
+      card.lastOrientationDeparture = card.lastOrientationArriving = player.boat.orientation;
+    }
+    firstTime = false;
+
+    card.lastXDeparture = card.lastXArriving = departure.x;
+    card.lastYDeparture = card.lastYArriving = departure.y;
+
+    _.each(card.possibilities[indexPossibility].moves, (move: any) => {
+      console.log(card.lastOrientationDeparture);
+      if (card.lastOrientationDeparture === Orientation.TOP) {
+        card.xArriving[card.xArriving.length - 1] -= move.x;
+        card.yArriving[card.yArriving.length - 1] -= move.y;
+      } else if (card.lastOrientationDeparture === Orientation.BOTTOM) {
+        card.xArriving[card.xArriving.length - 1] += move.x;
+        card.yArriving[card.yArriving.length - 1] += move.y;
+      } else if (card.lastOrientationDeparture === Orientation.LEFT) {
+        card.xArriving[card.xArriving.length - 1] -= move.y;
+        card.yArriving[card.yArriving.length - 1] += move.x;
+      } else if (card.lastOrientationDeparture === Orientation.RIGHT) {
+        card.xArriving[card.xArriving.length - 1] += move.y;
+        card.yArriving[card.yArriving.length - 1] -= move.x;
+      }
+    });
+
+    card.orientationArriving[card.orientationArriving.length - 1] += card.possibilities[indexPossibility].rotate;
+    if (card.lastOrientationArriving > 270) {
+      card.orientationArriving[card.orientationArriving.length - 1] = Orientation.TOP;
+    } else if (card.lastOrientationArriving < 0) {
+      card.orientationArriving[card.orientationArriving.length - 1] = Orientation.LEFT;
+    }
+
+    console.log(card);
+  }
+
+  public play(player: Player, game: Game): boolean {
+
+
+    return false;
   }
 
   public update(player: Player, game: Game) {

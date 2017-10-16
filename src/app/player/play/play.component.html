@@ -3,9 +3,9 @@
 
   <swiper class="flex-grow-2">
     <div class="swiper-wrapper">
-      <app-card class="swiper-slide" *ngFor="let card of p.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
+      <app-card-to-play class="swiper-slide" *ngFor="let card of p.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
                 [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(p, card, actionNavBar.mode)"
-                (clickOnPossibility)="previewCard($event, p)"></app-card>
+                (clickOnPossibility)="previewCard($event, p)"></app-card-to-play>
     </div>
   </swiper>
 
@@ -20,7 +20,7 @@
                        (onStart)="placeRemoteIsVisible.isVisible = true;"
                        (onMoveMap)="moveRemoteIsVisible.isVisible = true;"
                        (onTackBabord)="tack(p, -90)" (onTackTribord)="tack(p, 90)"
-                       (onTrash)="dropCards(p)" (onClearPreview)="clearPreview(p)"></app-action-nav-bar>
+                       (onTrash)="dropCards(p)" (onClearPreview)="clearPreview(p)" (onPlay)="play(p)"></app-action-nav-bar>
 
   <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
   <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="p"></app-place-boat-remote>

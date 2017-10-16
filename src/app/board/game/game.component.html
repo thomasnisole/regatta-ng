@@ -3,6 +3,9 @@
        *ngIf="gs.isStarted()" appViewbox [viewBoxX]="gs.board.x" [viewBoxY]="gs.board.y"
        [viewBoxWidth]="gs.board.width" [viewBoxHeight]="gs.board.height" [zoom]="gs.board.zoom">
 
+    <svg:g appCardPreview [x]="gs.board.x" [y]="gs.board.y" [cards]="cardsToPreview"
+           [boatNumber]="gs.getCurrentPlayer().boat.boatNumber" [boatColor]="gs.getCurrentPlayer().boat.color"></svg:g>
+
     <!-- Board grid -->
     <svg:g appGridBoard z-index="-10" [gridX]="gs.board.x" [gridY]="gs.board.y"></svg:g>
 

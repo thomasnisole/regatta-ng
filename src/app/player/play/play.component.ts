@@ -72,6 +72,15 @@ export class PlayComponent implements OnInit {
       return cardsToDrop.length <= 3 && cardsToDrop.length > 0;
     }
 
+    if (mode === 'play') {
+      const cardsInPreview = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
+      return cardsInPreview.length > 0 &&
+        (
+          !_.last(cardsInPreview).hasCloudOption() ||
+          (_.last(cardsInPreview).hasCloudOption() && _.last(cardsInPreview).previewPossibilities.length === 2)
+        );
+    }
+
     return false;
   }
 
@@ -88,28 +97,53 @@ export class PlayComponent implements OnInit {
       return false;
     }
 
-    if (_.filter(player.cards, (c: Card) => c.previewPossibility).length >= 2) {
-      return false;
-    }
+    const cardsInPreview: Card[] = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
 
-    if (card.previewPossibility) {
-      return false;
+    if (card.hasCloudOption()) {
+      if (cardsInPreview.length !== 0 &&
+        !_.last(cardsInPreview).hasSteeringWheelOption() &&
+        _.last(cardsInPreview) !== card) {
+        return false;
+      }
+
+      if (card.previewPossibilities && card.previewPossibilities.length >= 2) {
+        return false;
+      }
+    } else {
+      if (card.previewPossibilities) {
+        return false;
+      }
+
+      if (cardsInPreview.length !== 0 && !_.last(cardsInPreview).hasSteeringWheelOption()) {
+        return false;
+      }
     }
 
     return true;
   }
 
   public previewCard(card: Card, player: Player): void {
-    card.previewOrder = _.filter(player.cards, (c: Card) => c.previewPossibility).length;
+    this.playerService.previewCard(player, card);
     this.playerService.update(player, this.game);
   }
 
   public clearPreview(player: Player): void {
     _.each(player.cards, (card: Card) => {
-      card.previewPossibility = void 0;
+      card.previewPossibilities = void 0;
       card.previewOrder = void 0;
+      card.xDeparture = void 0;
+      card.yDeparture = void 0;
+      card.xArriving = void 0;
+      card.yArriving = void 0;
+      card.orientationDeparture = void 0;
+      card.orientationArriving = void 0;
     });
 
+    this.playerService.update(player, this.game);
+  }
+
+  public play(player: Player): void {
+    this.playerService.play(player, this.game);
     this.playerService.update(player, this.game);
   }
 }

@@ -36,9 +36,7 @@ export class GameService {
   public findById(id: string): Observable<Game> {
     return this.db
       .object('/games/' + id)
-      .do((os: DataSnapshot) => console.log(os))
-      .map((os: DataSnapshot) => deserialize(Game, os))
-      .do((g: Game) => console.log(g));
+      .map((os: DataSnapshot) => deserialize(Game, os));
   }
 
   public create(name: string, password: string): Observable<Game> {
@@ -97,7 +95,7 @@ export class GameService {
   }
 
   public changeCurrentPlayer(nextPlayerId: string, game: Game) {
-    game.currentPlayer = game.getPlayerByPlayerId(nextPlayerId);
+    game.currentPlayer = nextPlayerId;
     game.getCurrentPlayer().status = PlayerStatus.WAITING_TO_PLAY;
   }
 

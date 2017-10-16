@@ -27,14 +27,13 @@ export class LevelParserService {
   public parse(game: Game): Observable<Game> {
     return this.db.object('/game-types/level1').map(
       (data) => {
-        console.log(data);
         game.board = new Board();
         game.board.x = 0;
         game.board.y = 0;
         game.board.width = window.innerWidth * environment.board.viewboxHeight / window.innerHeight;
         game.board.height = environment.board.viewboxHeight;
         game.board.zoom = environment.board.viewboxHeight;
-        game.currentPlayer = game.players[0];
+        game.currentPlayer = game.players[0].userId;
         game.board.buoys = [];
         game.board.seaElements = [];
 

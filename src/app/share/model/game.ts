@@ -26,7 +26,7 @@ export class Game {
   public password: string = void 0;
 
   @JsonProperty('currentPlayer')
-  public currentPlayer: Player = null;
+  public currentPlayer: string = null;
 
   @JsonProperty({name: 'status', customConverter: enumConverter})
   public status: GameStatus = void 0;
@@ -78,14 +78,6 @@ export class Game {
       return false;
     }
 
-    return player.userId === this.currentPlayer.userId;
-  }
-
-  public isCurrentBoat(boat: Boat): boolean {
-    if (!this.currentPlayer) {
-      return false;
-    }
-
-    return boat.boatNumber === this.currentPlayer.boat.boatNumber;
+    return player.userId === this.currentPlayer;
   }
 }

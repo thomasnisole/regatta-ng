@@ -41,6 +41,6 @@ export class Player extends FbIdentifiable {
   }
 
   public hasPreviewedCards(): boolean {
-    return _.filter(this.cards, (c: Card) => c.previewPossibility).length > 0;
+    return _.filter(this.cards, (c: Card) => c.previewPossibilities).length > 0;
   }
 }

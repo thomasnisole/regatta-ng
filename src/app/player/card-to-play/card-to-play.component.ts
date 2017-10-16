@@ -1,14 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
-import {environment} from '../../../environments/environment';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  selector: 'app-card-to-play',
+  templateUrl: './card-to-play.component.html',
+  styleUrls: ['./card-to-play.component.scss']
 })
-export class CardComponent implements OnInit {
+export class CardToPlayComponent implements OnInit {
 
   @Input()
   public card: Card;
@@ -19,24 +18,12 @@ export class CardComponent implements OnInit {
   @Input()
   public isInTrashMode: boolean;
 
-  private params: string;
-
   @Output()
   public clickOnPossibility: EventEmitter<Card> = new EventEmitter<Card>();
 
-  public constructor() {
-  }
+  public constructor() {}
 
-  public ngOnInit(): void {
-    this.params = '';
-    _.each(this.card.svgParams, (value, index) => {
-      this.params += '&' + index + '=' + encodeURIComponent(value);
-    });
-  }
-
-  public get href(): string {
-    return environment.svgServerUrl + 'carte' + this.params;
-  }
+  public ngOnInit(): void { }
 
   public isPossibilitySelectable(index: number): boolean {
     return _.indexOf(Object.keys(this.card.possibilities), String(index)) !== -1;
@@ -47,7 +34,11 @@ export class CardComponent implements OnInit {
       return;
     }
 
-    this.card.previewPossibility = possibility;
+    if (!this.card.previewPossibilities) {
+      this.card.previewPossibilities = [];
+    }
+
+    this.card.previewPossibilities.push(possibility);
 
     this.clickOnPossibility.emit(this.card);
   }

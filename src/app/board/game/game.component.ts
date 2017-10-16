@@ -11,6 +11,7 @@ import {Point} from '../../share/model/point';
 import {Buoy} from '../../share/model/buoy';
 import {SeaElement} from "../../share/model/sea-element";
 import {Boat} from "../../share/model/boat";
+import {Card} from '../../share/model/card';
 
 @Component({
   selector: 'app-game',
@@ -38,7 +39,7 @@ export class GameComponent implements OnInit {
       (params: any) => this.game = this.gameService
         .findById(params['id'])
         .do((game: Game) => {
-        this.g = game;
+          this.g = game;
           if (game.isStarted()) {
             this.makeElements(game);
           }
@@ -51,7 +52,6 @@ export class GameComponent implements OnInit {
   }
 
   private makeElements(game: Game): void {
-    console.log(game);
     this.elements = _.union(
       game.board.seaElements,
       game.board.buoys,
@@ -60,8 +60,6 @@ export class GameComponent implements OnInit {
         return player;
       })
     );
-
-    console.log(this.elements);
   }
 
   public isBuoy(obj: Buoy): boolean {
@@ -74,5 +72,12 @@ export class GameComponent implements OnInit {
 
   public isBoat(obj: Boat): boolean {
     return obj instanceof Boat;
+  }
+
+  public get cardsToPreview(): Card[] {
+    return _.sortBy(
+      _.filter(this.g.getCurrentPlayer().cards, (card: Card) => card.previewOrder),
+      (card: Card) => card.previewOrder
+    );
   }
 }

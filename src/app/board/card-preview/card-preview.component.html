@@ -1,0 +1,9 @@
+<svg:g [attr.x]="gridX" [attr.y]="gridY" width="100%" height="100%"  opacity=".8">
+  <ng-container *ngFor="let card of cards">
+    <ng-container *ngFor="let preview of card.xDeparture; index as i">
+      <svg:g appCard [card]="card" [x]="getCardX(card, i)" [y]="getCardY(card, i)"
+             [width]="getCardWidth(card, i)" [height]="getCardHeight(card, i)" [activeRotation]="i"></svg:g>
+      <svg:g appBoat [boat]="getBoat(card, i)"></svg:g>
+    </ng-container>
+  </ng-container>
+</svg:g>

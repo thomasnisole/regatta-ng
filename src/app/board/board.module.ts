@@ -12,6 +12,7 @@ import { BuoyDirective } from './directive/buoy.directive';
 import { SeaElementComponent } from './sea-element/sea-element.component';
 import { BoatComponent } from './boat/boat.component';
 import { CheckLineDirective } from './directive/check-line.directive';
+import { CardPreviewComponent } from './card-preview/card-preview.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { CheckLineDirective } from './directive/check-line.directive';
     BuoyDirective,
     SeaElementComponent,
     BoatComponent,
-    CheckLineDirective
+    CheckLineDirective,
+    CardPreviewComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
