@@ -8,11 +8,11 @@ import {FormsModule} from '@angular/forms';
 import { ViewboxDirective } from './directive/viewbox.directive';
 import { GridBoardComponent } from './grid-board/grid-board.component';
 import {OrderModule} from 'ngx-order-pipe';
-import { BuoyDirective } from './directive/buoy.directive';
 import { SeaElementComponent } from './sea-element/sea-element.component';
 import { BoatComponent } from './boat/boat.component';
 import { CheckLineDirective } from './directive/check-line.directive';
 import { CardPreviewComponent } from './card-preview/card-preview.component';
+import { BuoyComponent } from './buoy/buoy.component';
 
 @NgModule({
   imports: [
@@ -27,11 +27,11 @@ import { CardPreviewComponent } from './card-preview/card-preview.component';
     GameComponent,
     GridBoardComponent,
     ViewboxDirective,
-    BuoyDirective,
     SeaElementComponent,
     BoatComponent,
     CheckLineDirective,
-    CardPreviewComponent
+    CardPreviewComponent,
+    BuoyComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

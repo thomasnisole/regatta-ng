@@ -24,11 +24,7 @@
 
     <!-- Element -->
     <svg:g *ngFor="let elt of elements|orderBy:'y';let i = index">
-      <g *ngIf="isBuoy(elt)" class="buoy-container" style="{{ 'animation-delay: ' + (0 - i) + 's' }}">
-        <image appBuoy xlink:href="" class="buoy" style="{{ 'animation-delay: ' + (0 - i) + 's' }}"
-               [svgParams]="{'buoy-color': elt.color}"
-               [x]="elt.x"
-               [y]="elt.y"></image>
+      <g appBuoy [buoy]="elt" *ngIf="isBuoy(elt)" class="buoy-container">
       </g>
 
       <g appSeaElement [seaElement]="elt" *ngIf="isSeaElement(elt)">
