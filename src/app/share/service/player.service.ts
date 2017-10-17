@@ -13,11 +13,15 @@ import * as _ from 'underscore/underscore';
 import {Observable} from 'rxjs/Observable';
 import {CardService} from './card.service';
 import {Point} from '../model/point';
+import {BoardService} from './board.service';
 
 @Injectable()
 export class PlayerService {
 
-  public constructor(private db: AngularFireDatabase, private cardService: CardService) { }
+  public constructor(
+    private db: AngularFireDatabase,
+    private cardService: CardService,
+    private boardService: BoardService) { }
 
   public create(game: Game, user: User, boatNumber: number, color: any): Observable<Player> {
     const player = new Player();
@@ -89,15 +93,19 @@ export class PlayerService {
     player.status = PlayerStatus.TERMINATED;
   }
 
-  public previewCard(player: Player, card: Card): void {
+  public previewCard(game: Game, player: Player, card: Card): boolean {
     const previewedCard = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), (c: Card) => c.previewOrder);
     card.previewOrder = previewedCard.length;
     let departure: Point;
-    let firstTime: boolean = true;
     const indexPossibility = _.last(card.previewPossibilities);
 
     if (previewedCard.length > 1 || (previewedCard.length === 1 && card.previewPossibilities.length > 1)) {
-      const lastCard: Card = previewedCard[previewedCard.length > 1 ? previewedCard.length - 2 : 0];
+      let lastCard: Card = null;
+      if (card.previewPossibilities.length > 1) {
+        lastCard = card;
+      } else {
+        lastCard = previewedCard[previewedCard.length - 2];
+      }
       const b: Boat = _.clone(player.boat);
       b.orientation = card.lastOrientationDeparture = card.lastOrientationArriving = lastCard.lastOrientationArriving;
       const arriving = this.cardService.findBoatFromArriving(lastCard, b);
@@ -108,13 +116,11 @@ export class PlayerService {
       departure = this.cardService.findDepartureFromBoat(player.boat);
       card.lastOrientationDeparture = card.lastOrientationArriving = player.boat.orientation;
     }
-    firstTime = false;
 
     card.lastXDeparture = card.lastXArriving = departure.x;
     card.lastYDeparture = card.lastYArriving = departure.y;
 
     _.each(card.possibilities[indexPossibility].moves, (move: any) => {
-      console.log(card.lastOrientationDeparture);
       if (card.lastOrientationDeparture === Orientation.TOP) {
         card.xArriving[card.xArriving.length - 1] -= move.x;
         card.yArriving[card.yArriving.length - 1] -= move.y;
@@ -137,7 +143,22 @@ export class PlayerService {
       card.orientationArriving[card.orientationArriving.length - 1] = Orientation.LEFT;
     }
 
-    console.log(card);
+    const result = this.boardService.checkCardMove(game, card, player.boat);
+    console.log(result);
+    return result;
+  }
+
+  public clearPreview(player: Player): void {
+    _.each(player.cards, (card: Card) => {
+      card.previewPossibilities = void 0;
+      card.previewOrder = void 0;
+      card.xDeparture = void 0;
+      card.yDeparture = void 0;
+      card.xArriving = void 0;
+      card.yArriving = void 0;
+      card.orientationDeparture = void 0;
+      card.orientationArriving = void 0;
+    });
   }
 
   public play(player: Player, game: Game): boolean {

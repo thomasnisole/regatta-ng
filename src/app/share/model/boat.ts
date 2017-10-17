@@ -62,4 +62,13 @@ export class Boat extends Rectangle {
 
     return rect;
   }
+
+  public applyRotation(delta: number): void {
+    this.orientation += delta;
+    if (this.orientation > 270) {
+      this.orientation = Orientation.TOP;
+    } else if (this.orientation < 0) {
+      this.orientation = Orientation.LEFT;
+    }
+  }
 }

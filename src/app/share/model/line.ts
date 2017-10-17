@@ -12,7 +12,7 @@ export class Line {
 
   public intersectRectangle(rect: Rectangle): boolean {
     if (this.pointA.x === this.pointB.x
-      && this.pointA.x >= rect.x && this.pointA.x <= rect.x + rect.width) {
+      && this.pointA.x >= rect.x && this.pointA.x < rect.x + rect.width) {
       if (Math.min(this.pointA.y, this.pointB.y) < rect.y
         && Math.max(this.pointA.y, this.pointB.y) < rect.y) {
         return false;
@@ -26,8 +26,9 @@ export class Line {
       return true;
     }
 
+
     if (this.pointA.y === this.pointB.y
-      && this.pointA.y >= rect.y && this.pointA.y <= rect.y + rect.height) {
+      && this.pointA.y >= rect.y && this.pointA.y < rect.y + rect.height) {
       if (Math.min(this.pointA.x, this.pointB.x) < rect.x
         && Math.max(this.pointA.x, this.pointB.x) < rect.x) {
         return false;
@@ -37,6 +38,8 @@ export class Line {
         && Math.max(this.pointA.x, this.pointB.x) < rect.x + rect.width) {
         return false;
       }
+
+      return true;
     }
 
     return false;

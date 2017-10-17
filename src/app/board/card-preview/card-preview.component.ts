@@ -44,11 +44,19 @@ export class CardPreviewComponent implements OnInit {
     }
 
     if (card.orientationDeparture[i] === Orientation.TOP) {
-      return (card.xDeparture[i] - Math.floor(card.width / 2)) * environment.board.caseDimensions.width;
+      let x = card.xDeparture[i] - Math.floor(card.width / 2);
+      if (card.offsetDeparture) {
+        x += - card.offsetDeparture;
+      }
+      return x * environment.board.caseDimensions.width;
     }
 
     if (card.orientationDeparture[i] === Orientation.BOTTOM) {
-      return (card.xDeparture[i] + Math.ceil(card.width / 2)) * environment.board.caseDimensions.width;
+      let x = card.xDeparture[i] + Math.ceil(card.width / 2);
+      if (card.offsetDeparture) {
+        x += card.offsetDeparture;
+      }
+      return x * environment.board.caseDimensions.width;
     }
 
     return 0;
@@ -56,11 +64,19 @@ export class CardPreviewComponent implements OnInit {
 
   public getCardY(card: Card, i: number): number {
     if (card.orientationDeparture[i] === Orientation.LEFT) {
-      return (card.yDeparture[i] + Math.ceil(card.width / 2)) * environment.board.caseDimensions.height;
+      let y = card.yDeparture[i] + Math.ceil(card.width / 2);
+      if (card.offsetDeparture) {
+        y += card.offsetDeparture;
+      }
+      return  y * environment.board.caseDimensions.height;
     }
 
     if (card.orientationDeparture[i] === Orientation.RIGHT) {
-      return (card.yDeparture[i] - Math.ceil(card.width / 2) + 1) * environment.board.caseDimensions.height;
+      let y = card.yDeparture[i] - Math.ceil(card.width / 2) + 1;
+      if (card.offsetDeparture) {
+        y += - card.offsetDeparture;
+      }
+      return y * environment.board.caseDimensions.height;
     }
 
     if (card.orientationDeparture[i] === Orientation.TOP) {

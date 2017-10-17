@@ -6,11 +6,11 @@ import {Observable} from 'rxjs/Rx';
 import {Game} from '../../share/model/game';
 import {User} from '../../share/model/user';
 import {Player} from '../../share/model/player';
-import {GameFlowService} from '../../share/service/game-flow.service';
+import {CardService} from '../../share/service/card.service';
 import {Card} from '../../share/model/card';
 import {PlayerService} from '../../share/service/player.service';
 import * as _ from 'underscore/underscore';
-import {CardType} from '../../share/model/card-type.enum';
+import {GameFlowService} from '../../share/service/game-flow.service';
 
 @Component({
   selector: 'app-play',
@@ -25,12 +25,17 @@ export class PlayComponent implements OnInit {
 
   public player: Observable<Player>;
 
+  public canPlay: boolean = true;
+
+  public firstLoad: boolean = true;
+
   public constructor(
     private activatedRoute: ActivatedRoute,
     private gameService: GameService,
     private userService: UserService,
-    protected gameFlowService: GameFlowService,
-    private playerService: PlayerService) { }
+    private cardService: CardService,
+    private playerService: PlayerService,
+    protected gameFlowService: GameFlowService) { }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -42,12 +47,19 @@ export class PlayComponent implements OnInit {
             .findById(params['id'])
             .do((game: Game) => this.game = game)
             .map((game: Game) => game.getPlayerByUserId(user.id))
-          );
+          )
+          .do((player: Player) => {
+            if (this.firstLoad) {
+              this.clearPreview(player);
+              this.firstLoad = false;
+            }
+          });
       }
     );
   }
 
   public tack(player: Player, degres: number): void {
+    this.clearPreview(player);
     this.playerService.tack(player, degres);
     this.playerService.update(player, this.game);
 
@@ -74,7 +86,7 @@ export class PlayComponent implements OnInit {
 
     if (mode === 'play') {
       const cardsInPreview = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
-      return cardsInPreview.length > 0 &&
+      return cardsInPreview.length > 0 && this.canPlay &&
         (
           !_.last(cardsInPreview).hasCloudOption() ||
           (_.last(cardsInPreview).hasCloudOption() && _.last(cardsInPreview).previewPossibilities.length === 2)
@@ -85,60 +97,24 @@ export class PlayComponent implements OnInit {
   }
 
   public canDisplayPossibilities(player: Player, card: Card, mode: string): boolean {
-    if (card.type === CardType.TRAP) {
-      return false;
-    }
-
     if (mode !== 'play') {
       return false;
     }
 
-    if (!this.gameFlowService.canMove(player)) {
+    if (!this.canPlay) {
       return false;
     }
 
-    const cardsInPreview: Card[] = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
-
-    if (card.hasCloudOption()) {
-      if (cardsInPreview.length !== 0 &&
-        !_.last(cardsInPreview).hasSteeringWheelOption() &&
-        _.last(cardsInPreview) !== card) {
-        return false;
-      }
-
-      if (card.previewPossibilities && card.previewPossibilities.length >= 2) {
-        return false;
-      }
-    } else {
-      if (card.previewPossibilities) {
-        return false;
-      }
-
-      if (cardsInPreview.length !== 0 && !_.last(cardsInPreview).hasSteeringWheelOption()) {
-        return false;
-      }
-    }
-
-    return true;
+    return this.cardService.canDisplayPossibilities(player, card);
   }
 
   public previewCard(card: Card, player: Player): void {
-    this.playerService.previewCard(player, card);
+    this.canPlay = this.playerService.previewCard(this.game, player, card);
     this.playerService.update(player, this.game);
   }
 
   public clearPreview(player: Player): void {
-    _.each(player.cards, (card: Card) => {
-      card.previewPossibilities = void 0;
-      card.previewOrder = void 0;
-      card.xDeparture = void 0;
-      card.yDeparture = void 0;
-      card.xArriving = void 0;
-      card.yArriving = void 0;
-      card.orientationDeparture = void 0;
-      card.orientationArriving = void 0;
-    });
-
+    this.playerService.clearPreview(player);
     this.playerService.update(player, this.game);
   }
 

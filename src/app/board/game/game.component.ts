@@ -9,8 +9,8 @@ import * as _ from 'underscore/underscore';
 import {Player} from '../../share/model/player';
 import {Point} from '../../share/model/point';
 import {Buoy} from '../../share/model/buoy';
-import {SeaElement} from "../../share/model/sea-element";
-import {Boat} from "../../share/model/boat";
+import {SeaElement} from '../../share/model/sea-element';
+import {Boat} from '../../share/model/boat';
 import {Card} from '../../share/model/card';
 
 @Component({

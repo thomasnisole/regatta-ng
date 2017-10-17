@@ -8,6 +8,7 @@ import {LevelParserService} from './service/level-parser.service';
 import {GameFlowService} from './service/game-flow.service';
 import { CardComponent } from './card/card.component';
 import {CardService} from './service/card.service';
+import {BoardService} from './service/board.service';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {CardService} from './service/card.service';
   ],
   providers: [
     AuthService,
+    BoardService,
     CardService,
     GameService,
     GameFlowService,

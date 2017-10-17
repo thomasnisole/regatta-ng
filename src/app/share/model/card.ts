@@ -53,6 +53,9 @@ export class Card {
   @JsonProperty('orientationArriving')
   public orientationArriving: Orientation[] = void 0;
 
+  @JsonProperty('offsetDeparture')
+  public offsetDeparture: number = void 0;
+
   public selectedToDrop: boolean = void 0;
 
   public hasOption(option: OptionCard): boolean {
