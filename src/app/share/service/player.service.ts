@@ -14,6 +14,7 @@ import {Observable} from 'rxjs/Observable';
 import {CardService} from './card.service';
 import {Point} from '../model/point';
 import {BoardService} from './board.service';
+import {Trajectory} from '../model/trajectory';
 
 @Injectable()
 export class PlayerService {
@@ -143,14 +144,20 @@ export class PlayerService {
       card.orientationArriving[card.orientationArriving.length - 1] = Orientation.LEFT;
     }
 
-    const result = this.boardService.checkCardMove(game, card, player.boat);
-    console.log(result);
+    const trajectories: Trajectory[] = this.cardService.findAllPossibillityTrajectories(player.boat, card, card.previewPossibilities.length - 1);
+    const result = this.boardService.checkCardMove(game, trajectories, player.boat);
+    if (!card.previewTrajectories) {
+      card.previewTrajectories = [];
+    }
+    card.previewTrajectories = card.previewTrajectories.concat(trajectories);
+
     return result;
   }
 
   public clearPreview(player: Player): void {
     _.each(player.cards, (card: Card) => {
       card.previewPossibilities = void 0;
+      card.previewTrajectories = void 0;
       card.previewOrder = void 0;
       card.xDeparture = void 0;
       card.yDeparture = void 0;
@@ -162,9 +169,31 @@ export class PlayerService {
   }
 
   public play(player: Player, game: Game): boolean {
+    const cards = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
+    const trajectories: Trajectory[] = _.flatten(_.map(cards, (c: Card) => c.previewTrajectories));
 
+    _.each(trajectories, (t: Trajectory) => {
+      if (player.checkLines.length > 0 && t.intersectLine(player.checkLines[0])) {
+        player.checkLines.shift();
+      }
+    });
 
-    return false;
+    const lastCard: Card = _.last(cards);
+    const arriving: Point = this.cardService.findBoatFromArriving(lastCard, player.boat);
+    player.boat.x = arriving.x;
+    player.boat.y = arriving.y;
+    player.boat.orientation = lastCard.lastOrientationArriving;
+
+    if (!game.droppedCards) {
+      game.droppedCards = [];
+    }
+    game.droppedCards.concat(cards);
+    player.cards = _.reject(player.cards, (c: Card) => c.previewOrder);
+    console.log(game);
+
+    this.clearPreview(player);
+
+    return true;
   }
 
   public update(player: Player, game: Game) {

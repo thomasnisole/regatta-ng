@@ -5,6 +5,8 @@ import {enumConverter} from '../converter/enum-converter';
 import * as _ from 'underscore/underscore';
 import {noUndefined} from '@angular/compiler/src/util';
 import {Orientation} from './orientation.enum';
+import {Line} from './line';
+import {Trajectory} from './trajectory';
 
 export class Card {
 
@@ -55,6 +57,9 @@ export class Card {
 
   @JsonProperty('offsetDeparture')
   public offsetDeparture: number = void 0;
+
+  @JsonProperty({name: 'previewTrajectories', clazz: Trajectory})
+  public previewTrajectories: Trajectory[] = void 0;
 
   public selectedToDrop: boolean = void 0;
 

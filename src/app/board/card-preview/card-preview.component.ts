@@ -5,6 +5,7 @@ import {Orientation} from '../../share/model/orientation.enum';
 import {environment} from '../../../environments/environment';
 import {CardService} from '../../share/service/card.service';
 import {Point} from '../../share/model/point';
+import {Trajectory} from '../../share/model/trajectory';
 
 @Component({
   selector: '[appCardPreview]',
@@ -30,8 +31,26 @@ export class CardPreviewComponent implements OnInit {
 
   public constructor(private cardService: CardService) { }
 
-  public ngOnInit(): void {
-    console.log(this.cards);
+  public ngOnInit(): void {}
+
+  public getXTrajectory(trajectory: Trajectory): number {
+    return Math.min(trajectory.pointA.x, trajectory.pointB.x) * environment.board.caseDimensions.width;
+  }
+
+  public getYTrajectory(trajectory: Trajectory): number {
+    return Math.min(trajectory.pointA.y, trajectory.pointB.y) * environment.board.caseDimensions.height;
+  }
+
+  public getWidthTrajectory(trajectory: Trajectory): number {
+    return (Math.abs(trajectory.pointA.x - trajectory.pointB.x) + 1) * environment.board.caseDimensions.width;
+  }
+
+  public getHeightTrajectory(trajectory: Trajectory): number {
+    return (Math.abs(trajectory.pointA.y - trajectory.pointB.y) + 1) * environment.board.caseDimensions.height;
+  }
+
+  public getColorTrajectory(trajectory: Trajectory): string {
+    return trajectory.isValid ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.5)';
   }
 
   public getCardX(card: Card, i: number): number {

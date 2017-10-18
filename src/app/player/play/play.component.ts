@@ -114,12 +114,14 @@ export class PlayComponent implements OnInit {
   }
 
   public clearPreview(player: Player): void {
+    this.canPlay = true;
     this.playerService.clearPreview(player);
     this.playerService.update(player, this.game);
   }
 
   public play(player: Player): void {
-    this.playerService.play(player, this.game);
-    this.playerService.update(player, this.game);
+    if (this.playerService.play(player, this.game)) {
+      this.gameService.update(this.game);
+    }
   }
 }

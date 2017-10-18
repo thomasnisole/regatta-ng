@@ -1,9 +1,13 @@
 <svg:g [attr.x]="gridX" [attr.y]="gridY" width="100%" height="100%"  opacity=".8">
   <ng-container *ngFor="let card of cards">
-    <ng-container *ngFor="let preview of card.xDeparture; index as i">
-      <svg:g appCard [card]="card" [x]="getCardX(card, i)" [y]="getCardY(card, i)"
-             [width]="getCardWidth(card, i)" [height]="getCardHeight(card, i)" [activeRotation]="i"></svg:g>
-      <svg:g appBoat [boat]="getBoat(card, i)"></svg:g>
-    </ng-container>
+      <!--svg:g appCard [card]="card" [x]="getCardX(card, i)" [y]="getCardY(card, i)"
+             [width]="getCardWidth(card, i)" [height]="getCardHeight(card, i)" [activeRotation]="i"></svg:g-->
+    <svg:rect *ngFor="let trajectory of card.previewTrajectories|orderBy:'isValid':true" [attr.x]="getXTrajectory(trajectory)" [attr.y]="getYTrajectory(trajectory)"
+              [attr.width]="getWidthTrajectory(trajectory)" [ngStyle]="{fill: getColorTrajectory(trajectory)}"
+              [attr.height]="getHeightTrajectory(trajectory)">
+    </svg:rect>
+  </ng-container>
+  <ng-container *ngFor="let card of cards">
+    <svg:g appBoat [boat]="getBoat(card, i)" *ngFor="let preview of card.xDeparture; index as i"></svg:g>
   </ng-container>
 </svg:g>

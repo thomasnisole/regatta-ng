@@ -74,16 +74,16 @@ export class GameService {
     });
   }
 
-  public moveMap(game: Game, deltaX: number, deltaY: number) {
+  public moveMap(game: Game, deltaX: number, deltaY: number): void {
     game.board.x += deltaX;
     game.board.y += deltaY;
   }
 
-  public zoomMap(game: Game, deltaZoom: number) {
+  public zoomMap(game: Game, deltaZoom: number): void {
     game.board.zoom += deltaZoom;
   }
 
-  public resetOnCurrentPlayer(game: Game) {
+  public resetOnCurrentPlayer(game: Game): void {
     const player: Player = game.getCurrentPlayer();
     game.board.x =
       player.boat.x - (game.board.width / environment.board.caseDimensions.width) / 2;
@@ -94,12 +94,12 @@ export class GameService {
     game.board.zoom = environment.board.viewboxHeight;
   }
 
-  public changeCurrentPlayer(nextPlayerId: string, game: Game) {
+  public changeCurrentPlayer(nextPlayerId: string, game: Game): void {
     game.currentPlayer = nextPlayerId;
     game.getCurrentPlayer().status = PlayerStatus.WAITING_TO_PLAY;
   }
 
-  public update(game: Game) {
+  public update(game: Game): void {
     this.db.object('/games/' + game.id).update(removeUndefined(serialize(game)));
   }
 }

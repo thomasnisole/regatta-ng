@@ -9,42 +9,41 @@ import {SeaElement} from '../model/sea-element';
 import {Buoy} from '../model/buoy';
 import {Player} from '../model/player';
 import {Rectangle} from '../model/rectangle';
+import {Trajectory} from '../model/trajectory';
 
 @Injectable()
 export class BoardService {
 
-  public constructor(private cardService: CardService) { }
+  public constructor() { }
 
-  public checkCardMove(game: Game, card: Card, boat: Boat): boolean {
-    const lines: Line[] = this.cardService.findAllPossibillityLines(boat, card, _.last(card.previewPossibilities));
-
-    return !_.some(lines, (line: Line) => {
-      let result: boolean = _.some(
+  public checkCardMove(game: Game, trajectories: Trajectory[], boat: Boat): boolean {
+    return !_.some(trajectories, (trajectory: Trajectory) => {
+      trajectory.isValid = !_.some(
         game.board.seaElements,
-        (seaElement: SeaElement) => line.intersectRectangle(seaElement)
+        (seaElement: SeaElement) =>  trajectory.intersectRectangle(seaElement)
       );
 
-      if (!result) {
-        result = _.some(
+      if (trajectory.isValid) {
+        trajectory.isValid = !_.some(
           game.board.buoys,
           (buoy: Buoy) => {
             const r = new Rectangle();
             r.x = buoy.x;
             r.y = buoy.y;
-            r.width = 0;
-            r.height = 0;
+            r.width = 1;
+            r.height = 1;
 
-            return line.intersectRectangle(r);
+            return trajectory.intersectRectangle(r);
           }
         );
       }
 
-      if (!result) {
-        result = _.some(
+      if (trajectory.isValid) {
+        trajectory.isValid = !_.some(
           game.players,
           (player: Player) => {
             if (player.boat.boatNumber !== boat.boatNumber) {
-              return line.intersectRectangle(player.boat.getCongestion());
+              return trajectory.intersectRectangle(player.boat.getCongestion());
             }
 
             return false;
@@ -52,7 +51,7 @@ export class BoardService {
         );
       }
 
-      return result;
+      return !trajectory.isValid;
     });
   }
 }

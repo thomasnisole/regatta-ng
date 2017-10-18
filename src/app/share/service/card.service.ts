@@ -8,6 +8,7 @@ import {CardType} from '../model/card-type.enum';
 import {GameFlowService} from './game-flow.service';
 import * as _ from 'underscore/underscore';
 import {Line} from '../model/line';
+import {Trajectory} from '../model/trajectory';
 
 @Injectable()
 export class CardService {
@@ -108,9 +109,15 @@ export class CardService {
     return p;
   }
 
-  public findAllPossibillityLines(boat: Boat, card: Card, possibilityIndex: number): Line[] {
-    const lines: Line[] = [];
-    let beginPoint: Point = {x: _.first(card.xDeparture), y: _.first(card.yDeparture)};
+  public findAllPossibillityTrajectories(boat: Boat, card: Card, previewPossibilityIndex: number): Trajectory[] {
+    const trajectories: Trajectory[] = [];
+    const possibilityIndex = card.previewPossibilities[previewPossibilityIndex];
+    let beginPoint: Point = {
+      x: card.xDeparture[previewPossibilityIndex],
+      y: card.yDeparture[previewPossibilityIndex]
+    };
+    const savedOrientation = boat.orientation;
+    boat.orientation = card.orientationDeparture[previewPossibilityIndex];
 
     _.each(card.possibilities[possibilityIndex].moves, (move: any) => {
       const p: Point = new Point();
@@ -128,27 +135,25 @@ export class CardService {
         p.y = beginPoint.y - move.x;
       }
 
-      const l = new Line();
-      l.pointA = beginPoint;
-      l.pointB = p;
-      lines.push(l);
+      const t = new Trajectory();
+      t.pointA = beginPoint;
+      t.pointB = p;
+      trajectories.push(t);
       beginPoint = p;
     });
+    boat.orientation = savedOrientation;
 
     const bArriving: Boat = _.clone(boat);
-    const arrivingIndex = _.indexOf(card.previewPossibilities, possibilityIndex);
-    bArriving.orientation = card.orientationArriving[arrivingIndex];
-    const arriving = this.findBoatFromArriving(card, bArriving, arrivingIndex);
+    bArriving.orientation = card.orientationArriving[previewPossibilityIndex];
+    const arriving = this.findBoatFromArriving(card, bArriving, previewPossibilityIndex);
     bArriving.x = arriving.x;
     bArriving.y = arriving.y;
     const bRectArriving = bArriving.getCongestion();
-    const finalLine = new Line();
-    finalLine.pointA = {x: bRectArriving.x, y: bRectArriving.y};
-    finalLine.pointB = {x: bRectArriving.x + bRectArriving.width - 1, y: bRectArriving.y + bRectArriving.height - 1};
-    lines.push(finalLine);
+    const finalTrajectory = new Trajectory();
+    finalTrajectory.pointA = {x: bRectArriving.x, y: bRectArriving.y};
+    finalTrajectory.pointB = {x: bRectArriving.x + bRectArriving.width - 1, y: bRectArriving.y + bRectArriving.height - 1};
+    trajectories.push(finalTrajectory);
 
-    console.log(lines);
-
-    return lines;
+    return trajectories;
   }
 }
