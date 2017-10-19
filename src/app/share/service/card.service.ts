@@ -16,7 +16,7 @@ export class CardService {
   public constructor(private gameFlowService: GameFlowService) { }
 
   public canDisplayPossibilities(player: Player, card: Card): boolean {
-    if (card.type === CardType.TRAP) {
+    if (!card.isMoveCard()) {
       return false;
     }
 
@@ -36,12 +36,20 @@ export class CardService {
       if (card.previewPossibilities && card.previewPossibilities.length >= 2) {
         return false;
       }
+
+      if (cardsInPreview.length === 2) {
+        return false;
+      }
     } else {
       if (card.previewPossibilities) {
         return false;
       }
 
-      if (cardsInPreview.length !== 0 && !_.last(cardsInPreview).hasSteeringWheelOption()) {
+      if (cardsInPreview.length === 1 && !_.last(cardsInPreview).hasSteeringWheelOption()) {
+        return false;
+      }
+
+      if (cardsInPreview.length === 2) {
         return false;
       }
     }
@@ -155,5 +163,17 @@ export class CardService {
     trajectories.push(finalTrajectory);
 
     return trajectories;
+  }
+
+  public clearMoveCard(card: Card): void {
+    card.previewPossibilities = void 0;
+    card.previewTrajectories = void 0;
+    card.previewOrder = void 0;
+    card.xDeparture = void 0;
+    card.yDeparture = void 0;
+    card.xArriving = void 0;
+    card.yArriving = void 0;
+    card.orientationDeparture = void 0;
+    card.orientationArriving = void 0;
   }
 }

@@ -156,19 +156,11 @@ export class PlayerService {
 
   public clearPreview(player: Player): void {
     _.each(player.cards, (card: Card) => {
-      card.previewPossibilities = void 0;
-      card.previewTrajectories = void 0;
-      card.previewOrder = void 0;
-      card.xDeparture = void 0;
-      card.yDeparture = void 0;
-      card.xArriving = void 0;
-      card.yArriving = void 0;
-      card.orientationDeparture = void 0;
-      card.orientationArriving = void 0;
+      this.cardService.clearMoveCard(card);
     });
   }
 
-  public play(player: Player, game: Game): boolean {
+  public play(player: Player, game: Game): void {
     const cards = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
     const trajectories: Trajectory[] = _.flatten(_.map(cards, (c: Card) => c.previewTrajectories));
 
@@ -179,7 +171,9 @@ export class PlayerService {
     });
 
     const lastCard: Card = _.last(cards);
-    const arriving: Point = this.cardService.findBoatFromArriving(lastCard, player.boat);
+    const bArriving = _.clone(player.boat);
+    bArriving.orientation = lastCard.lastOrientationArriving;
+    const arriving: Point = this.cardService.findBoatFromArriving(lastCard, bArriving);
     player.boat.x = arriving.x;
     player.boat.y = arriving.y;
     player.boat.orientation = lastCard.lastOrientationArriving;
@@ -187,13 +181,12 @@ export class PlayerService {
     if (!game.droppedCards) {
       game.droppedCards = [];
     }
-    game.droppedCards.concat(cards);
+    game.droppedCards = game.droppedCards.concat(cards);
     player.cards = _.reject(player.cards, (c: Card) => c.previewOrder);
-    console.log(game);
+    _.each(cards, (c: Card) => this.cardService.clearMoveCard(c));
+    player.status = PlayerStatus.MOVE_PLAYED;
 
     this.clearPreview(player);
-
-    return true;
   }
 
   public update(player: Player, game: Game) {

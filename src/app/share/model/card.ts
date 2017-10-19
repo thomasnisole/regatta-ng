@@ -7,6 +7,7 @@ import {noUndefined} from '@angular/compiler/src/util';
 import {Orientation} from './orientation.enum';
 import {Line} from './line';
 import {Trajectory} from './trajectory';
+import {Player} from './player';
 
 export class Card {
 
@@ -61,6 +62,9 @@ export class Card {
   @JsonProperty({name: 'previewTrajectories', clazz: Trajectory})
   public previewTrajectories: Trajectory[] = void 0;
 
+  @JsonProperty('playerTrap')
+  public playerTrap: string = void 0;
+
   public selectedToDrop: boolean = void 0;
 
   public hasOption(option: OptionCard): boolean {
@@ -81,6 +85,14 @@ export class Card {
 
   public hasSteeringWheelOption(): boolean {
     return this.hasOption(OptionCard.STEERING_WHEEL);
+  }
+
+  public isTrapCard(): boolean {
+    return this.type === CardType.TRAP;
+  }
+
+  public isMoveCard(): boolean {
+    return this.type === CardType.MOVE;
   }
 
   public get lastXDeparture(): number {

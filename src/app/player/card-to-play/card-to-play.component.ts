@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
+import {Player} from '../../share/model/player';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-card-to-play',
@@ -18,10 +20,19 @@ export class CardToPlayComponent implements OnInit {
   @Input()
   public isInTrashMode: boolean;
 
+  @Input()
+  public isInTrapMode: boolean;
+
+  @Input()
+  public players: Player[];
+
+  @Input()
+  public player: Player;
+
   @Output()
   public clickOnPossibility: EventEmitter<Card> = new EventEmitter<Card>();
 
-  public constructor() {}
+  public constructor(private modalService: NgbModal) {}
 
   public ngOnInit(): void { }
 
@@ -41,5 +52,16 @@ export class CardToPlayComponent implements OnInit {
     this.card.previewPossibilities.push(possibility);
 
     this.clickOnPossibility.emit(this.card);
+  }
+
+  public openTrapPlayer(content, card): void {
+    if (!card.isTrapCard()) {
+      return;
+    }
+
+    this.modalService.open(content).result.then((p: Player) => {
+      card.playerTrap = p.userId;
+      p.isTrap = true;
+    });
   }
 }

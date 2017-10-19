@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameService} from '../../share/service/game.service';
 import {UserService} from '../../share/service/user.service';
@@ -11,6 +11,9 @@ import {Card} from '../../share/model/card';
 import {PlayerService} from '../../share/service/player.service';
 import * as _ from 'underscore/underscore';
 import {GameFlowService} from '../../share/service/game-flow.service';
+import {environment} from '../../../environments/environment';
+import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component';
+
 
 @Component({
   selector: 'app-play',
@@ -28,6 +31,9 @@ export class PlayComponent implements OnInit {
   public canPlay: boolean = true;
 
   public firstLoad: boolean = true;
+
+  @ViewChild(ActionNavBarComponent)
+  public actionNavBar: ActionNavBarComponent;
 
   public constructor(
     private activatedRoute: ActivatedRoute,
@@ -50,7 +56,7 @@ export class PlayComponent implements OnInit {
           )
           .do((player: Player) => {
             if (this.firstLoad) {
-              this.clearPreview(player);
+              //this.clearPreview(player);
               this.firstLoad = false;
             }
           });
@@ -68,6 +74,7 @@ export class PlayComponent implements OnInit {
   }
 
   public dropCards(player: Player): void {
+    this.playerService.clearPreview(player);
     const cardsToDrop: Card[] = _.filter(player.cards, (card: Card) => card.selectedToDrop);
 
     this.playerService.dropCards(player, this.game, cardsToDrop);
@@ -91,6 +98,10 @@ export class PlayComponent implements OnInit {
           !_.last(cardsInPreview).hasCloudOption() ||
           (_.last(cardsInPreview).hasCloudOption() && _.last(cardsInPreview).previewPossibilities.length === 2)
         );
+    }
+
+    if (mode === 'trap') {
+      return true;
     }
 
     return false;
@@ -120,8 +131,25 @@ export class PlayComponent implements OnInit {
   }
 
   public play(player: Player): void {
-    if (this.playerService.play(player, this.game)) {
-      this.gameService.update(this.game);
+    this.playerService.play(player, this.game);
+
+    if (!this.gameFlowService.canTrap(player)) {
+      this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
+      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+    } else {
+      this.actionNavBar.changeToTrapMode();
     }
+
+    // this.gameService.update(this.game);
+  }
+
+  public trap(player: Player): void {
+    // launch trap
+
+    // and finish
+    this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
+    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+    //this.gameService.update(this.game);
+    this.actionNavBar.changeToPlayMode();
   }
 }

@@ -11,10 +11,7 @@ export class GameFlowService {
   public constructor() { }
 
   public canTrap(player: Player): boolean {
-    return _.indexOf(
-      [PlayerStatus.MOVE_PLAYED, PlayerStatus.MOVE_SW_PLAYED, PlayerStatus.MOVE_CLOUD_PLAYED],
-      player.status
-    ) !== -1;
+    return player.status === PlayerStatus.MOVE_PLAYED && _.filter(player.cards, (c: Card) => c.isTrapCard()).length > 0;
   }
 
   public canDropCard(player: Player): boolean {
@@ -22,10 +19,7 @@ export class GameFlowService {
   }
 
   public canMove(player: Player): boolean {
-    return _.indexOf(
-        [PlayerStatus.WAITING_TO_PLAY, PlayerStatus.MOVE_SW_PLAYED],
-        player.status
-      ) !== -1;
+    return player.status === PlayerStatus.WAITING_TO_PLAY;
   }
 
   public canTack(player: Player): boolean {

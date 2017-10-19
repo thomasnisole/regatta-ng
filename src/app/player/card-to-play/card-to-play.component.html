@@ -1,4 +1,4 @@
-<svg viewBox="0 0 65 80">
+<svg viewBox="0 0 65 80" xmlns:svg="http://www.w3.org/1999/html">
   <svg:g *ngIf="canDisplayPossibilities">
     <ng-container *ngFor="let j of [6, 5, 4, 3, 2, 1, 0]; let i = index">
       <svg:rect class="possibility" height="10" width="5"
@@ -36,9 +36,16 @@
     </ng-container>
   </svg:g>
 
-  <svg:g width="55" height="70"[attr.opacity]="card.previewPossibility ? .3 : 1"
-         appCard [card]="card" [x]="5" y="5" width="55" height="70">
+  <svg:g width="55" height="70" appCard [card]="card" [x]="5" y="5" width="55" height="70"
+         [attr.opacity]="card.playerTrap ? 0.3 : 1" (click)="openTrapPlayer(selectPlayerToTrap, card)">
   </svg:g>
+
+  <svg:foreignObject width="55" height="70" x="5" y="5" *ngIf="card.playerTrap" class="card-overlay"
+                     (click)="openTrapPlayer(selectPlayerToTrap, card)">
+    <xhtml:div class="player-trap">
+      <p [ngStyle]="{color: card.playerTrap.boat.color}">{{ card.playerTrap.boat.boatNumber }} - {{ card.playerTrap.name }}</p>
+    </xhtml:div>
+  </svg:foreignObject>
 
   <svg:foreignObject width="28" height="24" x="18.5" y="28"
                  *ngIf="isInTrashMode" class="card-overlay">
@@ -47,3 +54,21 @@
     </xhtml:button>
   </svg:foreignObject>
 </svg>
+
+
+<ng-template #selectPlayerToTrap let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Choisissez un joueur à piéger</h4>
+  </div>
+  <div class="modal-body">
+    <ul class="list-group">
+      <li class="list-group-item" (click)="c()">Aucun</li>
+      <ng-template ngFor let-p [ngForOf]="players">
+        <li class="list-group-item" *ngIf="!p.isTrap" (click)="c(p)"
+            [ngStyle]="{color: p.boat.color}">
+          {{ p.boat.boatNumber }} - {{ p.name }}
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</ng-template>

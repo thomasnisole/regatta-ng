@@ -42,7 +42,7 @@
     <li *ngIf="clearIsVisible" (click)="onClearPreview.emit()">
       <i class="fa fa-times"></i>
     </li>
-    <li  *ngIf="terminateIsVisible" (click)="currentAction.emit();changeToPlayMode();">
+    <li  *ngIf="terminateIsVisible" (click)="currentAction.emit();">
       <i class="fa fa-check"></i>
     </li>
   </ul>
