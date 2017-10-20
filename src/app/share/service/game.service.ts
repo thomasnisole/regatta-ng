@@ -95,7 +95,12 @@ export class GameService {
   }
 
   public changeCurrentPlayer(nextPlayerId: string, game: Game): void {
-    game.currentPlayer = nextPlayerId;
+    let nextPlayer: Player = game.getPlayerByUserId(nextPlayerId);
+    while (nextPlayer.isTrap) {
+      nextPlayer.isTrap = false;
+      nextPlayer = game.getPlayerByUserId(nextPlayer.nextPlayer);
+    }
+    game.currentPlayer = nextPlayer.userId;
     game.getCurrentPlayer().status = PlayerStatus.WAITING_TO_PLAY;
   }
 

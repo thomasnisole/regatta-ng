@@ -3,6 +3,7 @@ import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
 import {Player} from '../../share/model/player';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Game } from '../../share/model/game';
 
 @Component({
   selector: 'app-card-to-play',
@@ -24,10 +25,7 @@ export class CardToPlayComponent implements OnInit {
   public isInTrapMode: boolean;
 
   @Input()
-  public players: Player[];
-
-  @Input()
-  public player: Player;
+  public game: Game;
 
   @Output()
   public clickOnPossibility: EventEmitter<Card> = new EventEmitter<Card>();
@@ -54,14 +52,19 @@ export class CardToPlayComponent implements OnInit {
     this.clickOnPossibility.emit(this.card);
   }
 
-  public openTrapPlayer(content, card): void {
+  public openTrapPlayer(content, card: Card): void {
     if (!card.isTrapCard()) {
       return;
     }
 
     this.modalService.open(content).result.then((p: Player) => {
-      card.playerTrap = p.userId;
-      p.isTrap = true;
+      if (!p && card.playerTrap) {
+        this.game.getPlayerByUserId(card.playerTrap).isTrap = false;
+        card.playerTrap = void 0;
+      } else {
+        card.playerTrap = p.userId;
+        p.isTrap = true;
+      }
     });
   }
 }

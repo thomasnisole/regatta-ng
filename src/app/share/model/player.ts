@@ -33,6 +33,9 @@ export class Player extends FbIdentifiable {
   @JsonProperty('isTrap')
   public isTrap: boolean = void 0;
 
+  @JsonProperty('arrivingOrder')
+  public arrivingOrder: number = void 0;
+
   public y: number;
 
   public isWaitingToStart(): boolean {

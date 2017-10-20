@@ -5,7 +5,7 @@
     <div class="swiper-wrapper">
       <app-card-to-play class="swiper-slide" *ngFor="let card of p.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
                 [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(p, card, actionNavBar.mode)"
-                [isInTrapMode]="actionNavBar.mode === 'trap'" [players]="game.players" [player]="p"
+                [isInTrapMode]="actionNavBar.mode === 'trap'" [game]="game"
                 (clickOnPossibility)="previewCard($event, p)"></app-card-to-play>
     </div>
   </swiper>

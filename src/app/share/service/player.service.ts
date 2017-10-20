@@ -144,7 +144,10 @@ export class PlayerService {
       card.orientationArriving[card.orientationArriving.length - 1] = Orientation.LEFT;
     }
 
-    const trajectories: Trajectory[] = this.cardService.findAllPossibillityTrajectories(player.boat, card, card.previewPossibilities.length - 1);
+    const trajectories: Trajectory[] = this.cardService.findAllPossibillityTrajectories(
+      player.boat, card,
+      card.previewPossibilities.length - 1
+    );
     const result = this.boardService.checkCardMove(game, trajectories, player.boat);
     if (!card.previewTrajectories) {
       card.previewTrajectories = [];
@@ -187,6 +190,17 @@ export class PlayerService {
     player.status = PlayerStatus.MOVE_PLAYED;
 
     this.clearPreview(player);
+  }
+
+  public trap(player: Player, game: Game): void {
+    const cards = _.filter(player.cards, (c: Card) => c.playerTrap);
+    if (!game.droppedCards) {
+      game.droppedCards = [];
+    }
+    game.droppedCards = game.droppedCards.concat(cards);
+    player.cards = _.reject(player.cards, (c: Card) => c.playerTrap);
+    _.each(cards, (c: Card) => this.cardService.clearTrapCard(c));
+    player.status = PlayerStatus.TERMINATED;
   }
 
   public update(player: Player, game: Game) {

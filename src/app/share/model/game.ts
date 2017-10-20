@@ -8,6 +8,7 @@ import {enumConverter} from '../converter/enum-converter';
 import {Boat} from './boat';
 import * as _ from 'underscore/underscore';
 import {Card} from './card';
+import { PlayerStatus } from './player-status.enum';
 
 export class Game {
   public static readonly STATES: {
@@ -71,6 +72,14 @@ export class Game {
 
   public getPlayerByPlayerId(playerId: string): Player {
     return _.find(this.players, (player: Player) => player.id === playerId);
+  }
+
+  public getPlayersGaming(): Player[] {
+    return _.filter(this.players, (p: Player) => p.status !== PlayerStatus.FINISHED);
+  }
+
+  public getFinishedPlayers(): Player[] {
+    return _.filter(this.players, (p: Player) => p.status === PlayerStatus.FINISHED);
   }
 
   public isCurrentPlayer(player: Player): boolean {

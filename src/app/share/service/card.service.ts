@@ -176,4 +176,8 @@ export class CardService {
     card.orientationDeparture = void 0;
     card.orientationArriving = void 0;
   }
+
+  public clearTrapCard(card: Card): void {
+    card.playerTrap = void 0;
+  }
 }

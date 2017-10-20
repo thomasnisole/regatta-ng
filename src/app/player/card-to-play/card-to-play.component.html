@@ -43,7 +43,9 @@
   <svg:foreignObject width="55" height="70" x="5" y="5" *ngIf="card.playerTrap" class="card-overlay"
                      (click)="openTrapPlayer(selectPlayerToTrap, card)">
     <xhtml:div class="player-trap">
-      <p [ngStyle]="{color: card.playerTrap.boat.color}">{{ card.playerTrap.boat.boatNumber }} - {{ card.playerTrap.name }}</p>
+      <p [ngStyle]="{color: game.getPlayerByUserId(card.playerTrap).boat.color}">
+        {{ game.getPlayerByUserId(card.playerTrap).boat.boatNumber }} - {{game.getPlayerByUserId(card.playerTrap).name }}
+      </p>
     </xhtml:div>
   </svg:foreignObject>
 
@@ -63,8 +65,8 @@
   <div class="modal-body">
     <ul class="list-group">
       <li class="list-group-item" (click)="c()">Aucun</li>
-      <ng-template ngFor let-p [ngForOf]="players">
-        <li class="list-group-item" *ngIf="!p.isTrap" (click)="c(p)"
+      <ng-template ngFor let-p [ngForOf]="game.players">
+        <li class="list-group-item" *ngIf="!p.isTrap && p !== game.getCurrentPlayer()" (click)="c(p)"
             [ngStyle]="{color: p.boat.color}">
           {{ p.boat.boatNumber }} - {{ p.name }}
         </li>

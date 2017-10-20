@@ -140,16 +140,15 @@ export class PlayComponent implements OnInit {
       this.actionNavBar.changeToTrapMode();
     }
 
-    // this.gameService.update(this.game);
+    this.gameService.update(this.game);
   }
 
   public trap(player: Player): void {
-    // launch trap
+    this.playerService.trap(player, this.game);
 
-    // and finish
     this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
     this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
-    //this.gameService.update(this.game);
+    this.gameService.update(this.game);
     this.actionNavBar.changeToPlayMode();
   }
 }

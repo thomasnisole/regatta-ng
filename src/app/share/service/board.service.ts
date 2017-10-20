@@ -40,7 +40,7 @@ export class BoardService {
 
       if (trajectory.isValid) {
         trajectory.isValid = !_.some(
-          game.players,
+          game.getPlayersGaming(),
           (player: Player) => {
             if (player.boat.boatNumber !== boat.boatNumber) {
               return trajectory.intersectRectangle(player.boat.getCongestion());
