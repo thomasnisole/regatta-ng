@@ -7,12 +7,13 @@ import {Game} from '../../share/model/game';
 import {User} from '../../share/model/user';
 import {Player} from '../../share/model/player';
 import {CardService} from '../../share/service/card.service';
-import {Card} from '../../share/model/card';
 import {PlayerService} from '../../share/service/player.service';
 import * as _ from 'underscore/underscore';
 import {GameFlowService} from '../../share/service/game-flow.service';
 import {environment} from '../../../environments/environment';
 import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component';
+import { AbstractCard } from '../../share/model/abstract-card';
+import { CloudCard } from '../../share/model/cloud-card';
 
 
 @Component({
@@ -56,7 +57,7 @@ export class PlayComponent implements OnInit {
           )
           .do((player: Player) => {
             if (this.firstLoad) {
-              //this.clearPreview(player);
+              // this.clearPreview(player);
               this.firstLoad = false;
             }
           });
@@ -75,7 +76,7 @@ export class PlayComponent implements OnInit {
 
   public dropCards(player: Player): void {
     this.playerService.clearPreview(player);
-    const cardsToDrop: Card[] = _.filter(player.cards, (card: Card) => card.selectedToDrop);
+    const cardsToDrop: AbstractCard[] = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
 
     this.playerService.dropCards(player, this.game, cardsToDrop);
     this.playerService.takeCards(player, this.game, cardsToDrop.length);
@@ -86,17 +87,17 @@ export class PlayComponent implements OnInit {
 
   public canTerminateCurrentAction(player: Player, mode: string): boolean {
     if (mode === 'trash') {
-      const cardsToDrop = _.filter(player.cards, (card: Card) => card.selectedToDrop);
+      const cardsToDrop = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
 
       return cardsToDrop.length <= 3 && cardsToDrop.length > 0;
     }
 
     if (mode === 'play') {
-      const cardsInPreview = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
+      const cardsInPreview = _.sortBy(_.filter(player.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
       return cardsInPreview.length > 0 && this.canPlay &&
         (
-          !_.last(cardsInPreview).hasCloudOption() ||
-          (_.last(cardsInPreview).hasCloudOption() && _.last(cardsInPreview).previewPossibilities.length === 2)
+          !(_.last(cardsInPreview) instanceof CloudCard) ||
+          (_.last(cardsInPreview) instanceof CloudCard && _.last(cardsInPreview).previewPossibilities.length === 2)
         );
     }
 
@@ -107,7 +108,7 @@ export class PlayComponent implements OnInit {
     return false;
   }
 
-  public canDisplayPossibilities(player: Player, card: Card, mode: string): boolean {
+  public canDisplayPossibilities(player: Player, card: AbstractCard, mode: string): boolean {
     if (mode !== 'play') {
       return false;
     }
@@ -119,7 +120,7 @@ export class PlayComponent implements OnInit {
     return this.cardService.canDisplayPossibilities(player, card);
   }
 
-  public previewCard(card: Card, player: Player): void {
+  public previewCard(card: AbstractCard, player: Player): void {
     this.canPlay = this.playerService.previewCard(this.game, player, card);
     this.playerService.update(player, this.game);
   }

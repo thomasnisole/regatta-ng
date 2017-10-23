@@ -3,7 +3,7 @@
     <li class="card-preview-item">
       <img class="card" [attr.src]="getHref(card)">
     </li>
-    <li class="card-preview-item" *ngIf="card.hasCloudOption() && card.previewPossibilities.length === 2">
+    <li class="card-preview-item" *ngIf="cardIsCloud(card) && card.previewPossibilities.length === 2">
       <img class="card" [attr.src]="getHref(card)">
     </li>
   </ng-container>

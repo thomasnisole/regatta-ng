@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
 import {Player} from '../../share/model/player';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { Game } from '../../share/model/game';
+import { AbstractCard } from '../../share/model/abstract-card';
 
 @Component({
   selector: 'app-card-to-play',
@@ -13,7 +13,7 @@ import { Game } from '../../share/model/game';
 export class CardToPlayComponent implements OnInit {
 
   @Input()
-  public card: Card;
+  public card: AbstractCard;
 
   @Input()
   public canDisplayPossibilities: boolean;
@@ -28,7 +28,7 @@ export class CardToPlayComponent implements OnInit {
   public game: Game;
 
   @Output()
-  public clickOnPossibility: EventEmitter<Card> = new EventEmitter<Card>();
+  public clickOnPossibility: EventEmitter<AbstractCard> = new EventEmitter<AbstractCard>();
 
   public constructor(private modalService: NgbModal) {}
 
@@ -52,7 +52,7 @@ export class CardToPlayComponent implements OnInit {
     this.clickOnPossibility.emit(this.card);
   }
 
-  public openTrapPlayer(content, card: Card): void {
+  public openTrapPlayer(content, card: AbstractCard): void {
     if (!card.isTrapCard()) {
       return;
     }

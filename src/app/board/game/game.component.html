@@ -44,7 +44,7 @@
       <li class="list-group-item" *ngFor="let player of gs.getPlayersGaming()">
         <span [ngStyle]="{'color': player.boat.color}">
           <i class="fa fa-chevron-right" *ngIf="gs.isCurrentPlayer(player)"></i>
-          <i class="fa fa-ban" *ngIf="player.isTrap"></i>
+          <i class="fa fa-sun-o" *ngIf="player.isTrap"></i>
           {{ player.boat.boatNumber }} - {{ player.name }}
         </span>
       </li>

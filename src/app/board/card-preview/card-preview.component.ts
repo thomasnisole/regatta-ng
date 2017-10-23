@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Card} from '../../share/model/card';
 import {Boat} from '../../share/model/boat';
 import {Orientation} from '../../share/model/orientation.enum';
 import {environment} from '../../../environments/environment';
 import {CardService} from '../../share/service/card.service';
 import {Point} from '../../share/model/point';
 import {Trajectory} from '../../share/model/trajectory';
+import { AbstractCard } from '../../share/model/abstract-card';
 
 @Component({
   selector: '[appCardPreview]',
@@ -21,7 +21,7 @@ export class CardPreviewComponent implements OnInit {
   public gridY: number;
 
   @Input()
-  public cards: Card[];
+  public cards: AbstractCard[];
 
   @Input()
   public boatNumber: number;
@@ -53,7 +53,7 @@ export class CardPreviewComponent implements OnInit {
     return trajectory.isValid ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.5)';
   }
 
-  public getCardX(card: Card, i: number): number {
+  public getCardX(card: AbstractCard, i: number): number {
     if (card.orientationDeparture[i] === Orientation.LEFT) {
       return (card.xDeparture[i] - card.height) * environment.board.caseDimensions.width;
     }
@@ -81,7 +81,7 @@ export class CardPreviewComponent implements OnInit {
     return 0;
   }
 
-  public getCardY(card: Card, i: number): number {
+  public getCardY(card: AbstractCard, i: number): number {
     if (card.orientationDeparture[i] === Orientation.LEFT) {
       let y = card.yDeparture[i] + Math.ceil(card.width / 2);
       if (card.offsetDeparture) {
@@ -109,7 +109,7 @@ export class CardPreviewComponent implements OnInit {
     return 0;
   }
 
-  public getCardWidth(card: Card, i: number): number {
+  public getCardWidth(card: AbstractCard, i: number): number {
     if (card.orientationDeparture[i] === Orientation.TOP || card.orientationDeparture[i] === Orientation.BOTTOM) {
       return card.width * environment.board.caseDimensions.width;
     }
@@ -121,7 +121,7 @@ export class CardPreviewComponent implements OnInit {
     return 0;
   }
 
-  public getCardHeight(card: Card, i: number): number {
+  public getCardHeight(card: AbstractCard, i: number): number {
     if (card.orientationDeparture[i] === Orientation.TOP || card.orientationDeparture[i] === Orientation.BOTTOM) {
       return card.height * environment.board.caseDimensions.height;
     }
@@ -133,7 +133,7 @@ export class CardPreviewComponent implements OnInit {
     return 0;
   }
 
-  public getBoat(card: Card, i: number): Boat {
+  public getBoat(card: AbstractCard, i: number): Boat {
     const boat: Boat = new Boat();
     boat.orientation = card.orientationArriving[i];
     boat.color = this.boatColor;

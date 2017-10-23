@@ -15,7 +15,8 @@ import {Observable} from 'rxjs/Observable';
 import {Player} from '../model/player';
 import {environment} from '../../../environments/environment';
 import {GameStatus} from '../model/game-status.enum';
-import {Card} from '../model/card';
+import { AbstractCard } from '../model/abstract-card';
+import { cardConverter } from '../converter/card-converter';
 
 @Injectable()
 export class LevelParserService {
@@ -129,16 +130,7 @@ export class LevelParserService {
     return seaElement;
   }
 
-  private makeCard(data: any): Card {
-    const card: Card = new Card();
-    card.height = data.height;
-    card.width = data.width;
-    card.name = data.name;
-    card.options = data.options;
-    card.possibilities = data.possibilities;
-    card.svgParams = data.svgParams;
-    card.type = data.type;
-
-    return card;
+  private makeCard(data: any): AbstractCard {
+    return cardConverter.convertCard(data);
   }
 }

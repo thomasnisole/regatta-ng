@@ -1,11 +1,12 @@
 import {JsonProperty} from 'json-typescript-mapper';
 import {FbIdentifiable} from './fb-identifiable';
-import {enumConverter} from '../converter/enum-converter';
+import { enumConverter } from '../converter/enum-converter';
 import {PlayerStatus} from './player-status.enum';
 import {Boat} from './boat';
 import {Line} from './line';
-import {Card} from './card';
 import * as _ from 'underscore/underscore';
+import { cardConverter } from '../converter/card-converter';
+import { AbstractCard } from './abstract-card';
 
 export class Player extends FbIdentifiable {
 
@@ -24,8 +25,8 @@ export class Player extends FbIdentifiable {
   @JsonProperty({name: 'checkLines', clazz: Line})
   public checkLines: Line[] = [];
 
-  @JsonProperty({name: 'cards', clazz: Card})
-  public cards: Card[] = [];
+  @JsonProperty({name: 'cards', customConverter: cardConverter})
+  public cards: AbstractCard[] = [];
 
   @JsonProperty('nextPlayer')
   public nextPlayer: string = void 0;
@@ -47,6 +48,6 @@ export class Player extends FbIdentifiable {
   }
 
   public hasPreviewedCards(): boolean {
-    return _.filter(this.cards, (c: Card) => c.previewPossibilities).length > 0;
+    return _.filter(this.cards, (c: AbstractCard) => c.previewPossibilities).length > 0;
   }
 }

@@ -11,7 +11,7 @@ import {Point} from '../../share/model/point';
 import {Buoy} from '../../share/model/buoy';
 import {SeaElement} from '../../share/model/sea-element';
 import {Boat} from '../../share/model/boat';
-import {Card} from '../../share/model/card';
+import { AbstractCard } from '../../share/model/abstract-card';
 
 @Component({
   selector: 'app-game',
@@ -74,10 +74,10 @@ export class GameComponent implements OnInit {
     return obj instanceof Boat;
   }
 
-  public get cardsToPreview(): Card[] {
+  public get cardsToPreview(): AbstractCard[] {
     return _.sortBy(
-      _.filter(this.g.getCurrentPlayer().cards, (card: Card) => card.previewOrder),
-      (card: Card) => card.previewOrder
+      _.filter(this.g.getCurrentPlayer().cards, (card: AbstractCard) => card.previewOrder),
+      (card: AbstractCard) => card.previewOrder
     );
   }
 }

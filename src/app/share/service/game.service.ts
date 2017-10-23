@@ -36,7 +36,7 @@ export class GameService {
   public findById(id: string): Observable<Game> {
     return this.db
       .object('/games/' + id)
-      .map((os: DataSnapshot) => deserialize(Game, os));
+      .map((os: DataSnapshot) => deserialize(Game, os));;
   }
 
   public create(name: string, password: string): Observable<Game> {
@@ -97,7 +97,7 @@ export class GameService {
   public changeCurrentPlayer(nextPlayerId: string, game: Game): void {
     let nextPlayer: Player = game.getPlayerByUserId(nextPlayerId);
     while (nextPlayer.isTrap) {
-      nextPlayer.isTrap = false;
+      nextPlayer.isTrap = void 0;
       nextPlayer = game.getPlayerByUserId(nextPlayer.nextPlayer);
     }
     game.currentPlayer = nextPlayer.userId;

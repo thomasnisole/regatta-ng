@@ -7,8 +7,9 @@ import {GameStatus} from './game-status.enum';
 import {enumConverter} from '../converter/enum-converter';
 import {Boat} from './boat';
 import * as _ from 'underscore/underscore';
-import {Card} from './card';
 import { PlayerStatus } from './player-status.enum';
+import { cardConverter } from '../converter/card-converter';
+import { AbstractCard } from './abstract-card';
 
 export class Game {
   public static readonly STATES: {
@@ -38,11 +39,11 @@ export class Game {
   @JsonProperty('board')
   public board: Board = void 0;
 
-  @JsonProperty({name: 'cards', clazz: Card})
-  public cards: Card[] = [];
+  @JsonProperty({name: 'cards', customConverter: cardConverter})
+  public cards: AbstractCard[] = [];
 
-  @JsonProperty({name: 'droppedCards', clazz: Card})
-  public droppedCards: Card[] = [];
+  @JsonProperty({name: 'droppedCards', customConverter: cardConverter})
+  public droppedCards: AbstractCard[] = [];
 
   @JsonProperty({name: 'createdAt', clazz: Date, customConverter: dateConverter})
   public createdAt: Date = new Date();

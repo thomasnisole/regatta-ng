@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Boat} from '../model/boat';
-import {Card} from '../model/card';
 import {Game} from '../model/game';
 import * as _ from 'underscore/underscore';
 import {Line} from '../model/line';

@@ -1,8 +1,8 @@
-import * as _ from 'underscore/underscore';
 import { AbstractCard } from './abstract-card';
+import * as _ from 'underscore/underscore';
 import { SteeringWheelCard } from './steering-wheel-card';
 
-export class Card extends AbstractCard {
+export class CloudCard extends AbstractCard {
 
   public canDisplayPossibilities(cards: AbstractCard[]): boolean {
     if (cards.length === 0 && (!this.previewPossibilities || this.previewPossibilities.length === 0)) {
@@ -11,6 +11,10 @@ export class Card extends AbstractCard {
 
     const swCards = _.sortBy(_.filter(cards, (c: AbstractCard) => c instanceof SteeringWheelCard), 'previewOrder');
     if (swCards.length === 1 && swCards[0] === _.last(cards)) {
+      return true;
+    }
+
+    if (_.last(cards) === this && this.previewPossibilities && this.previewPossibilities.length < 2) {
       return true;
     }
 

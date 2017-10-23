@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Card} from '../model/card';
 import {environment} from '../../../environments/environment';
 import * as _ from 'underscore/underscore';
+import { AbstractCard } from '../model/abstract-card';
 
 @Component({
   selector: '[appCard]',
@@ -11,7 +11,7 @@ import * as _ from 'underscore/underscore';
 export class CardComponent implements OnInit {
 
   @Input()
-  public card: Card;
+  public card: AbstractCard;
 
   @Input()
   public x: number;

@@ -2,59 +2,27 @@ import { Injectable } from '@angular/core';
 import {Point} from '../model/point';
 import {Boat} from '../model/boat';
 import {Orientation} from '../model/orientation.enum';
-import {Card} from '../model/card';
 import {Player} from '../model/player';
 import {CardType} from '../model/card-type.enum';
 import {GameFlowService} from './game-flow.service';
 import * as _ from 'underscore/underscore';
 import {Line} from '../model/line';
 import {Trajectory} from '../model/trajectory';
+import { AbstractCard } from '../model/abstract-card';
 
 @Injectable()
 export class CardService {
 
   public constructor(private gameFlowService: GameFlowService) { }
 
-  public canDisplayPossibilities(player: Player, card: Card): boolean {
-    if (!card.isMoveCard()) {
-      return false;
-    }
-
+  public canDisplayPossibilities(player: Player, card: AbstractCard): boolean {
     if (!this.gameFlowService.canMove(player)) {
       return false;
     }
 
-    const cardsInPreview: Card[] = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
+    const cardsInPreview: AbstractCard[] = _.sortBy(_.filter(player.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
 
-    if (card.hasCloudOption()) {
-      if (cardsInPreview.length !== 0 &&
-        !_.last(cardsInPreview).hasSteeringWheelOption() &&
-        _.last(cardsInPreview) !== card) {
-        return false;
-      }
-
-      if (card.previewPossibilities && card.previewPossibilities.length >= 2) {
-        return false;
-      }
-
-      if (cardsInPreview.length === 2) {
-        return false;
-      }
-    } else {
-      if (card.previewPossibilities) {
-        return false;
-      }
-
-      if (cardsInPreview.length === 1 && !_.last(cardsInPreview).hasSteeringWheelOption()) {
-        return false;
-      }
-
-      if (cardsInPreview.length === 2) {
-        return false;
-      }
-    }
-
-    return true;
+    return card.canDisplayPossibilities(cardsInPreview);
   }
 
   public findDepartureFromBoat(boat: Boat): Point {
@@ -81,7 +49,7 @@ export class CardService {
     return p;
   }
 
-  public findBoatFromArriving(card: Card, boat: Boat, arrivingIndex: number = null): Point {
+  public findBoatFromArriving(card: AbstractCard, boat: Boat, arrivingIndex: number = null): Point {
     const p: Point = new Point();
 
     if (arrivingIndex === null) {
@@ -117,7 +85,7 @@ export class CardService {
     return p;
   }
 
-  public findAllPossibillityTrajectories(boat: Boat, card: Card, previewPossibilityIndex: number): Trajectory[] {
+  public findAllPossibillityTrajectories(boat: Boat, card: AbstractCard, previewPossibilityIndex: number): Trajectory[] {
     const trajectories: Trajectory[] = [];
     const possibilityIndex = card.previewPossibilities[previewPossibilityIndex];
     let beginPoint: Point = {
@@ -165,7 +133,7 @@ export class CardService {
     return trajectories;
   }
 
-  public clearMoveCard(card: Card): void {
+  public clearMoveCard(card: AbstractCard): void {
     card.previewPossibilities = void 0;
     card.previewTrajectories = void 0;
     card.previewOrder = void 0;
@@ -177,7 +145,7 @@ export class CardService {
     card.orientationArriving = void 0;
   }
 
-  public clearTrapCard(card: Card): void {
+  public clearTrapCard(card: AbstractCard): void {
     card.playerTrap = void 0;
   }
 }

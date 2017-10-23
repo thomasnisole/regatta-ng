@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Card} from '../../share/model/card';
 import * as _ from 'underscore/underscore';
 import {environment} from '../../../environments/environment';
+import { AbstractCard } from '../../share/model/abstract-card';
+import { CloudCard } from '../../share/model/cloud-card';
 
 @Component({
   selector: 'app-card-preview',
@@ -11,7 +12,7 @@ import {environment} from '../../../environments/environment';
 export class CardPreviewComponent implements OnInit {
 
   @Input()
-  public cards: Card[];
+  public cards: AbstractCard[];
 
   public constructor() { }
 
@@ -19,16 +20,20 @@ export class CardPreviewComponent implements OnInit {
 
   }
 
-  public get cardsToDisplay(): Card[] {
-    return _.sortBy(_.filter(this.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
+  public get cardsToDisplay(): AbstractCard[] {
+    return _.sortBy(_.filter(this.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
   }
 
-  public getHref(card: Card): string {
+  public getHref(card: AbstractCard): string {
     let params = '';
     _.each(card.svgParams, (value, index) => {
       params += '&' + index + '=' + encodeURIComponent(value);
     });
 
     return environment.svgServerUrl + 'carte' + params;
+  }
+
+  public cardIsCloud(card: AbstractCard): boolean {
+    return card instanceof CloudCard;
   }
 }

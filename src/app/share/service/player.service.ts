@@ -8,13 +8,13 @@ import {Boat} from '../model/boat';
 import {Orientation} from '../model/orientation.enum';
 import {PlayerStatus} from '../model/player-status.enum';
 import {removeUndefined} from '../utils';
-import {Card} from '../model/card';
 import * as _ from 'underscore/underscore';
 import {Observable} from 'rxjs/Observable';
 import {CardService} from './card.service';
 import {Point} from '../model/point';
 import {BoardService} from './board.service';
 import {Trajectory} from '../model/trajectory';
+import { AbstractCard } from '../model/abstract-card';
 
 @Injectable()
 export class PlayerService {
@@ -74,7 +74,7 @@ export class PlayerService {
     player.status = PlayerStatus.TERMINATED;
   }
 
-  public dropCards(player: Player, game: Game, cards: Card[]): void {
+  public dropCards(player: Player, game: Game, cards: AbstractCard[]): void {
     player.cards = _.difference(player.cards, cards);
 
     if (!game.droppedCards) {
@@ -94,14 +94,16 @@ export class PlayerService {
     player.status = PlayerStatus.TERMINATED;
   }
 
-  public previewCard(game: Game, player: Player, card: Card): boolean {
-    const previewedCard = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), (c: Card) => c.previewOrder);
+  public previewCard(game: Game, player: Player, card: AbstractCard): boolean {
+    const previewedCard = _.sortBy(
+      _.filter(player.cards, (c: AbstractCard) => c.previewPossibilities), (c: AbstractCard) => c.previewOrder
+    );
     card.previewOrder = previewedCard.length;
     let departure: Point;
     const indexPossibility = _.last(card.previewPossibilities);
 
     if (previewedCard.length > 1 || (previewedCard.length === 1 && card.previewPossibilities.length > 1)) {
-      let lastCard: Card = null;
+      let lastCard: AbstractCard = null;
       if (card.previewPossibilities.length > 1) {
         lastCard = card;
       } else {
@@ -158,14 +160,14 @@ export class PlayerService {
   }
 
   public clearPreview(player: Player): void {
-    _.each(player.cards, (card: Card) => {
+    _.each(player.cards, (card: AbstractCard) => {
       this.cardService.clearMoveCard(card);
     });
   }
 
   public play(player: Player, game: Game): void {
-    const cards = _.sortBy(_.filter(player.cards, (c: Card) => c.previewPossibilities), 'previewOrder');
-    const trajectories: Trajectory[] = _.flatten(_.map(cards, (c: Card) => c.previewTrajectories));
+    const cards = _.sortBy(_.filter(player.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
+    const trajectories: Trajectory[] = _.flatten(_.map(cards, (c: AbstractCard) => c.previewTrajectories));
 
     _.each(trajectories, (t: Trajectory) => {
       if (player.checkLines.length > 0 && t.intersectLine(player.checkLines[0])) {
@@ -173,7 +175,7 @@ export class PlayerService {
       }
     });
 
-    const lastCard: Card = _.last(cards);
+    const lastCard: AbstractCard = _.last(cards);
     const bArriving = _.clone(player.boat);
     bArriving.orientation = lastCard.lastOrientationArriving;
     const arriving: Point = this.cardService.findBoatFromArriving(lastCard, bArriving);
@@ -185,21 +187,21 @@ export class PlayerService {
       game.droppedCards = [];
     }
     game.droppedCards = game.droppedCards.concat(cards);
-    player.cards = _.reject(player.cards, (c: Card) => c.previewOrder);
-    _.each(cards, (c: Card) => this.cardService.clearMoveCard(c));
+    player.cards = _.reject(player.cards, (c: AbstractCard) => c.previewOrder);
+    _.each(cards, (c: AbstractCard) => this.cardService.clearMoveCard(c));
     player.status = PlayerStatus.MOVE_PLAYED;
 
     this.clearPreview(player);
   }
 
   public trap(player: Player, game: Game): void {
-    const cards = _.filter(player.cards, (c: Card) => c.playerTrap);
+    const cards = _.filter(player.cards, (c: AbstractCard) => c.playerTrap);
     if (!game.droppedCards) {
       game.droppedCards = [];
     }
     game.droppedCards = game.droppedCards.concat(cards);
-    player.cards = _.reject(player.cards, (c: Card) => c.playerTrap);
-    _.each(cards, (c: Card) => this.cardService.clearTrapCard(c));
+    player.cards = _.reject(player.cards, (c: AbstractCard) => c.playerTrap);
+    _.each(cards, (c: AbstractCard) => this.cardService.clearTrapCard(c));
     player.status = PlayerStatus.TERMINATED;
   }
 

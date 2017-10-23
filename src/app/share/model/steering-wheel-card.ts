@@ -1,8 +1,7 @@
 import * as _ from 'underscore/underscore';
 import { AbstractCard } from './abstract-card';
-import { SteeringWheelCard } from './steering-wheel-card';
 
-export class Card extends AbstractCard {
+export class SteeringWheelCard extends AbstractCard {
 
   public canDisplayPossibilities(cards: AbstractCard[]): boolean {
     if (cards.length === 0 && (!this.previewPossibilities || this.previewPossibilities.length === 0)) {

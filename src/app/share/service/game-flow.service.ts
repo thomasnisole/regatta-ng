@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {Player} from '../model/player';
 import * as _ from 'underscore/underscore';
 import {PlayerStatus} from '../model/player-status.enum';
-import {Card} from '../model/card';
 import {CardType} from '../model/card-type.enum';
+import { AbstractCard } from '../model/abstract-card';
 
 @Injectable()
 export class GameFlowService {
@@ -11,7 +11,7 @@ export class GameFlowService {
   public constructor() { }
 
   public canTrap(player: Player): boolean {
-    return player.status === PlayerStatus.MOVE_PLAYED && _.filter(player.cards, (c: Card) => c.isTrapCard()).length > 0;
+    return player.status === PlayerStatus.MOVE_PLAYED && _.filter(player.cards, (c: AbstractCard) => c.isTrapCard()).length > 0;
   }
 
   public canDropCard(player: Player): boolean {
