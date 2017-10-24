@@ -1,3 +1,9 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+.btn:hover {
+  cursor: pointer;
+}
+
 @mixin vertical-align(){
   top: 50%;
   transform: translateY(-50%);
@@ -23,7 +29,7 @@
   background: transparent;
 }
 
-@mixin regattaPrimaryButton($sizeButton, $sizeFont){
+@mixin circledRegattaPrimaryButton($sizeButton, $sizeFont) {
   @include resetButtonStyle();
   @include circle();
   @include circleSize($sizeButton);
@@ -36,15 +42,31 @@
 
   &:hover {
     cursor: pointer;
+    background-color: #fff;
+    color: $bgButtonFlash;
+    border-color: $bgButtonFlash;
   }
 }
 
-
 .btn-primary-regatta-100-30 {
-  @include regattaPrimaryButton(100px, 30px);
+  @include circledRegattaPrimaryButton(100px, 30px);
 }
 
-
 .btn-primary-regatta-120-30 {
-  @include regattaPrimaryButton(120px, 30px);
+  @include circledRegattaPrimaryButton(120px, 30px);
+}
+
+.btn-primary-regatta {
+  @extend .btn-primary;
+
+  background-color: $bgButtonFlash;
+  color: #fff;
+  border-color: $bgButtonFlash;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #fff;
+    color: $bgButtonFlash;
+    border-color: $bgButtonFlash;
+  }
 }

@@ -7,7 +7,8 @@
       <i class="fa fa-arrows"></i>
     </li>
     <li *ngIf="tackIsVisible">
-      <i class="fa fa-exchange" [ngbPopover]="tackPopover" #tackPopoverInstance="ngbPopover"></i>
+      <i class="fa fa-exchange" [ngbPopover]="tackPopover" #tackPopoverInstance="ngbPopover"
+        (document:click)="tackPopoverInstance.close()" (click)="$event.stopPropagation()"></i>
       <ng-template #tackPopover>
         <ul class="list-group list-unstyled text-muted">
           <li class="list-group-item border-0">
@@ -24,7 +25,8 @@
       </ng-template>
     </li>
     <li *ngIf="!flagIsVisible && (playIsVisible || trashIsVisible || trapIsVisible)">
-      <i class="fa fa-bars" [ngbPopover]="modePopover" #modePopoverInstance="ngbPopover"></i>
+      <i class="fa fa-bars" [ngbPopover]="modePopover" #modePopoverInstance="ngbPopover"
+        (document:click)="modePopoverInstance.close()" (click)="$event.stopPropagation()"></i>
       <ng-template #modePopover>
         <ul class="list-group list-unstyled text-muted">
           <li class="list-group-item border-0" *ngIf="playIsVisible" [ngClass]="{'active': mode === 'play'}">

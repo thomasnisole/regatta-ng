@@ -1,7 +1,7 @@
 import {JsonProperty} from 'json-typescript-mapper';
 import {FbIdentifiable} from './fb-identifiable';
 import { enumConverter } from '../converter/enum-converter';
-import {PlayerStatus} from './player-status.enum';
+import { PlayerStatus } from './player-status.enum';
 import {Boat} from './boat';
 import {Line} from './line';
 import * as _ from 'underscore/underscore';
@@ -37,6 +37,12 @@ export class Player extends FbIdentifiable {
   @JsonProperty('arrivingOrder')
   public arrivingOrder: number = void 0;
 
+  @JsonProperty('photoUrl')
+  public photoUrl: string = void 0;
+
+  @JsonProperty('cardPlayedCount')
+  public cardPlayedCount: number = void 0;
+
   public y: number;
 
   public isWaitingToStart(): boolean {
@@ -44,7 +50,13 @@ export class Player extends FbIdentifiable {
   }
 
   public isStarted(): boolean {
-    return this.status > PlayerStatus.WAITING_TO_START;
+    return this.status === PlayerStatus.WAITING_TO_PLAY
+        || this.status === PlayerStatus.MOVE_PLAYED
+        || this.status === PlayerStatus.TERMINATED;
+  }
+
+  public isArrived(): boolean {
+    return this.status === PlayerStatus.FINISHED;
   }
 
   public hasPreviewedCards(): boolean {

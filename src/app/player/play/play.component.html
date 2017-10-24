@@ -20,13 +20,59 @@
                        [terminateIsVisible]="canTerminateCurrentAction(p, actionNavBar.mode)"
                        (onStart)="placeRemoteIsVisible.isVisible = true;"
                        (onMoveMap)="moveRemoteIsVisible.isVisible = true;"
-                       (onTackBabord)="tack(p, -90)" (onTackTribord)="tack(p, 90)"
-                       (onTrash)="dropCards(p)" (onClearPreview)="clearPreview(p)" (onPlay)="play(p)"
-                       (onTrap)="trap(p)"></app-action-nav-bar>
+                       (onTackBabord)="tack(p, -90, confirmTack)" (onTackTribord)="tack(p, 90, confirmTack)"
+                       (onTrash)="dropCards(p, confirmTrash)" (onClearPreview)="clearPreview(p)" (onPlay)="play(p, confirmPlaying)"
+                       (onTrap)="trap(p, confirmTrap)"></app-action-nav-bar>
 
   <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
   <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="p"></app-place-boat-remote>
 </div>
 
-<ng-template #loading>
+<ng-template #confirmTack let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Virer de bord</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir virer de bord ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmTrash let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Défausser des cartes</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir vous défausser de ces cartes ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmPlaying let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Se déplacer</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir jouer ces cartes de déplacement ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmTrap let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Piéger</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir jouer ces cartes de piège ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
 </ng-template>

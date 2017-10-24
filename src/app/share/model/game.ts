@@ -63,6 +63,10 @@ export class Game {
     return this.status === GameStatus.STARTED;
   }
 
+  public isFinished(): boolean {
+    return this.status === GameStatus.FINISHED;
+  }
+
   public getCurrentPlayer(): Player {
     return _.find(this.players, (player: Player) => this.isCurrentPlayer(player));
   }

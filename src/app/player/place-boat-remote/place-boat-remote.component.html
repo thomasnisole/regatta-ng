@@ -4,7 +4,20 @@
             (onBottom)="moveBottom()"
             (onRotateLeft)="rotateLeft()"
             (onRotateRight)="rotateRight()"
-            (onValid)="validPosition()"
+            (onValid)="validPosition(confirmStart)"
             (onDblClick)="isVisible = !isVisible"
             [isVisible]="isVisible">
 </app-remote>
+
+<ng-template #confirmStart let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Démarrer</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir commencer à cette position ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>

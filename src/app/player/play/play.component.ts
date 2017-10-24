@@ -14,6 +14,7 @@ import {environment} from '../../../environments/environment';
 import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component';
 import { AbstractCard } from '../../share/model/abstract-card';
 import { CloudCard } from '../../share/model/cloud-card';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -42,7 +43,8 @@ export class PlayComponent implements OnInit {
     private userService: UserService,
     private cardService: CardService,
     private playerService: PlayerService,
-    protected gameFlowService: GameFlowService) { }
+    protected gameFlowService: GameFlowService,
+    private modalService: NgbModal) { }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -65,24 +67,37 @@ export class PlayComponent implements OnInit {
     );
   }
 
-  public tack(player: Player, degres: number): void {
-    this.clearPreview(player);
-    this.playerService.tack(player, degres);
-    this.playerService.update(player, this.game);
+  public tack(player: Player, degres: number, modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
 
-    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
-    this.gameService.update(this.game);
+      this.clearPreview(player);
+      this.playerService.tack(player, degres);
+      this.playerService.update(player, this.game);
+
+      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.gameService.update(this.game);
+    });
   }
 
-  public dropCards(player: Player): void {
-    this.playerService.clearPreview(player);
-    const cardsToDrop: AbstractCard[] = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
+  public dropCards(player: Player, modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
 
-    this.playerService.dropCards(player, this.game, cardsToDrop);
-    this.playerService.takeCards(player, this.game, cardsToDrop.length);
+      this.playerService.clearPreview(player);
+      const cardsToDrop: AbstractCard[] = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
 
-    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
-    this.gameService.update(this.game);
+      this.playerService.dropCards(player, this.game, cardsToDrop);
+      this.playerService.takeCards(player, this.game, cardsToDrop.length);
+
+      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.gameService.update(this.game);
+      this.actionNavBar.changeToPlayMode();
+    });
   }
 
   public canTerminateCurrentAction(player: Player, mode: string): boolean {
@@ -131,25 +146,42 @@ export class PlayComponent implements OnInit {
     this.playerService.update(player, this.game);
   }
 
-  public play(player: Player): void {
-    this.playerService.play(player, this.game);
+  public play(player: Player, modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
 
-    if (!this.gameFlowService.canTrap(player)) {
-      this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
-      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
-    } else {
-      this.actionNavBar.changeToTrapMode();
-    }
+      this.playerService.play(player, this.game);
 
-    this.gameService.update(this.game);
+      if (!this.gameFlowService.canTrap(player)) {
+        if (!player.isArrived()) {
+          this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
+        } else {
+          this.playerService.dropCards(player, this.game, player.cards);
+        }
+
+        this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      } else {
+        this.actionNavBar.changeToTrapMode();
+      }
+
+      this.gameService.update(this.game);
+    });
   }
 
-  public trap(player: Player): void {
-    this.playerService.trap(player, this.game);
+  public trap(player: Player, modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
 
-    this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
-    this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
-    this.gameService.update(this.game);
-    this.actionNavBar.changeToPlayMode();
+      this.playerService.trap(player, this.game);
+
+      this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
+      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.gameService.update(this.game);
+      this.actionNavBar.changeToPlayMode();
+    });
   }
 }

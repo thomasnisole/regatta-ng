@@ -1,0 +1,118 @@
+@import 'variables';
+
+$step-height: 200px;
+$step-width: 200px;
+$step-border-color: white;
+$step-border-size: 3px;
+$step-background-color: $flashColor;
+$step-font-color: white;
+$step-base-font-size: 50px;
+$step-base-animation-duration: 1s;
+$step-head-font-size: 20px;
+$step-head-img-width: 100px;
+$step-head-img-height: 100px;
+
+.podium {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: $step-font-color;
+  align-items: flex-end;
+
+  .step  {
+    width: $step-width;
+    display: flex;
+    flex-direction: column-reverse;
+
+    &:not(:first-child):not(:last-child) {
+      margin: 0 10px;
+    }
+
+    .head-step {
+      display: flex;
+      padding: 10px 0;
+      justify-content: center;
+      flex-wrap: nowrap;
+      align-items: center;
+      flex-direction: column;
+      font-size: $step-head-font-size;
+
+      img {
+        border-radius: 50%;
+        width: $step-head-img-width;
+        height: $step-head-img-height;
+      }
+
+      p {
+        margin: 0;
+        padding: 0 5px;
+      }
+    }
+
+    .base-step {
+      background-color: $step-background-color;
+      border-top: solid $step-border-size $step-border-color;
+      font-size: $step-base-font-size;
+      text-align: center;
+      font-weight: bold;
+      width: 100%;
+
+      &-one {
+        height: $step-height;
+        animation-name: animateHeightStepOne;
+        animation-duration: $step-base-animation-duration;
+
+        &::before {
+          content: '1';
+        }
+      }
+
+      &-two {
+        height: $step-height * 75 / 100;
+        animation-name: animateHeightStepTwo;
+        animation-duration: $step-base-animation-duration;
+
+        &::before {
+          content: '2';
+        }
+      }
+
+      &-three {
+        height: $step-height * 50 / 100;
+        animation-name: animateHeightStepThree;
+        animation-duration: $step-base-animation-duration;
+
+        &::before {
+          content: '3';
+        }
+      }
+    }
+  }
+}
+
+@keyframes animateHeightStepOne {
+  from {
+    height: 0;
+  }
+  to {
+    height: 200px;
+  }
+}
+
+@keyframes animateHeightStepTwo {
+  from {
+    height: 0;
+  }
+  to {
+    height: $step-height * 75 / 100;
+  }
+}
+
+@keyframes animateHeightStepThree {
+  from {
+    height: 0;
+  }
+  to {
+    height: $step-height * 50 / 100;
+  }
+}

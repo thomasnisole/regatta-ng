@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {Player} from '../../share/model/player';
 import {Game} from '../../share/model/game';
 import {PlayerService} from '../../share/service/player.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-place-boat-remote',
@@ -19,7 +20,7 @@ export class PlaceBoatRemoteComponent implements OnInit {
   @Input()
   public player: Player;
 
-  public constructor(private playerService: PlayerService) { }
+  public constructor(private playerService: PlayerService, private modalService: NgbModal) { }
 
   public ngOnInit(): void {
 
@@ -79,12 +80,18 @@ export class PlaceBoatRemoteComponent implements OnInit {
     this.playerService.update(this.player, this.game);
   }
 
-  public validPosition(): void {
-    this.checkPlayer();
+  public validPosition(modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
 
-    if (this.playerService.startPlayer(this.player, this.game)) {
-      this.playerService.update(this.player, this.game);
-      this.isVisible = false;
-    }
+      this.checkPlayer();
+
+      if (this.playerService.startPlayer(this.player, this.game)) {
+        this.playerService.update(this.player, this.game);
+        this.isVisible = false;
+      }
+    });
   }
 }

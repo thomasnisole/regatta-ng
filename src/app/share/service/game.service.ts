@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {Game} from '../model/game';
 import {AngularFireDatabase} from 'angularfire2/database';
 import {deserialize, serialize} from 'json-typescript-mapper';
-import {GameStatus} from '../model/game-status.enum';
+import { GameStatus } from '../model/game-status.enum';
 import {LevelParserService} from './level-parser.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
@@ -95,8 +95,13 @@ export class GameService {
   }
 
   public changeCurrentPlayer(nextPlayerId: string, game: Game): void {
+    if (_.filter(game.players, (p: Player) => !p.arrivingOrder).length === 0) {
+      game.status = GameStatus.FINISHED;
+      return;
+    }
+
     let nextPlayer: Player = game.getPlayerByUserId(nextPlayerId);
-    while (nextPlayer.isTrap) {
+    while (nextPlayer.isTrap || nextPlayer.arrivingOrder > 0) {
       nextPlayer.isTrap = void 0;
       nextPlayer = game.getPlayerByUserId(nextPlayer.nextPlayer);
     }

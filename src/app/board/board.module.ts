@@ -13,6 +13,7 @@ import { BoatComponent } from './boat/boat.component';
 import { CheckLineDirective } from './directive/check-line.directive';
 import { CardPreviewComponent } from './card-preview/card-preview.component';
 import { BuoyComponent } from './buoy/buoy.component';
+import { EndGameComponent } from './end-game/end-game.component';
 
 @NgModule({
   imports: [
@@ -31,8 +32,9 @@ import { BuoyComponent } from './buoy/buoy.component';
     BoatComponent,
     CheckLineDirective,
     CardPreviewComponent,
-    BuoyComponent
-  ],
+    BuoyComponent,
+    EndGameComponent
+],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class BoardModule { }

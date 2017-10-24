@@ -1,4 +1,4 @@
-<div class="row h-100" *ngIf="game|async; else loading; let gs;">
+<div class="row h-100" *ngIf="game|async as gs">
   <svg version="1.1" class="board p-0 col-12"
        *ngIf="gs.isStarted()" appViewbox [viewBoxX]="gs.board.x" [viewBoxY]="gs.board.y"
        [viewBoxWidth]="gs.board.width" [viewBoxHeight]="gs.board.height" [zoom]="gs.board.zoom">

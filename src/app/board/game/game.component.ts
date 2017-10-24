@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {GameService} from '../../share/service/game.service';
 import {Observable} from 'rxjs/Observable';
 import {Game} from '../../share/model/game';
@@ -32,6 +32,7 @@ export class GameComponent implements OnInit {
 
   public constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private gameService: GameService) { }
 
   public ngOnInit(): void {
@@ -39,6 +40,9 @@ export class GameComponent implements OnInit {
       (params: any) => this.game = this.gameService
         .findById(params['id'])
         .do((game: Game) => {
+          if (game.isFinished()) {
+            this.router.navigate(['/board/' + game.id + '/end']);
+          }
           this.g = game;
           if (game.isStarted()) {
             this.makeElements(game);

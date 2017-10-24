@@ -170,7 +170,7 @@ export class PlayerService {
     const trajectories: Trajectory[] = _.flatten(_.map(cards, (c: AbstractCard) => c.previewTrajectories));
 
     _.each(trajectories, (t: Trajectory) => {
-      if (player.checkLines.length > 0 && t.intersectLine(player.checkLines[0])) {
+      if (player.checkLines && player.checkLines.length > 0 && t.intersectLine(player.checkLines[0])) {
         player.checkLines.shift();
       }
     });
@@ -188,8 +188,18 @@ export class PlayerService {
     }
     game.droppedCards = game.droppedCards.concat(cards);
     player.cards = _.reject(player.cards, (c: AbstractCard) => c.previewOrder);
+    if (player.cardPlayedCount) {
+      player.cardPlayedCount = 0;
+    }
+    player.cardPlayedCount += cards.length;
     _.each(cards, (c: AbstractCard) => this.cardService.clearMoveCard(c));
-    player.status = PlayerStatus.MOVE_PLAYED;
+
+    if (player.checkLines && player.checkLines.length > 0) {
+      player.status = PlayerStatus.MOVE_PLAYED;
+    } else {
+      player.status = PlayerStatus.FINISHED;
+      player.arrivingOrder = _.filter(game.players, (p: Player) => p.arrivingOrder).length + 1;
+    }
 
     this.clearPreview(player);
   }
@@ -201,6 +211,10 @@ export class PlayerService {
     }
     game.droppedCards = game.droppedCards.concat(cards);
     player.cards = _.reject(player.cards, (c: AbstractCard) => c.playerTrap);
+    if (player.cardPlayedCount) {
+      player.cardPlayedCount = 0;
+    }
+    player.cardPlayedCount += cards.length;
     _.each(cards, (c: AbstractCard) => this.cardService.clearTrapCard(c));
     player.status = PlayerStatus.TERMINATED;
   }
