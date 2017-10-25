@@ -1,8 +1,7 @@
 @import "../styles/variables";
 
 .splash-screen {
-  background-color: $primaryColor;
-  //background-image: url('../assets/images/regatta_start.png');
+  background-color: $bgColor;
   background-repeat: no-repeat;
   background-position : center center;
   background-size: contain;

@@ -15,6 +15,8 @@ import { PlaceBoatRemoteComponent } from './place-boat-remote/place-boat-remote.
 import { MoveMapRemoteComponent } from './move-map-remote/move-map-remote.component';
 import { CardToPlayComponent } from './card-to-play/card-to-play.component';
 import {SwiperModule} from 'angular2-useful-swiper';
+import { HomeComponent } from './home/home.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   imports: [
@@ -35,7 +37,9 @@ import {SwiperModule} from 'angular2-useful-swiper';
     RemoteComponent,
     PlaceBoatRemoteComponent,
     MoveMapRemoteComponent,
-    CardToPlayComponent
-  ]
+    CardToPlayComponent,
+    HomeComponent,
+    LayoutComponent
+]
 })
 export class PlayerModule {}

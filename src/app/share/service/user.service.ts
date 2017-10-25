@@ -25,6 +25,7 @@ export class UserService {
           this.authService.authenticateWithGoogle();
         }
 
+        console.log(user);
         this.user = deserialize(User, user);
 
         this.db.object('/users/' + user.uid).update(removeUndefined(serialize(this.user)));

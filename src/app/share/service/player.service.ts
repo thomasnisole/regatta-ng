@@ -188,7 +188,7 @@ export class PlayerService {
     }
     game.droppedCards = game.droppedCards.concat(cards);
     player.cards = _.reject(player.cards, (c: AbstractCard) => c.previewOrder);
-    if (player.cardPlayedCount) {
+    if (!player.cardPlayedCount) {
       player.cardPlayedCount = 0;
     }
     player.cardPlayedCount += cards.length;
@@ -211,7 +211,7 @@ export class PlayerService {
     }
     game.droppedCards = game.droppedCards.concat(cards);
     player.cards = _.reject(player.cards, (c: AbstractCard) => c.playerTrap);
-    if (player.cardPlayedCount) {
+    if (!player.cardPlayedCount) {
       player.cardPlayedCount = 0;
     }
     player.cardPlayedCount += cards.length;

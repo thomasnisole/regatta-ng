@@ -101,8 +101,8 @@ export class GameService {
     }
 
     let nextPlayer: Player = game.getPlayerByUserId(nextPlayerId);
-    while (nextPlayer.isTrap || nextPlayer.arrivingOrder > 0) {
-      nextPlayer.isTrap = void 0;
+    while (nextPlayer.isTrapped || nextPlayer.arrivingOrder > 0) {
+      nextPlayer.isTrapped = void 0;
       nextPlayer = game.getPlayerByUserId(nextPlayer.nextPlayer);
     }
     game.currentPlayer = nextPlayer.userId;

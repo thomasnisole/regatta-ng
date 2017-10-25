@@ -32,13 +32,16 @@ export class Player extends FbIdentifiable {
   public nextPlayer: string = void 0;
 
   @JsonProperty('isTrap')
-  public isTrap: boolean = void 0;
+  public isTrapped: boolean = void 0;
+
+  @JsonProperty('isLeft')
+  public isLeft: boolean = void 0;
 
   @JsonProperty('arrivingOrder')
   public arrivingOrder: number = void 0;
 
-  @JsonProperty('photoUrl')
-  public photoUrl: string = void 0;
+  @JsonProperty('photoURL')
+  public photoURL: string = void 0;
 
   @JsonProperty('cardPlayedCount')
   public cardPlayedCount: number = void 0;

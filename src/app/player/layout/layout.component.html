@@ -1,0 +1,29 @@
+<div *ngIf="user|async as u">
+  <nav class="sidenav" [ngClass]="{open: sideBarOpened}" (document:click)="sideBarOpened = false">
+    <div class="header-account">
+      <img src="{{ u.photoURL }}" />
+      <p>
+        {{ u.displayName }}
+        <br/>
+        <span class=text-muted>{{ u.username }}</span>
+      </p>
+    </div>
+    <a href="#" class="active">
+      <span class="fa fa-home mr-2"></span>Accueil
+    </a>
+    <a href="#">
+      <span class="fa fa-sign-in mr-2"></span>Rejoindre une partie
+    </a>
+    <a href="#">
+      <span class="fa fa-magic mr-2"></span>Créer une partie
+    </a>
+    <a href="#">
+      <span class="fa fa-table mr-2"></span>Classements
+    </a>
+  </nav>
+
+  <h1 class="title-bar h3 p-2">
+    <a class="btn pt-1" role="button" (click)="sideBarOpened = true; $event.stopPropagation()"><span class="fa fa-bars"></span></a>
+    Accueil
+  </h1>
+</div>

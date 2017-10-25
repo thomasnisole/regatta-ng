@@ -1,31 +1,31 @@
-<div *ngIf="player|async; else loading; let p;" class="play-board d-flex flex-column">
-  <app-card-preview [cards]="p.cards"></app-card-preview>
+<div *ngIf="player" class="play-board d-flex flex-column">
+  <app-card-preview [cards]="player.cards"></app-card-preview>
 
   <swiper class="flex-grow-2">
     <div class="swiper-wrapper">
-      <app-card-to-play class="swiper-slide" *ngFor="let card of p.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
-                [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(p, card, actionNavBar.mode)"
+      <app-card-to-play class="swiper-slide" *ngFor="let card of player.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
+                [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(card, actionNavBar.mode)"
                 [isInTrapMode]="actionNavBar.mode === 'trap'" [game]="game"
-                (clickOnPossibility)="previewCard($event, p)"></app-card-to-play>
+                (clickOnPossibility)="previewCard($event)"></app-card-to-play>
     </div>
   </swiper>
 
   <app-action-nav-bar  #actionNavBar
-                       [flagIsVisible]="p.isWaitingToStart()"
-                       [clearIsVisible]="p.hasPreviewedCards()"
-                       [trapIsVisible]="gameFlowService.canTrap(p)"
-                       [trashIsVisible]="gameFlowService.canDropCard(p)"
-                       [playIsVisible]="gameFlowService.canMove(p)"
-                       [tackIsVisible]="gameFlowService.canTack(p)"
-                       [terminateIsVisible]="canTerminateCurrentAction(p, actionNavBar.mode)"
+                       [flagIsVisible]="player.isWaitingToStart()"
+                       [clearIsVisible]="player.hasPreviewedCards()"
+                       [trapIsVisible]="gameFlowService.canTrap(player)"
+                       [trashIsVisible]="gameFlowService.canDropCard(player)"
+                       [playIsVisible]="gameFlowService.canMove(player)"
+                       [tackIsVisible]="gameFlowService.canTack(player)"
+                       [terminateIsVisible]="canTerminateCurrentAction(actionNavBar.mode)"
                        (onStart)="placeRemoteIsVisible.isVisible = true;"
                        (onMoveMap)="moveRemoteIsVisible.isVisible = true;"
-                       (onTackBabord)="tack(p, -90, confirmTack)" (onTackTribord)="tack(p, 90, confirmTack)"
-                       (onTrash)="dropCards(p, confirmTrash)" (onClearPreview)="clearPreview(p)" (onPlay)="play(p, confirmPlaying)"
-                       (onTrap)="trap(p, confirmTrap)"></app-action-nav-bar>
+                       (onTackBabord)="tack(-90, confirmTack)" (onTackTribord)="tack(90, confirmTack)"
+                       (onTrash)="dropCards(confirmTrash)" (onClearPreview)="clearPreview()" (onPlay)="play(confirmPlaying)"
+                       (onTrap)="trap(confirmTrap)"></app-action-nav-bar>
 
   <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
-  <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="p"></app-place-boat-remote>
+  <app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="player"></app-place-boat-remote>
 </div>
 
 <ng-template #confirmTack let-c="close">

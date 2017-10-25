@@ -35,6 +35,10 @@ export class CardToPlayComponent implements OnInit {
   public ngOnInit(): void { }
 
   public isPossibilitySelectable(index: number): boolean {
+    if (!this.card.possibilities) {
+      return false;
+    }
+
     return _.indexOf(Object.keys(this.card.possibilities), String(index)) !== -1;
   }
 
@@ -59,11 +63,11 @@ export class CardToPlayComponent implements OnInit {
 
     this.modalService.open(content).result.then((p: Player) => {
       if (!p && card.playerTrap) {
-        this.game.getPlayerByUserId(card.playerTrap).isTrap = false;
+        this.game.getPlayerByUserId(card.playerTrap).isTrapped = false;
         card.playerTrap = void 0;
       } else {
         card.playerTrap = p.userId;
-        p.isTrap = true;
+        p.isTrapped = true;
       }
     });
   }

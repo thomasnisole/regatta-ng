@@ -1,6 +1,6 @@
 @import 'variables';
 
-$step-height: 200px;
+$step-height: 160px;
 $step-width: 200px;
 $step-border-color: white;
 $step-border-size: 3px;
@@ -11,6 +11,7 @@ $step-base-animation-duration: 1s;
 $step-head-font-size: 20px;
 $step-head-img-width: 100px;
 $step-head-img-height: 100px;
+$step-pub-height: 100px;
 
 .podium {
   display: flex;
@@ -36,6 +37,7 @@ $step-head-img-height: 100px;
       align-items: center;
       flex-direction: column;
       font-size: $step-head-font-size;
+      color: black;
 
       img {
         border-radius: 50%;
@@ -87,6 +89,21 @@ $step-head-img-height: 100px;
         }
       }
     }
+
+    .pub-step {
+      width: 100%;
+      height: $step-pub-height;
+      background-color: $step-background-color;
+      overflow: hidden;
+      text-align: center;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+
+      img {
+        height: $step-pub-height;
+      }
+    }
   }
 }
 
@@ -95,7 +112,7 @@ $step-head-img-height: 100px;
     height: 0;
   }
   to {
-    height: 200px;
+    height: $step-height;
   }
 }
 

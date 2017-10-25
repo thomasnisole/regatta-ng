@@ -10,6 +10,6 @@ export class User {
   @JsonProperty('displayName')
   public displayName: string = void 0;
 
-  @JsonProperty('photoUrl')
-  public photoUrl: string = void 0;
+  @JsonProperty('photoURL')
+  public photoURL: string = void 0;
 }

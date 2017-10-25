@@ -28,7 +28,7 @@ export class PlayComponent implements OnInit {
 
   public user: User;
 
-  public player: Observable<Player>;
+  public player: Player;
 
   public canPlay: boolean = true;
 
@@ -49,7 +49,7 @@ export class PlayComponent implements OnInit {
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
       (params: any) => {
-        this.player = this.userService
+        this.userService
           .findUserAccount()
           .do((user: User) => this.user = user)
           .flatMap((user: User) => this.gameService
@@ -62,53 +62,56 @@ export class PlayComponent implements OnInit {
               // this.clearPreview(player);
               this.firstLoad = false;
             }
-          });
+          })
+          .subscribe(
+            (p: Player) => this.player = p
+          );
       }
     );
   }
 
-  public tack(player: Player, degres: number, modalContent): void {
+  public tack(degres: number, modalContent): void {
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
         return;
       }
 
-      this.clearPreview(player);
-      this.playerService.tack(player, degres);
-      this.playerService.update(player, this.game);
+      this.clearPreview();
+      this.playerService.tack(this.player, degres);
+      this.playerService.update(this.player, this.game);
 
-      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
       this.gameService.update(this.game);
     });
   }
 
-  public dropCards(player: Player, modalContent): void {
+  public dropCards(modalContent): void {
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
         return;
       }
 
-      this.playerService.clearPreview(player);
-      const cardsToDrop: AbstractCard[] = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
+      this.playerService.clearPreview(this.player);
+      const cardsToDrop: AbstractCard[] = _.filter(this.player.cards, (card: AbstractCard) => card.selectedToDrop);
 
-      this.playerService.dropCards(player, this.game, cardsToDrop);
-      this.playerService.takeCards(player, this.game, cardsToDrop.length);
+      this.playerService.dropCards(this.player, this.game, cardsToDrop);
+      this.playerService.takeCards(this.player, this.game, cardsToDrop.length);
 
-      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
       this.gameService.update(this.game);
       this.actionNavBar.changeToPlayMode();
     });
   }
 
-  public canTerminateCurrentAction(player: Player, mode: string): boolean {
+  public canTerminateCurrentAction( mode: string): boolean {
     if (mode === 'trash') {
-      const cardsToDrop = _.filter(player.cards, (card: AbstractCard) => card.selectedToDrop);
+      const cardsToDrop = _.filter(this.player.cards, (card: AbstractCard) => card.selectedToDrop);
 
       return cardsToDrop.length <= 3 && cardsToDrop.length > 0;
     }
 
     if (mode === 'play') {
-      const cardsInPreview = _.sortBy(_.filter(player.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
+      const cardsInPreview = _.sortBy(_.filter(this.player.cards, (c: AbstractCard) => c.previewPossibilities), 'previewOrder');
       return cardsInPreview.length > 0 && this.canPlay &&
         (
           !(_.last(cardsInPreview) instanceof CloudCard) ||
@@ -123,7 +126,7 @@ export class PlayComponent implements OnInit {
     return false;
   }
 
-  public canDisplayPossibilities(player: Player, card: AbstractCard, mode: string): boolean {
+  public canDisplayPossibilities(card: AbstractCard, mode: string): boolean {
     if (mode !== 'play') {
       return false;
     }
@@ -132,36 +135,36 @@ export class PlayComponent implements OnInit {
       return false;
     }
 
-    return this.cardService.canDisplayPossibilities(player, card);
+    return this.cardService.canDisplayPossibilities(this.player, card);
   }
 
-  public previewCard(card: AbstractCard, player: Player): void {
-    this.canPlay = this.playerService.previewCard(this.game, player, card);
-    this.playerService.update(player, this.game);
+  public previewCard(card: AbstractCard): void {
+    this.canPlay = this.playerService.previewCard(this.game, this.player, card);
+    this.playerService.update(this.player, this.game);
   }
 
-  public clearPreview(player: Player): void {
+  public clearPreview(): void {
     this.canPlay = true;
-    this.playerService.clearPreview(player);
-    this.playerService.update(player, this.game);
+    this.playerService.clearPreview(this.player);
+    this.playerService.update(this.player, this.game);
   }
 
-  public play(player: Player, modalContent): void {
+  public play(modalContent): void {
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
         return;
       }
 
-      this.playerService.play(player, this.game);
+      this.playerService.play(this.player, this.game);
 
-      if (!this.gameFlowService.canTrap(player)) {
-        if (!player.isArrived()) {
-          this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
+      if (!this.gameFlowService.canTrap(this.player)) {
+        if (!this.player.isArrived()) {
+          this.playerService.takeCards(this.player, this.game, environment.cardsCountPerPlayer - this.player.cards.length);
         } else {
-          this.playerService.dropCards(player, this.game, player.cards);
+          this.playerService.dropCards(this.player, this.game, this.player.cards);
         }
 
-        this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+        this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
       } else {
         this.actionNavBar.changeToTrapMode();
       }
@@ -170,18 +173,22 @@ export class PlayComponent implements OnInit {
     });
   }
 
-  public trap(player: Player, modalContent): void {
+  public trap(modalContent): void {
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
         return;
       }
 
-      this.playerService.trap(player, this.game);
+      this.playerService.trap(this.player, this.game);
 
-      this.playerService.takeCards(player, this.game, environment.cardsCountPerPlayer - player.cards.length);
-      this.gameService.changeCurrentPlayer(player.nextPlayer, this.game);
+      this.playerService.takeCards(this.player, this.game, environment.cardsCountPerPlayer - this.player.cards.length);
+      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
       this.gameService.update(this.game);
       this.actionNavBar.changeToPlayMode();
     });
+  }
+
+  public confirmLeave(): void {
+
   }
 }

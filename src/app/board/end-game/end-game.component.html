@@ -1,6 +1,9 @@
 <ng-template [ngIf]="game|async" let-g>
     <div class="podium">
       <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/hugo-boss.svg" style="height: 40px" class="mb-4"/>
+        </div>
         <div class="base-step base-step-two">
 
         </div>
@@ -8,6 +11,9 @@
                       [ngOutletContext]="{$implicit: getPlayer(g, 2)}"></ng-template>
       </div>
       <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/helly-hansen.svg" />
+        </div>
         <div class="base-step base-step-one">
 
         </div>
@@ -15,6 +21,9 @@
                       [ngOutletContext]="{$implicit: getPlayer(g, 1)}"></ng-template>
       </div>
       <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/volvo.svg" />
+        </div>
         <div class="base-step base-step-three">
 
         </div>
