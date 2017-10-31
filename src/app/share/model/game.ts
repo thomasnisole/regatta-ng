@@ -18,7 +18,7 @@ export class Game {
     FINISHED: 'finished'
   };
 
-  @JsonProperty({name: '$key', excludeToJson: true})
+  @JsonProperty({name: 'id', excludeToJson: true})
   public id: string = void 0;
 
   @JsonProperty('name')

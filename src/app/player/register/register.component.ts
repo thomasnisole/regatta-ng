@@ -9,6 +9,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
 import {PlayerService} from '../../share/service/player.service';
 import {Player} from '../../share/model/player';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -70,6 +71,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    console.log('connard');
     this.playerService
       .create(this.gameToJoin, this.user, this.boatNumber, this.selectedColor)
       .subscribe(

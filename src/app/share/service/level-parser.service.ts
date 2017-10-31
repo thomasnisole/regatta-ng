@@ -26,54 +26,56 @@ export class LevelParserService {
   public constructor(private db: AngularFireDatabase) { }
 
   public parse(game: Game): Observable<Game> {
-    return this.db.object('/game-types/level1').map(
-      (data) => {
-        game.board = new Board();
-        game.board.x = 0;
-        game.board.y = 0;
-        game.board.width = window.innerWidth * environment.board.viewboxHeight / window.innerHeight;
-        game.board.height = environment.board.viewboxHeight;
-        game.board.zoom = environment.board.viewboxHeight;
-        game.currentPlayer = game.players[0].userId;
-        game.board.buoys = [];
-        game.board.seaElements = [];
+    return this.db.object('/game-types/level1')
+      .valueChanges()
+      .map(
+        (data: any) => {
+          game.board = new Board();
+          game.board.x = 0;
+          game.board.y = 0;
+          game.board.width = window.innerWidth * environment.board.viewboxHeight / window.innerHeight;
+          game.board.height = environment.board.viewboxHeight;
+          game.board.zoom = environment.board.viewboxHeight;
+          game.currentPlayer = game.players[0].userId;
+          game.board.buoys = [];
+          game.board.seaElements = [];
 
-        const rect: Rectangle = new Rectangle();
-        rect.x = data.board.departureArea.x;
-        rect.y = data.board.departureArea.y;
-        rect.width = data.board.departureArea.width;
-        rect.height = data.board.departureArea.height;
-        game.board.departureArea = rect;
+          const rect: Rectangle = new Rectangle();
+          rect.x = data.board.departureArea.x;
+          rect.y = data.board.departureArea.y;
+          rect.width = data.board.departureArea.width;
+          rect.height = data.board.departureArea.height;
+          game.board.departureArea = rect;
 
-        this.makeLineBuoys(game.board, data.board.departure);
+          this.makeLineBuoys(game.board, data.board.departure);
 
-        _.each(data.board.buoys, (buoy: any) => game.board.buoys.push(this.makeBuoy(buoy)));
-        _.each(data.board.seaElements, (seaElement: any) => game.board.seaElements.push(this.makeSeaElement(seaElement)));
-        game.cards = [];
-        _.each(data.board.cardTypes, (cardType: any) => {
-          for (let i = 0; i < cardType.count; i++) {
-            game.cards.push(this.makeCard(cardType));
-          }
-        });
-        game.cards = _.shuffle(game.cards);
+          _.each(data.board.buoys, (buoy: any) => game.board.buoys.push(this.makeBuoy(buoy)));
+          _.each(data.board.seaElements, (seaElement: any) => game.board.seaElements.push(this.makeSeaElement(seaElement)));
+          game.cards = [];
+          _.each(data.board.cardTypes, (cardType: any) => {
+            for (let i = 0; i < cardType.count; i++) {
+              game.cards.push(this.makeCard(cardType));
+            }
+          });
+          game.cards = _.shuffle(game.cards);
 
-        this.makeLineBuoys(game.board, data.board.arrival);
+          this.makeLineBuoys(game.board, data.board.arrival);
 
-        _.each(game.players, (player: Player) => {
-          player.boat.x = game.board.departureArea.x;
-          player.boat.y = game.board.departureArea.y;
-          player.boat.width = data.board.boatWidth;
-          player.boat.height = data.board.boatLength;
-          player.boat.orientation = data.board.boatOrientation;
-          player.checkLines = this.checkLines.slice();
-          player.cards = game.cards.splice(0, environment.cardsCountPerPlayer);
-        });
+          _.each(game.players, (player: Player) => {
+            player.boat.x = game.board.departureArea.x;
+            player.boat.y = game.board.departureArea.y;
+            player.boat.width = data.board.boatWidth;
+            player.boat.height = data.board.boatLength;
+            player.boat.orientation = data.board.boatOrientation;
+            player.checkLines = this.checkLines.slice();
+            player.cards = game.cards.splice(0, environment.cardsCountPerPlayer);
+          });
 
-        game.status = GameStatus.STARTED;
+          game.status = GameStatus.STARTED;
 
-        return game;
-      }
-    );
+          return game;
+        }
+      );
   }
 
   private makeLineBuoys(board: Board, line: any): void {

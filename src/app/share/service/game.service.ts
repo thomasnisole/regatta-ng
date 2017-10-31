@@ -24,22 +24,35 @@ export class GameService {
 
   public findAllWaiting(): Observable<Game[]> {
     return this.db
-      .list('/games', {
-        query: {
-          orderByChild: 'status',
-          equalTo: GameStatus.WAITING
-        }
-      })
-      .map((os: DataSnapshot) => _.map(os, (o) => deserialize(Game, o)));
+      .list('/games', (ref: firebase.database.Reference) =>
+        ref.orderByChild('status').equalTo(GameStatus.WAITING)
+      ).snapshotChanges()
+      .map((os: any) => _.map(os, (o) => {
+        const g: Game = deserialize(Game, o.payload.val());
+        g.id = o.payload.key;
+
+        return g;
+      }));
   }
 
   public findById(id: string): Observable<Game> {
     return this.db
       .object('/games/' + id)
-      .map((os: DataSnapshot) => deserialize(Game, os));;
+      .snapshotChanges()
+      .do((os: any) => {
+        if (!os) {
+          throw Error('No game found');
+        }
+      })
+      .map((os: any) => {
+        const g: Game = deserialize(Game, os.payload.val());
+        g.id = os.payload.key;
+
+        return g;
+      });
   }
 
-  public create(name: string, password: string): Observable<Game> {
+  public create(name: string, password: string): Observable<string> {
     const game = new Game();
     game.name = name;
     game.password = password;
@@ -48,10 +61,7 @@ export class GameService {
       this.db
         .list('/games')
         .push(removeUndefined(serialize(game)))
-        .then((o: DataSnapshot) => {
-          game.id = o.key;
-          observer.next(game);
-        });
+        .then((os: DataSnapshot) => observer.next(os.key));
     });
   }
 

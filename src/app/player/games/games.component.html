@@ -1,7 +1,16 @@
-<h1 class="h2 header">Rejoindre une partie</h1>
 <ul class="list-group">
-  <li class="list-group-item justify-content-between" *ngFor="let game of games|async">
-    <a routerLink="{{ game.id }}">{{ game.name }}</a>
-    <span class="badge badge-default badge-pill">{{ game.players ? game.players.length : 0 }}</span>
+  <li class="list-group-item" *ngFor="let game of games|async">
+    <a [routerLink]="['/player/games', game.id, 'register']">
+      {{ game.name }}
+      <span class="text-muted d-block mt-1">
+        <span class="fa fa-map-o mr-2"></span>
+        Baie de St Malo
+      </span>
+      <span class="text-muted d-block">
+        <span class="fa fa-users mr-2"></span>
+        {{ game.players ? game.players.length + ' joueur(s)' : 'Aucun joueur' }}
+      </span>
+    </a>
+    <span class="fa fa-chevron-right ml-2 my-auto text-muted" style="font-size: 25px;"></span>
   </li>
 </ul>

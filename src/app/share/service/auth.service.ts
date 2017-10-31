@@ -12,7 +12,7 @@ export class AuthService {
     this.user = afAuth.authState;
   }
 
-  public authenticateWithGoogle(): firebase.Promise<any> {
+  public authenticateWithGoogle(): Promise<any> {
     return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 

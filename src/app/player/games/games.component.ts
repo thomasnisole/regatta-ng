@@ -17,5 +17,4 @@ export class GamesComponent implements OnInit {
   public ngOnInit(): void {
     this.games = this.gameService.findAllWaiting();
   }
-
 }

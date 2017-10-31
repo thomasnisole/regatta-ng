@@ -30,7 +30,9 @@ import {ToastModule} from 'ng2-toastr';
     SwiperModule,
     ToastModule.forRoot()
   ],
-  providers: [UserGuard],
+  providers: [
+    UserGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

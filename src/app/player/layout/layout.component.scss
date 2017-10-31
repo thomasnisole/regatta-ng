@@ -26,7 +26,7 @@ $sidenav-header-image-width: 60px;
   left: 0;
   background-color: $sidenav-background-color;
   overflow-x: hidden;
-  transition: 0.5s;
+  transition: 0.3s;
 
   &.open {
     width: $sidenav-width;
@@ -55,6 +55,7 @@ $sidenav-header-image-width: 60px;
 
       span {
         font-size: 14px;
+        color: #818181;
       }
     }
   }
@@ -65,7 +66,6 @@ $sidenav-header-image-width: 60px;
     font-size: 15px;
     color: #818181;
     display: block;
-    transition: 0.3s;
     white-space: nowrap;
 
     &:hover, &.active {

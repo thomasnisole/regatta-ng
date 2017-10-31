@@ -1,34 +1,24 @@
-<div *ngIf="game|async; else loading; let g">
-  <h1 class="h2 header">
-    {{ g.name }} - Ton bateau
-  </h1>
+<form #playerForm="ngForm" novalidate *ngIf="game|async as g">
+  <div class="form-group">
+    <label for="name">Nom du joueur</label>
+    <input class="form-control" type="text" id="name" name="name" value="{{ user.displayName }}" disabled>
+  </div>
 
-  <form #playerForm="ngForm" (submit)="onSubmit()">
-    <div class="form-group row">
-      <div class="col-12">
-        <input class="form-control" type="text" id="name" name="name" value="{{ user.displayName }}" disabled>
-      </div>
-    </div>
+  <div class="form-group" [class.has-danger]="!boatNumberModel.valid && boatNumberModel.dirty">
+    <label for="boatNumber">Numéro de voile</label>
+    <input class="form-control" type="number" id="boatNumber" name="boatNumber" required
+            [(ngModel)]="boatNumber" #boatNumberModel="ngModel" appBoatNumberValidator [game]="g">
+  </div>
 
-    <div class="form-group row" [class.has-danger]="!number.valid && number.dirty">
-      <div class="col-12">
-        <input class="form-control" type="number" id="number" name="number" required
-               [(ngModel)]="boatNumber" #number="ngModel" appBoatNumberValidator [game]="g">
-      </div>
-    </div>
+  <div class="form-group">
+    <label>Couleur du bateau</label>
+    <ul class="color-chooser list-unstyled col-12">
+      <li *ngFor="let color of colors" class="{{ color.name }}" (click)="selectedColor = color"
+          [ngClass]="selectedColor?.name == color.name ? 'active' : ''"></li>
+    </ul>
+  </div>
 
-    <div class="form-group row">
-      <ul class="color-chooser list-unstyled col-12">
-        <li *ngFor="let color of colors" class="{{ color.name }}" (click)="selectedColor = color"
-            [ngClass]="selectedColor?.name == color.name ? 'active' : ''"></li>
-      </ul>
-    </div>
-
-    <div class="text-center">
-      <button type="submit" class="btn-primary-regatta-100-30">OK</button>
-    </div>
-  </form>
-</div>
-<ng-template #loading>
-
-</ng-template>
+  <div class="text-center">
+    <button class="btn-primary-regatta-100-30" (click)="onSubmit()">OK</button>
+  </div>
+</form>

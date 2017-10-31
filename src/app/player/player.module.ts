@@ -17,6 +17,10 @@ import { CardToPlayComponent } from './card-to-play/card-to-play.component';
 import {SwiperModule} from 'angular2-useful-swiper';
 import { HomeComponent } from './home/home.component';
 import { LayoutComponent } from './layout/layout.component';
+import { CanQuitGuard } from './guard/can-quit.guard';
+import { TestGuard } from './guard/test.guard';
+import { QuitGameComponent } from './quit-game/quit-game.component';
+import { CreateGameComponent } from './create-game/create-game.component';
 
 @NgModule({
   imports: [
@@ -39,7 +43,16 @@ import { LayoutComponent } from './layout/layout.component';
     MoveMapRemoteComponent,
     CardToPlayComponent,
     HomeComponent,
-    LayoutComponent
-]
+    LayoutComponent,
+    QuitGameComponent,
+    CreateGameComponent
+],
+  providers: [
+    CanQuitGuard,
+    TestGuard
+  ],
+  entryComponents: [
+    QuitGameComponent
+  ]
 })
 export class PlayerModule {}

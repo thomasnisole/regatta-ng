@@ -1,0 +1,17 @@
+<form class="container" #gameForm="ngForm" (submit)="onSubmit()">
+  <div class="form-group row" [class.has-danger]="!gameName.valid && gameName.dirty">
+    <div class="col-12">
+      <input class="form-control" type="text" id="game-name" name="gameName" placeholder="Saisir un nom de partie"
+             [(ngModel)]="name" #gameName="ngModel">
+    </div>
+  </div>
+  <div class="form-group row" [class.has-danger]="!password.valid && password.dirty">
+    <div class="col-12">
+      <input class="form-control" type="password" id="password" name="password" placeholder="Saisir un mot de passe de partie"
+             [(ngModel)]="pass" #password="ngModel">
+    </div>
+  </div>
+  <div class="text-center">
+    <button type="submit" class="btn-primary-regatta-100-30">OK</button>
+  </div>
+</form>

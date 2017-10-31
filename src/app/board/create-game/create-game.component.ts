@@ -23,7 +23,7 @@ export class CreateGameComponent implements OnInit {
 
   public onSubmit(): void {
     this.gameService.create(this.name, this.pass).subscribe(
-      (game: Game) => this.router.navigate(['/board/' + game.id])
+      (id: string) => this.router.navigate(['/board/' + id])
     );
   }
 }

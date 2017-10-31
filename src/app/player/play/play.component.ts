@@ -15,6 +15,8 @@ import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component'
 import { AbstractCard } from '../../share/model/abstract-card';
 import { CloudCard } from '../../share/model/cloud-card';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PlatformLocation } from '@angular/common';
+import { QuitGameComponent } from '../quit-game/quit-game.component';
 
 
 @Component({
@@ -44,7 +46,8 @@ export class PlayComponent implements OnInit {
     private cardService: CardService,
     private playerService: PlayerService,
     protected gameFlowService: GameFlowService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private location: PlatformLocation) {}
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -189,6 +192,13 @@ export class PlayComponent implements OnInit {
   }
 
   public confirmLeave(): void {
+    this.modalService.open(QuitGameComponent).result.then((result: boolean) => {
+      if (!result) {
+        return;
+      }
 
+      this.player.isLeft = true;
+      this.location.back();
+    }).catch((err: Error) => void 0);
   }
 }

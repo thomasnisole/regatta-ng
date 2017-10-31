@@ -20,7 +20,7 @@ import { AbstractCard } from '../../share/model/abstract-card';
 })
 export class GameComponent implements OnInit {
 
-  public game: Observable<Game>;
+  public game: Game;
 
   public caseWidth: number = environment.board.caseDimensions.width;
 
@@ -28,7 +28,6 @@ export class GameComponent implements OnInit {
 
   public elements: Point[];
 
-  private g: Game;
 
   public constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,17 +36,21 @@ export class GameComponent implements OnInit {
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
-      (params: any) => this.game = this.gameService
+      (params: any) => this.gameService
         .findById(params['id'])
-        .do((game: Game) => {
-          if (game.isFinished()) {
-            this.router.navigate(['/board/' + game.id + '/end']);
-          }
-          this.g = game;
-          if (game.isStarted()) {
-            this.makeElements(game);
-          }
-        })
+        .subscribe(
+          (game: Game) => {
+            this.game = game;
+            if (game.isFinished()) {
+              this.router.navigate(['/board/' + game.id + '/end']);
+            }
+
+            if (game.isStarted()) {
+              this.makeElements(game);
+            }
+          },
+          (err: Error) => this.router.navigate(['/board'])
+        )
     );
   }
 
@@ -80,7 +83,7 @@ export class GameComponent implements OnInit {
 
   public get cardsToPreview(): AbstractCard[] {
     return _.sortBy(
-      _.filter(this.g.getCurrentPlayer().cards, (card: AbstractCard) => card.previewOrder),
+      _.filter(this.game.getCurrentPlayer().cards, (card: AbstractCard) => card.previewOrder),
       (card: AbstractCard) => card.previewOrder
     );
   }

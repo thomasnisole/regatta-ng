@@ -1,3 +1,4 @@
+import { CreateGameComponent } from './create-game/create-game.component';
 import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {GamesComponent} from './games/games.component';
@@ -5,6 +6,8 @@ import {RegisterComponent} from './register/register.component';
 import {PlayComponent} from './play/play.component';
 import { HomeComponent } from './home/home.component';
 import { LayoutComponent } from './layout/layout.component';
+import { CanQuitGuard } from './guard/can-quit.guard';
+import { TestGuard } from './guard/test.guard';
 
 
 const routes: Routes = [
@@ -15,36 +18,54 @@ const routes: Routes = [
       {
         path: '',
         component: HomeComponent,
-        pathMatch: 'full'
-      }
-    ]
-  },
-  {
-    path: 'games',
-    children: [
-      {
-        path: '',
-        component: GamesComponent
+        pathMatch: 'full',
+        data: {
+          title: 'Accueil'
+        }
       },
       {
-        path: ':id',
+        path: 'games',
         children: [
           {
             path: '',
-            redirectTo: 'register',
-            pathMatch: 'full'
+            component: GamesComponent,
+            data: {
+              title: 'Rejoindre une partie'
+            }
           },
           {
-            path: 'register',
-            component: RegisterComponent
+            path: 'create',
+            component: CreateGameComponent,
+            data: {
+              title: 'Créer une partie'
+            }
           },
           {
-            path: 'play',
-            component: PlayComponent
+            path: ':id',
+            children: [
+              {
+                path: '',
+                redirectTo: 'register',
+                pathMatch: 'full'
+              },
+              {
+                path: 'register',
+                component: RegisterComponent,
+                data: {
+                  title: 'Inscription'
+                }
+              }
+            ]
           }
         ]
       }
     ]
+  },
+  {
+    path: 'games/:id/play',
+    component: PlayComponent,
+    canActivate: [TestGuard],
+    canDeactivate: [CanQuitGuard]
   }
 ];
 
