@@ -1,19 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {CreateGameComponent} from './create-game/create-game.component';
 import {GameComponent} from './game/game.component';
 import { EndGameComponent } from './end-game/end-game.component';
+import { IndexingGameComponentComponent } from './indexing-game-component/indexing-game-component.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'create',
+    component: IndexingGameComponentComponent,
     pathMatch: 'full'
-  },
-  {
-    path: 'create',
-    component: CreateGameComponent
   },
   {
     path: ':id',

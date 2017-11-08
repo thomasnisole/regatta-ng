@@ -11,6 +11,9 @@ export class RemoteComponent implements OnInit {
   public isVisible: boolean;
 
   @Output()
+  public isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Output()
   public onLeft: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
@@ -39,9 +42,6 @@ export class RemoteComponent implements OnInit {
 
   @Output()
   public onValid: EventEmitter<void> = new EventEmitter<void>();
-
-  @Output()
-  public onDblClick: EventEmitter<void> = new EventEmitter<void>();
 
   private touchActionInterval: number = 60;
 
@@ -102,15 +102,7 @@ export class RemoteComponent implements OnInit {
   }
 
   public close() {
-    const now = new Date().getTime();
-    const timesince = now - this.myLatestTap;
-    if ((timesince < 300) && (timesince > 0)) {
-      this.myLatestTap = null;
-      this.onDblClick.emit();
-    } else {
-      this.myLatestTap = null;
-    }
-
-    this.myLatestTap = new Date().getTime();
+    this.isVisible = false;
+    this.isVisibleChange.emit(this.isVisible);
   }
 }

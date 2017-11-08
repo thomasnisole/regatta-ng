@@ -9,6 +9,7 @@ import {GameFlowService} from './service/game-flow.service';
 import { CardComponent } from './card/card.component';
 import {CardService} from './service/card.service';
 import {BoardService} from './service/board.service';
+import { CastSenderService } from './service/cast-sender.service';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {BoardService} from './service/board.service';
     GameFlowService,
     LevelParserService,
     PlayerService,
-    UserService
+    UserService,
+    CastSenderService
   ]
 })
 export class ShareModule { }

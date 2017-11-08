@@ -30,6 +30,9 @@ export class Game {
   @JsonProperty('currentPlayer')
   public currentPlayer: string = null;
 
+  @JsonProperty('author')
+  public author: string = void 0;
+
   @JsonProperty({name: 'status', customConverter: enumConverter})
   public status: GameStatus = void 0;
 
@@ -75,12 +78,10 @@ export class Game {
     return _.find(this.players, (player: Player) => player.userId === userId);
   }
 
-  public getPlayerByPlayerId(playerId: string): Player {
-    return _.find(this.players, (player: Player) => player.id === playerId);
-  }
-
   public getPlayersGaming(): Player[] {
-    return _.filter(this.players, (p: Player) => p.status !== PlayerStatus.FINISHED);
+    return _.filter(this.players, (p: Player) =>
+      p.status !== PlayerStatus.FINISHED && p.status !== PlayerStatus.WAITING_TO_START
+    );
   }
 
   public getFinishedPlayers(): Player[] {

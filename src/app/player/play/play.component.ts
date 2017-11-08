@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {GameService} from '../../share/service/game.service';
 import {UserService} from '../../share/service/user.service';
 import {Observable} from 'rxjs/Rx';
@@ -15,8 +15,8 @@ import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component'
 import { AbstractCard } from '../../share/model/abstract-card';
 import { CloudCard } from '../../share/model/cloud-card';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PlatformLocation } from '@angular/common';
 import { QuitGameComponent } from '../quit-game/quit-game.component';
+import { PlatformLocation } from '@angular/common';
 
 
 @Component({
@@ -47,7 +47,8 @@ export class PlayComponent implements OnInit {
     private playerService: PlayerService,
     protected gameFlowService: GameFlowService,
     private modalService: NgbModal,
-    private location: PlatformLocation) {}
+    private location: PlatformLocation,
+    private router: Router) {}
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -60,17 +61,38 @@ export class PlayComponent implements OnInit {
             .do((game: Game) => this.game = game)
             .map((game: Game) => game.getPlayerByUserId(user.id))
           )
-          .do((player: Player) => {
-            if (this.firstLoad) {
-              // this.clearPreview(player);
-              this.firstLoad = false;
-            }
-          })
           .subscribe(
-            (p: Player) => this.player = p
+            (p: Player) => {
+              this.player = p;
+              if (this.firstLoad) {
+                this.clearPreview();
+                this.firstLoad = false;
+              }
+            },
+            (err: Error) => this.router.navigate(['/player/games'])
           );
       }
     );
+  }
+
+  public startGame(modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
+
+      this.gameService.start(this.game).subscribe();
+    });
+  }
+
+  public deleteGame(modalContent): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
+
+      this.gameService.delete(this.game);
+    });
   }
 
   public tack(degres: number, modalContent): void {
@@ -191,8 +213,18 @@ export class PlayComponent implements OnInit {
     });
   }
 
-  public confirmLeave(): void {
-    this.modalService.open(QuitGameComponent).result.then((result: boolean) => {
+  public deletePlayer(modalContent, player: Player): void {
+    this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
+      if (result === 'no') {
+        return;
+      }
+
+      this.gameService.deletePlayer(player, this.game);
+    });
+  }
+
+  public leave(modalContent): void {
+    this.modalService.open(modalContent).result.then((result: boolean) => {
       if (!result) {
         return;
       }

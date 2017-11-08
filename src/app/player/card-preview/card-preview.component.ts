@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'underscore/underscore';
 import {environment} from '../../../environments/environment';
 import { AbstractCard } from '../../share/model/abstract-card';
@@ -13,6 +13,9 @@ export class CardPreviewComponent implements OnInit {
 
   @Input()
   public cards: AbstractCard[];
+
+  @Output()
+  public clickOnParameters: EventEmitter<any> = new EventEmitter<any>();
 
   public constructor() { }
 

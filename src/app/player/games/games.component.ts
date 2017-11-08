@@ -15,6 +15,6 @@ export class GamesComponent implements OnInit {
   public constructor(private gameService: GameService) { }
 
   public ngOnInit(): void {
-    this.games = this.gameService.findAllWaiting();
+    this.games = this.gameService.findAllWaiting().share();
   }
 }

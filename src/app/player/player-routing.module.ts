@@ -6,9 +6,6 @@ import {RegisterComponent} from './register/register.component';
 import {PlayComponent} from './play/play.component';
 import { HomeComponent } from './home/home.component';
 import { LayoutComponent } from './layout/layout.component';
-import { CanQuitGuard } from './guard/can-quit.guard';
-import { TestGuard } from './guard/test.guard';
-
 
 const routes: Routes = [
   {
@@ -63,9 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'games/:id/play',
-    component: PlayComponent,
-    canActivate: [TestGuard],
-    canDeactivate: [CanQuitGuard]
+    component: PlayComponent
   }
 ];
 

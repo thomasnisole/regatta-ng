@@ -1,4 +1,4 @@
-import {Directive, Input, ElementRef} from '@angular/core';
+import { Directive, Input, ElementRef, EventEmitter, Output } from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Directive({
@@ -15,6 +15,9 @@ export class ViewboxDirective {
   private _viewBoxHeight: number;
 
   private _zoom: number;
+
+  @Output()
+  public viewBoxChange: EventEmitter<void> = new EventEmitter<void>();
 
   public constructor(private elementRef: ElementRef) {
     this._viewBoxX = this._viewBoxY = 0;
@@ -70,6 +73,8 @@ export class ViewboxDirective {
     if (this._viewBoxHeight == null) {
       return;
     }
+
+    this.viewBoxChange.emit();
 
     this.elementRef
       .nativeElement

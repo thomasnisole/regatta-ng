@@ -52,10 +52,11 @@ export class GameService {
       });
   }
 
-  public create(name: string, password: string): Observable<string> {
+  public create(name: string, password: string, author: string): Observable<string> {
     const game = new Game();
     game.name = name;
     game.password = password;
+    game.author = author;
 
     return Observable.create(observer => {
       this.db
@@ -105,7 +106,9 @@ export class GameService {
   }
 
   public changeCurrentPlayer(nextPlayerId: string, game: Game): void {
-    if (_.filter(game.players, (p: Player) => !p.arrivingOrder).length === 0) {
+    const playersNotArriving = _.filter(game.players, (p: Player) => !p.arrivingOrder);
+    if (playersNotArriving.length === 1) {
+      playersNotArriving[0].arrivingOrder = game.players.length;
       game.status = GameStatus.FINISHED;
       return;
     }
@@ -121,5 +124,32 @@ export class GameService {
 
   public update(game: Game): void {
     this.db.object('/games/' + game.id).update(removeUndefined(serialize(game)));
+  }
+
+  public delete(game: Game): void {
+    this.db.object('/games/' + game.id).remove();
+  }
+
+  public deletePlayer(player: Player, game: Game): void {
+    const nextPlayer: string = player.nextPlayer;
+
+    game.droppedCards = game.droppedCards.concat(player.cards);
+    const previousPlayer: Player = _.find(game.players, (p: Player) => p.nextPlayer === player.userId);
+    previousPlayer.nextPlayer = player.nextPlayer;
+
+    const index = _.findIndex(game.players, (p: Player) => p.userId === player.userId);
+    game.players.splice(index, 1);
+
+    if (game.currentPlayer === player.userId) {
+      this.changeCurrentPlayer(player.nextPlayer, game);
+    } else {
+      const playersNotArriving = _.filter(game.players, (p: Player) => !p.arrivingOrder);
+      if (playersNotArriving.length === 1) {
+        playersNotArriving[0].arrivingOrder = game.players.length;
+        game.status = GameStatus.FINISHED;
+      }
+    }
+
+    this.update(game);
   }
 }

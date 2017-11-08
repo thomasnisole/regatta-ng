@@ -12,6 +12,7 @@ import {Buoy} from '../../share/model/buoy';
 import {SeaElement} from '../../share/model/sea-element';
 import {Boat} from '../../share/model/boat';
 import { AbstractCard } from '../../share/model/abstract-card';
+import { BoardService } from '../../share/service/board.service';
 
 @Component({
   selector: 'app-game',
@@ -32,7 +33,8 @@ export class GameComponent implements OnInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private gameService: GameService) { }
+    private gameService: GameService,
+    private boardService: BoardService) { }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(
@@ -54,8 +56,9 @@ export class GameComponent implements OnInit {
     );
   }
 
-  public start(game: Game): void {
-    this.gameService.start(game).subscribe();
+  public onViewBoxChange(): void {
+    this.game.board.width = window.innerWidth * this.game.board.zoom / window.innerHeight;
+    this.boardService.update(this.game.board, this.game);
   }
 
   private makeElements(game: Game): void {

@@ -1,6 +1,5 @@
 import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CreateGameComponent } from './create-game/create-game.component';
 import { GameComponent } from './game/game.component';
 import {BoardRoutingModule} from './board-routing.module';
 import {ShareModule} from '../share/share.module';
@@ -14,6 +13,8 @@ import { CheckLineDirective } from './directive/check-line.directive';
 import { CardPreviewComponent } from './card-preview/card-preview.component';
 import { BuoyComponent } from './buoy/buoy.component';
 import { EndGameComponent } from './end-game/end-game.component';
+import { PlayerSummaryComponent } from './player-summary/player-summary.component';
+import { IndexingGameComponentComponent } from './indexing-game-component/indexing-game-component.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,6 @@ import { EndGameComponent } from './end-game/end-game.component';
     ShareModule
   ],
   declarations: [
-    CreateGameComponent,
     GameComponent,
     GridBoardComponent,
     ViewboxDirective,
@@ -33,8 +33,10 @@ import { EndGameComponent } from './end-game/end-game.component';
     CheckLineDirective,
     CardPreviewComponent,
     BuoyComponent,
-    EndGameComponent
-],
+    EndGameComponent,
+    PlayerSummaryComponent,
+    IndexingGameComponentComponent
+  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class BoardModule { }

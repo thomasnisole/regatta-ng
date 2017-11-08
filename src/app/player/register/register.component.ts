@@ -71,7 +71,6 @@ export class RegisterComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    console.log('connard');
     this.playerService
       .create(this.gameToJoin, this.user, this.boatNumber, this.selectedColor)
       .subscribe(

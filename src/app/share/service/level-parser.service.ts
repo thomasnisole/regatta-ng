@@ -33,7 +33,7 @@ export class LevelParserService {
           game.board = new Board();
           game.board.x = 0;
           game.board.y = 0;
-          game.board.width = window.innerWidth * environment.board.viewboxHeight / window.innerHeight;
+          game.board.width = 0;
           game.board.height = environment.board.viewboxHeight;
           game.board.zoom = environment.board.viewboxHeight;
           game.currentPlayer = game.players[0].userId;
@@ -61,6 +61,8 @@ export class LevelParserService {
 
           this.makeLineBuoys(game.board, data.board.arrival);
 
+          game.players = _.shuffle(game.players);
+          let previousPlayer: Player = _.last(game.players);
           _.each(game.players, (player: Player) => {
             player.boat.x = game.board.departureArea.x;
             player.boat.y = game.board.departureArea.y;
@@ -69,6 +71,8 @@ export class LevelParserService {
             player.boat.orientation = data.board.boatOrientation;
             player.checkLines = this.checkLines.slice();
             player.cards = game.cards.splice(0, environment.cardsCountPerPlayer);
+            previousPlayer.nextPlayer = player.userId;
+            previousPlayer = player;
           });
 
           game.status = GameStatus.STARTED;

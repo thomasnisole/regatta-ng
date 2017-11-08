@@ -9,7 +9,7 @@ export class SteeringWheelCard extends AbstractCard {
     }
 
     const swCards = _.sortBy(_.filter(cards, (c: AbstractCard) => c instanceof SteeringWheelCard), 'previewOrder');
-    if (swCards.length === 1 && swCards[0] === _.last(cards)) {
+    if (swCards.length === 1 && swCards[0] === _.last(cards) && (!this.previewPossibilities || this.previewPossibilities.length === 0)) {
       return true;
     }
 

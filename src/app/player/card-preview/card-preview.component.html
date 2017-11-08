@@ -7,4 +7,7 @@
       <img class="card" [attr.src]="getHref(card)">
     </li>
   </ng-container>
+  <li class="ml-auto parameters">
+    <a role="button" (click)="clickOnParameters.emit()"><span class="fa fa-gear"></span></a>
+  </li>
 </ul>

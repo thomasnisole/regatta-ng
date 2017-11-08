@@ -9,11 +9,15 @@ import {Buoy} from '../model/buoy';
 import {Player} from '../model/player';
 import {Rectangle} from '../model/rectangle';
 import {Trajectory} from '../model/trajectory';
+import { serialize } from 'json-typescript-mapper';
+import { removeUndefined } from '../utils';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Board } from '../model/board';
 
 @Injectable()
 export class BoardService {
 
-  public constructor() { }
+  public constructor(private db: AngularFireDatabase) { }
 
   public checkCardMove(game: Game, trajectories: Trajectory[], boat: Boat): boolean {
     return !_.some(trajectories, (trajectory: Trajectory) => {
@@ -52,5 +56,9 @@ export class BoardService {
 
       return !trajectory.isValid;
     });
+  }
+
+  public update(board: Board, game: Game): void {
+    this.db.object('/games/' + game.id + '/board').update(removeUndefined(serialize(board)));
   }
 }

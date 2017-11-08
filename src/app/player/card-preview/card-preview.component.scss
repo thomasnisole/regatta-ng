@@ -1,4 +1,4 @@
-@import "../../../styles/variables.scss";
+@import "variables.scss";
 
 ul.card-preview {
   background-color: $primaryColor;
@@ -7,6 +7,7 @@ ul.card-preview {
   display: flex;
   justify-content: left;
   padding-left: 0;
+  list-style: none;
 
   > li.card-preview-item {
     height: 100%;
@@ -23,5 +24,14 @@ ul.card-preview {
         border: solid 3px white;
       }
     }
+  }
+
+  > .parameters {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 30px;
+    padding: 10px;
+    color: white;
   }
 }

@@ -13,4 +13,7 @@
     </a>
     <span class="fa fa-chevron-right ml-2 my-auto text-muted" style="font-size: 25px;"></span>
   </li>
+  <li class="list-group-item" *ngIf="(games|async)?.length === 0" >
+    Aucune partie à rejoindre
+  </li>
 </ul>

@@ -5,8 +5,7 @@
             (onRotateLeft)="rotateLeft()"
             (onRotateRight)="rotateRight()"
             (onValid)="validPosition(confirmStart)"
-            (onDblClick)="isVisible = !isVisible"
-            [isVisible]="isVisible">
+            [(isVisible)]="isVisible">
 </app-remote>
 
 <ng-template #confirmStart let-c="close">

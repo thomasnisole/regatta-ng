@@ -35,4 +35,21 @@ export class UserService {
       });
     });
   }
+
+  public findById(id: string): Observable<User> {
+    return this.db
+      .object('/users/' + id)
+      .snapshotChanges()
+      .do((os: any) => {
+        if (!os) {
+          throw Error('No user found');
+        }
+      })
+      .map((os: any) => {
+        const u: User = deserialize(User, os.payload.val());
+        u.id = os.payload.key;
+
+        return u;
+      });
+  }
 }

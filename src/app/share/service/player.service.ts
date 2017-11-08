@@ -61,6 +61,7 @@ export class PlayerService {
     }
   }
 
+
   public startPlayer(player: Player, game: Game) {
     if (game.board.isInDeparture(player)) {
       player.status = PlayerStatus.WAITING_TO_PLAY;

@@ -1,6 +1,6 @@
 <div class="row h-100" *ngIf="game">
   <svg version="1.1" class="board p-0 col-12"
-       *ngIf="game.isStarted()" appViewbox [viewBoxX]="game.board.x" [viewBoxY]="game.board.y"
+       *ngIf="game.isStarted()" appViewbox [viewBoxX]="game.board.x" [viewBoxY]="game.board.y" (viewBoxChange)="onViewBoxChange()"
        [viewBoxWidth]="game.board.width" [viewBoxHeight]="game.board.height" [zoom]="game.board.zoom">
 
     <svg:g appCardPreview [x]="game.board.x" [y]="game.board.y" [cards]="cardsToPreview"
@@ -35,7 +35,7 @@
     </svg:g>
   </svg>
 
-  <div class="col-2 player-ranking" [ngClass]="{'offset-10': game.isWaiting()}">
+  <div class="col-2 player-ranking" [ngClass]="{'offset-10': game.isWaiting()}" *ngIf="game.isStarted()">
     <ul class="list-group">
       <li class="list-group-item text-center" *ngIf="game.players?.length > 0">
         En course
@@ -60,10 +60,6 @@
         </li>
     </ul>
   </div>
-
-  <div class="start-button-container d-flex justify-content-center align-items-center" *ngIf="game.isWaiting()">
-    <button (click)="start(game)" class="btn-primary-regatta-120-30">start</button>
-  </div>
-
+  <app-player-summary *ngIf="!game.isStarted()" class="col-12" [game]="game"></app-player-summary>
 </div>
 

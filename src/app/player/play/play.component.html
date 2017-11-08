@@ -1,5 +1,24 @@
 <div *ngIf="player" class="play-board d-flex flex-column">
-  <app-card-preview [cards]="player.cards"></app-card-preview>
+  <app-sidenav #sideNav [direction]="'right'">
+    <div class="section-title">Menu</div>
+    <a (click)="startGame(confirmStartGame);sideNav.sideBarOpened = false" *ngIf="player.userId === game.author && game.isWaiting()">
+      <span class="fa fa-play mr-2"></span>Démarrer la partie
+    </a>
+    <a (click)="deleteGame(confirmDeleteGame);sideNav.sideBarOpened = false" *ngIf="player.userId === game.author">
+      <span class="fa fa-times mr-2"></span>Supprimer la partie
+    </a>
+    <a (click)="leave(confirmLeave);sideNav.sideBarOpened = false">
+      <span class="fa fa-sign-out mr-2"></span>Quitter la partie
+    </a>
+    <div class="section-title">Supprimer un joueur</div>
+    <ng-template ngFor let-p [ngForOf]="game.players">
+      <a *ngIf="p.userId !== player.userId" (click)="deletePlayer(confirmDeletePlayer, p)">
+        {{ p.name }}
+      </a>
+    </ng-template>
+  </app-sidenav>
+
+  <app-card-preview [cards]="player.cards" (clickOnParameters)="sideNav.sideBarOpened = true"></app-card-preview>
 
   <swiper class="flex-grow-2">
     <div class="swiper-wrapper">
@@ -74,5 +93,54 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
     <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmDeleteGame let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Supprimer la partie</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir supprimer la partie ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmStartGame let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Démarrer la partie</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir démarrer la partie ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmDeletePlayer let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Supprimer un joueur</h4>
+  </div>
+  <div class="modal-body">
+    <p>Êtes-vous sûr de vouloir supprimer ce joueur ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('no')">Non</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c('yes')">Oui</button>
+  </div>
+</ng-template>
+<ng-template #confirmLeave let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Quitter</h4>
+  </div>
+  <div class="modal-body">
+    <p>De quelle manière voulez-vous quitter la partie ?</p>
+  </div>
+  <div class="modal-footer flex-wrap flex-column">
+    <button type="button" class="btn btn-secondary" (click)="c(false)">Ne pas quitter</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c(true)">Temporairement</button>
+    <button type="button" class="btn btn-primary-regatta" (click)="c(true)">Définitivement</button>
   </div>
 </ng-template>

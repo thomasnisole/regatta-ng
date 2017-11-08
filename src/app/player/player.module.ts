@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { window } from 'rxjs/operator/window';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {PlayerRoutingModule} from './player-routing.module';
 import { GamesComponent } from './games/games.component';
@@ -17,10 +18,19 @@ import { CardToPlayComponent } from './card-to-play/card-to-play.component';
 import {SwiperModule} from 'angular2-useful-swiper';
 import { HomeComponent } from './home/home.component';
 import { LayoutComponent } from './layout/layout.component';
-import { CanQuitGuard } from './guard/can-quit.guard';
-import { TestGuard } from './guard/test.guard';
 import { QuitGameComponent } from './quit-game/quit-game.component';
 import { CreateGameComponent } from './create-game/create-game.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
+
+declare var chrome;
+
+export function getChromeApi() {
+  if (!chrome) {
+    throw new Error('You don\'t run regatta in chrome browser');
+  }
+
+  return chrome;
+}
 
 @NgModule({
   imports: [
@@ -45,11 +55,14 @@ import { CreateGameComponent } from './create-game/create-game.component';
     HomeComponent,
     LayoutComponent,
     QuitGameComponent,
-    CreateGameComponent
-],
+    CreateGameComponent,
+    SidenavComponent
+  ],
   providers: [
-    CanQuitGuard,
-    TestGuard
+    {
+      provide: 'chrome',
+      useFactory: (getChromeApi)
+    }
   ],
   entryComponents: [
     QuitGameComponent

@@ -21,5 +21,9 @@ export const environment = {
     }
   },
   svgServerUrl: 'http://localhost:8056/svg-regatta.php?svgfile=',
-  cardsCountPerPlayer: 5
+  cardsCountPerPlayer: 5,
+  cast: {
+    applicationId: '023A162F',
+    namespace: 'urn:x-cast:com.google.cast.regatta'
+  }
 };
