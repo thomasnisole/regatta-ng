@@ -31,7 +31,7 @@ export class Player extends FbIdentifiable {
   @JsonProperty('nextPlayer')
   public nextPlayer: string = void 0;
 
-  @JsonProperty('isTrap')
+  @JsonProperty('isTrapped')
   public isTrapped: boolean = void 0;
 
   @JsonProperty('isLeft')

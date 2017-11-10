@@ -1,8 +1,7 @@
 <div class="row h-100" *ngIf="game">
   <svg version="1.1" class="board p-0 col-12"
-       *ngIf="game.isStarted()" appViewbox [viewBoxX]="game.board.x" [viewBoxY]="game.board.y" (viewBoxChange)="onViewBoxChange()"
+       *ngIf="game.isStarted()" appViewbox [viewBoxX]="game.board.x" [viewBoxY]="game.board.y"
        [viewBoxWidth]="game.board.width" [viewBoxHeight]="game.board.height" [zoom]="game.board.zoom">
-
     <svg:g appCardPreview [x]="game.board.x" [y]="game.board.y" [cards]="cardsToPreview"
            [boatNumber]="game.getCurrentPlayer().boat.boatNumber" [boatColor]="game.getCurrentPlayer().boat.color"></svg:g>
 
@@ -15,7 +14,7 @@
       [attr.y]="game.board.departureArea.y * caseHeight"
       [attr.width]="game.board.departureArea.width * caseWidth"
       [attr.height]="game.board.departureArea.height * caseHeight"
-      [ngClass]="{'departure-area-green': game.board.isInDeparture(game.getCurrentPlayer()), 'departure-area-red': !game.board.isInDeparture(game.getCurrentPlayer())}"></svg:rect>
+      [ngClass]="{'departure-area-green': canPlaceHere(), 'departure-area-red': !canPlaceHere()}"></svg:rect>
 
     <svg:line *ngFor="let line of game.getCurrentPlayer().checkLines;let i = index"
           style="stroke: #FFFFFF;stroke-width: 0.3;" [ngStyle]="{'opacity': 1 / (i + 1)}"
@@ -44,7 +43,7 @@
       <li class="list-group-item" *ngFor="let player of game.getPlayersGaming()">
         <span [ngStyle]="{'color': player.boat.color}">
           <i class="fa fa-chevron-right" *ngIf="game.isCurrentPlayer(player)"></i>
-          <i class="fa fa-sun-o" *ngIf="player.isTrap"></i>
+          <i class="fa fa-sun-o" *ngIf="player.isTrapped"></i>
           {{ player.boat.boatNumber }} - {{ player.name }}
         </span>
       </li>

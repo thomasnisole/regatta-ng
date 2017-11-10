@@ -31,4 +31,11 @@ export class Rectangle extends Point {
 
     return true;
   }
+
+  public intersectAnotherRectangle(rect: Rectangle): boolean {
+    return !(this.x + (this.width - 1) < rect.x
+      || rect.x + (rect.width - 1) < this.x
+      || this.y + (this.height - 1) < rect.y
+      || rect.y + (rect.height - 1) < this.y);
+  }
 }

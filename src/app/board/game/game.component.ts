@@ -56,9 +56,10 @@ export class GameComponent implements OnInit {
     );
   }
 
-  public onViewBoxChange(): void {
-    this.game.board.width = window.innerWidth * this.game.board.zoom / window.innerHeight;
-    this.boardService.update(this.game.board, this.game);
+  public canPlaceHere(): boolean {
+    const currentPlayer: Player = this.game.getCurrentPlayer();
+
+    return this.game.board.isInDeparture(currentPlayer) && this.boardService.checkBoatPosition(this.game, currentPlayer.boat);
   }
 
   private makeElements(game: Game): void {

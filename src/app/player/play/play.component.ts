@@ -96,6 +96,9 @@ export class PlayComponent implements OnInit {
   }
 
   public tack(degres: number, modalContent): void {
+    const boatTacked = _.clone(this.player.boat);
+    this.playerService.tack()
+
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
         return;

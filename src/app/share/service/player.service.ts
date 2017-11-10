@@ -63,7 +63,7 @@ export class PlayerService {
 
 
   public startPlayer(player: Player, game: Game) {
-    if (game.board.isInDeparture(player)) {
+    if (game.board.isInDeparture(player) && this.boardService.checkBoatPosition(game, player.boat)) {
       player.status = PlayerStatus.WAITING_TO_PLAY;
     }
 
@@ -221,6 +221,11 @@ export class PlayerService {
   }
 
   public update(player: Player, game: Game) {
+    if (!player.id) {
+      console.error('là il y a erreur', player, game);
+      return;
+    }
+
     this.db
       .object('/games/' + game.id + '/players/' + player.id)
       .update(removeUndefined(serialize(player)));

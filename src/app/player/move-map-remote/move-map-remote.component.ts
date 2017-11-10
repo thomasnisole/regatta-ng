@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Game} from '../../share/model/game';
-import {GameService} from '../../share/service/game.service';
+import {BoardService} from '../../share/service/board.service';
 
 @Component({
   selector: 'app-move-map-remote',
@@ -15,44 +15,44 @@ export class MoveMapRemoteComponent implements OnInit {
   @Input()
   public game: Game;
 
-  public constructor(private gameService: GameService) { }
+  public constructor(private boardService: BoardService) { }
 
   public ngOnInit(): void {
 
   }
 
   public moveLeft(): void {
-    this.gameService.moveMap(this.game, -10, 0);
-    this.gameService.update(this.game);
+    this.boardService.moveMap(this.game.board, -10, 0);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public moveRight(): void {
-    this.gameService.moveMap(this.game, 10, 0);
-    this.gameService.update(this.game);
+    this.boardService.moveMap(this.game.board, 10, 0);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public moveTop(): void {
-    this.gameService.moveMap(this.game, 0, -10);
-    this.gameService.update(this.game);
+    this.boardService.moveMap(this.game.board, 0, -10);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public moveBottom(): void {
-    this.gameService.moveMap(this.game, 0, 10);
-    this.gameService.update(this.game);
+    this.boardService.moveMap(this.game.board, 0, 10);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public zoomIn(): void {
-    this.gameService.zoomMap(this.game, -10);
-    this.gameService.update(this.game);
+    this.boardService.zoomMap(this.game.board, -10);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public zoomOut(): void {
-    this.gameService.zoomMap(this.game, 10);
-    this.gameService.update(this.game);
+    this.boardService.zoomMap(this.game.board, 10);
+    this.boardService.update(this.game.board, this.game);
   }
 
   public reset(): void {
-    this.gameService.resetOnCurrentPlayer(this.game);
-    this.gameService.update(this.game);
+    this.boardService.resetOnCurrentPlayer(this.game);
+    this.boardService.update(this.game.board, this.game);
   }
 }

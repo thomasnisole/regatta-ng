@@ -16,9 +16,6 @@ export class ViewboxDirective {
 
   private _zoom: number;
 
-  @Output()
-  public viewBoxChange: EventEmitter<void> = new EventEmitter<void>();
-
   public constructor(private elementRef: ElementRef) {
     this._viewBoxX = this._viewBoxY = 0;
     this._zoom = environment.board.viewboxHeight;
@@ -74,14 +71,9 @@ export class ViewboxDirective {
       return;
     }
 
-    this.viewBoxChange.emit();
-
-    this.elementRef
-      .nativeElement
-      .setAttribute(
-        'viewBox',
-        this._viewBoxX + ' ' + this._viewBoxY + ' ' +
-        this._viewBoxWidth + ' ' + this._viewBoxHeight
-      );
+    this.elementRef.nativeElement.setAttribute(
+      'viewBox',
+      this._viewBoxX + ' ' + this._viewBoxY + ' ' + this._viewBoxWidth + ' ' + this._viewBoxHeight
+    );
   }
 }
