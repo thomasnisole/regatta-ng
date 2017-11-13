@@ -1,7 +1,7 @@
-import {Rectangle} from './rectangle';
 import {JsonProperty} from 'json-typescript-mapper';
-import {Orientation} from './orientation.enum';
 import {enumConverter} from '../converter/enum-converter';
+import {Orientation} from './orientation.enum';
+import {Rectangle} from './rectangle';
 
 export class Boat extends Rectangle {
 

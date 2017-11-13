@@ -1,15 +1,15 @@
-import {Player} from './player';
-import {Board} from './board';
 import {JsonProperty} from 'json-typescript-mapper';
-import {dateConverter} from '../converter/date-converter';
-import {FbObjectsToArrayConverter} from '../converter/fb-objects-to-array';
-import {GameStatus} from './game-status.enum';
-import {enumConverter} from '../converter/enum-converter';
-import {Boat} from './boat';
 import * as _ from 'underscore/underscore';
-import { PlayerStatus } from './player-status.enum';
 import { cardConverter } from '../converter/card-converter';
+import {dateConverter} from '../converter/date-converter';
+import {enumConverter} from '../converter/enum-converter';
+import {FbObjectsToArrayConverter} from '../converter/fb-objects-to-array';
 import { AbstractCard } from './abstract-card';
+import {Board} from './board';
+
+import {GameStatus} from './game-status.enum';
+import {Player} from './player';
+import { PlayerStatus } from './player-status.enum';
 
 export class Game {
   public static readonly STATES: {

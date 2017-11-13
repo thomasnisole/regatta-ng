@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SeaElement} from '../../share/model/sea-element';
 import {environment} from '../../../environments/environment';
+import {SeaElement} from '../../share/model/sea-element';
 
 @Component({
   selector: '[appSeaElement]',

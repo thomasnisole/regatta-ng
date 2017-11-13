@@ -1,8 +1,8 @@
 import {JsonProperty} from 'json-typescript-mapper';
 import {Buoy} from './buoy';
+import {Player} from './player';
 import {Rectangle} from './rectangle';
 import {SeaElement} from './sea-element';
-import {Player} from './player';
 
 export class Board extends Rectangle {
 

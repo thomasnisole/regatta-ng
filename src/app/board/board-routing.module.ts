@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import {GameComponent} from './game/game.component';
+import { RouterModule, Routes } from '@angular/router';
 import { EndGameComponent } from './end-game/end-game.component';
+import {GameComponent} from './game/game.component';
 import { IndexingGameComponentComponent } from './indexing-game-component/indexing-game-component.component';
 
 

@@ -1,10 +1,10 @@
-import { ICustomConverter, serialize, deserialize } from 'json-typescript-mapper';
+import { deserialize, ICustomConverter, serialize } from 'json-typescript-mapper';
 import * as _ from 'underscore/underscore';
 import { AbstractCard } from '../model/abstract-card';
-import { OptionCard } from '../model/option-card.enum';
-import { CloudCard } from '../model/cloud-card';
-import { SteeringWheelCard } from '../model/steering-wheel-card';
 import { Card } from '../model/card';
+import { CloudCard } from '../model/cloud-card';
+import { OptionCard } from '../model/option-card.enum';
+import { SteeringWheelCard } from '../model/steering-wheel-card';
 
 export class CardConverter implements ICustomConverter {
 

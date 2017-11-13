@@ -1,5 +1,5 @@
-import { AbstractCard } from './abstract-card';
 import * as _ from 'underscore/underscore';
+import { AbstractCard } from './abstract-card';
 import { SteeringWheelCard } from './steering-wheel-card';
 
 export class CloudCard extends AbstractCard {

@@ -1,7 +1,7 @@
-import {Point} from './point';
 import {JsonProperty} from 'json-typescript-mapper';
-import {Rectangle} from './rectangle';
 import * as _ from 'underscore/underscore';
+import {Point} from './point';
+import {Rectangle} from './rectangle';
 
 export class Line {
 

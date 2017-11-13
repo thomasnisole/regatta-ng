@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Player} from '../../share/model/player';
-import {Game} from '../../share/model/game';
-import {PlayerService} from '../../share/service/player.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Game} from '../../share/model/game';
+import {Player} from '../../share/model/player';
 import { BoardService } from '../../share/service/board.service';
+import {PlayerService} from '../../share/service/player.service';
 
 @Component({
   selector: 'app-place-boat-remote',

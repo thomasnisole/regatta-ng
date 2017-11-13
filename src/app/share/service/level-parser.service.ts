@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import {AngularFireDatabase} from 'angularfire2/database';
-import {Game} from '../model/game';
+
 import {Board} from '../model/board';
-import * as firebase from 'firebase/app';
-import DataSnapshot = firebase.database.DataSnapshot;
-import {Buoy} from '../model/buoy';
-import {Line} from '../model/line';
+import {Game} from '../model/game';
+
+import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs/Observable';
 import * as _ from 'underscore/underscore';
+import {environment} from '../../../environments/environment';
+import { cardConverter } from '../converter/card-converter';
+import { AbstractCard } from '../model/abstract-card';
+import {Buoy} from '../model/buoy';
+import {GameStatus} from '../model/game-status.enum';
+import {Line} from '../model/line';
+import {Player} from '../model/player';
 import {Point} from '../model/point';
 import {Rectangle} from '../model/rectangle';
 import {SeaElement} from '../model/sea-element';
-import 'rxjs/add/operator/map';
-import {Observable} from 'rxjs/Observable';
-import {Player} from '../model/player';
-import {environment} from '../../../environments/environment';
-import {GameStatus} from '../model/game-status.enum';
-import { AbstractCard } from '../model/abstract-card';
-import { cardConverter } from '../converter/card-converter';
 
 @Injectable()
 export class LevelParserService {

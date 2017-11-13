@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import {Boat} from '../model/boat';
-import {Game} from '../model/game';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { serialize } from 'json-typescript-mapper';
 import * as _ from 'underscore/underscore';
-import {Line} from '../model/line';
-import {CardService} from './card.service';
-import {SeaElement} from '../model/sea-element';
+import { environment } from '../../../environments/environment';
+import { Board } from '../model/board';
+import {Boat} from '../model/boat';
 import {Buoy} from '../model/buoy';
+import {Game} from '../model/game';
+
 import {Player} from '../model/player';
 import {Rectangle} from '../model/rectangle';
+import {SeaElement} from '../model/sea-element';
 import {Trajectory} from '../model/trajectory';
-import { serialize } from 'json-typescript-mapper';
 import { removeUndefined } from '../utils';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { Board } from '../model/board';
-import { environment } from '../../../environments/environment';
+
 
 @Injectable()
 export class BoardService {

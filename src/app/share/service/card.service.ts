@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import {Point} from '../model/point';
+import * as _ from 'underscore/underscore';
+import { AbstractCard } from '../model/abstract-card';
 import {Boat} from '../model/boat';
+
+
 import {Orientation} from '../model/orientation.enum';
 import {Player} from '../model/player';
-import {CardType} from '../model/card-type.enum';
-import {GameFlowService} from './game-flow.service';
-import * as _ from 'underscore/underscore';
-import {Line} from '../model/line';
+import {Point} from '../model/point';
 import {Trajectory} from '../model/trajectory';
-import { AbstractCard } from '../model/abstract-card';
+import {GameFlowService} from './game-flow.service';
 
 @Injectable()
 export class CardService {

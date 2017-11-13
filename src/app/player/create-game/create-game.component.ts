@@ -1,10 +1,10 @@
-import { CastSenderService } from '../../share/service/cast-sender.service';
-import { environment } from '../../../environments/environment.prod';
-import { Component, Inject, OnInit } from '@angular/core';
-import { GameService } from '../../share/service/game.service';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../share/service/user.service';
+
 import { User } from '../../share/model/user';
+import { CastSenderService } from '../../share/service/cast-sender.service';
+import { GameService } from '../../share/service/game.service';
+import { UserService } from '../../share/service/user.service';
 
 @Component({
   selector: 'app-create-game',

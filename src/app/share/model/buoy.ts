@@ -1,5 +1,5 @@
-import {Point} from './point';
 import {JsonProperty} from 'json-typescript-mapper';
+import {Point} from './point';
 
 export class Buoy extends Point {
 

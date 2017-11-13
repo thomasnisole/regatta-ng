@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import {ChoiceComponent} from './choice/choice.component';
 import {UserGuard} from './user.guard';
 

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { User } from '../../share/model/user';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { User } from '../../share/model/user';
 import { UserService } from '../../share/service/user.service';
 
 @Component({

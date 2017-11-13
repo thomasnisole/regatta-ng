@@ -1,12 +1,12 @@
 import {JsonProperty} from 'json-typescript-mapper';
-import {FbIdentifiable} from './fb-identifiable';
-import { enumConverter } from '../converter/enum-converter';
-import { PlayerStatus } from './player-status.enum';
-import {Boat} from './boat';
-import {Line} from './line';
 import * as _ from 'underscore/underscore';
 import { cardConverter } from '../converter/card-converter';
+import { enumConverter } from '../converter/enum-converter';
 import { AbstractCard } from './abstract-card';
+import {Boat} from './boat';
+import {FbIdentifiable} from './fb-identifiable';
+import {Line} from './line';
+import { PlayerStatus } from './player-status.enum';
 
 export class Player extends FbIdentifiable {
 

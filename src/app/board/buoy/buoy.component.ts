@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Buoy} from '../../share/model/buoy';
+
 import {environment} from '../../../environments/environment';
-import * as _ from 'underscore/underscore';
+import {Buoy} from '../../share/model/buoy';
 
 @Component({
   selector: '[appBuoy]',

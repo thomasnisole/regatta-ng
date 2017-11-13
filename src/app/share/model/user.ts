@@ -1,7 +1,7 @@
 import {JsonProperty} from 'json-typescript-mapper';
 
 export class User {
-  @JsonProperty('$key')
+  @JsonProperty({name: '$key', excludeToJson: true})
   public id: string;
 
   @JsonProperty('email')

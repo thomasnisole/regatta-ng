@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import {Game} from '../model/game';
-import {User} from '../model/user';
 import {AngularFireDatabase} from 'angularfire2/database';
-import {Player} from '../model/player';
 import {serialize} from 'json-typescript-mapper';
-import {Boat} from '../model/boat';
-import {Orientation} from '../model/orientation.enum';
-import {PlayerStatus} from '../model/player-status.enum';
-import {removeUndefined} from '../utils';
-import * as _ from 'underscore/underscore';
 import {Observable} from 'rxjs/Observable';
-import {CardService} from './card.service';
-import {Point} from '../model/point';
-import {BoardService} from './board.service';
-import {Trajectory} from '../model/trajectory';
+import * as _ from 'underscore/underscore';
 import { AbstractCard } from '../model/abstract-card';
+import {Boat} from '../model/boat';
+import {Game} from '../model/game';
+import {Orientation} from '../model/orientation.enum';
+import {Player} from '../model/player';
+import {PlayerStatus} from '../model/player-status.enum';
+import {Point} from '../model/point';
+import {Trajectory} from '../model/trajectory';
+import {User} from '../model/user';
+import {removeUndefined} from '../utils';
+import {BoardService} from './board.service';
+import {CardService} from './card.service';
 
 @Injectable()
 export class PlayerService {
@@ -221,11 +221,6 @@ export class PlayerService {
   }
 
   public update(player: Player, game: Game) {
-    if (!player.id) {
-      console.error('là il y a erreur', player, game);
-      return;
-    }
-
     this.db
       .object('/games/' + game.id + '/players/' + player.id)
       .update(removeUndefined(serialize(player)));

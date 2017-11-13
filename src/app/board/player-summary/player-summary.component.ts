@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Game } from '../../share/model/game';
-import { User } from '../../share/model/user';
 import * as _ from 'underscore/underscore';
+import { Game } from '../../share/model/game';
 import { Player } from '../../share/model/player';
+import { User } from '../../share/model/user';
 import { UserService } from '../../share/service/user.service';
 
 @Component({

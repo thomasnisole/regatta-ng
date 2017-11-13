@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {environment} from '../../../environments/environment';
+import { AbstractCard } from '../../share/model/abstract-card';
 import {Boat} from '../../share/model/boat';
 import {Orientation} from '../../share/model/orientation.enum';
-import {environment} from '../../../environments/environment';
-import {CardService} from '../../share/service/card.service';
 import {Point} from '../../share/model/point';
 import {Trajectory} from '../../share/model/trajectory';
-import { AbstractCard } from '../../share/model/abstract-card';
+import {CardService} from '../../share/service/card.service';
 
 @Component({
   selector: '[appCardPreview]',

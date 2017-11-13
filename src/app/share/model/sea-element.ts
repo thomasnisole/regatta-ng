@@ -1,5 +1,5 @@
-import {Rectangle} from './rectangle';
 import {JsonProperty} from 'json-typescript-mapper';
+import {Rectangle} from './rectangle';
 
 export class SeaElement extends Rectangle {
   @JsonProperty('src')

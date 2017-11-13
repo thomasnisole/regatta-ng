@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import {Game} from '../../share/model/game';
-import {GameService} from '../../share/service/game.service';
-import {UserService} from '../../share/service/user.service';
-import {User} from '../../share/model/user';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/mergeMap';
-import {PlayerService} from '../../share/service/player.service';
+import {Observable} from 'rxjs/Observable';
+import {Game} from '../../share/model/game';
 import {Player} from '../../share/model/player';
-import {NgForm} from '@angular/forms';
+import {User} from '../../share/model/user';
+import {GameService} from '../../share/service/game.service';
+import {PlayerService} from '../../share/service/player.service';
+import {UserService} from '../../share/service/user.service';
 
 @Component({
   selector: 'app-register',

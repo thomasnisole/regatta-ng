@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Player} from '../model/player';
 import * as _ from 'underscore/underscore';
-import {PlayerStatus} from '../model/player-status.enum';
-import {CardType} from '../model/card-type.enum';
 import { AbstractCard } from '../model/abstract-card';
+
+import {Player} from '../model/player';
+import {PlayerStatus} from '../model/player-status.enum';
 
 @Injectable()
 export class GameFlowService {

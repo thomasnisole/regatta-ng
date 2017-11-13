@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import * as _ from 'underscore/underscore';
+import {environment} from '../../../environments/environment';
 import { AbstractCard } from '../model/abstract-card';
 
 @Component({

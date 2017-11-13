@@ -1,11 +1,12 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { CreateGameComponent } from './create-game/create-game.component';
-import { NgModule, Component } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import {GamesComponent} from './games/games.component';
-import {RegisterComponent} from './register/register.component';
-import {PlayComponent} from './play/play.component';
 import { HomeComponent } from './home/home.component';
+import { JoinComponent } from './join/join.component';
 import { LayoutComponent } from './layout/layout.component';
+import {PlayComponent} from './play/play.component';
+import {RegisterComponent} from './register/register.component';
+import { ResumeComponent } from './resume/resume.component';
 
 const routes: Routes = [
   {
@@ -25,9 +26,21 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: GamesComponent,
+            redirectTo: 'join',
+            pathMatch: 'full'
+          },
+          {
+            path: 'join',
+            component: JoinComponent,
             data: {
               title: 'Rejoindre une partie'
+            }
+          },
+          {
+            path: 'resume',
+            component: ResumeComponent,
+            data: {
+              title: 'Reprendre une partie'
             }
           },
           {

@@ -47,8 +47,6 @@ export class RemoteComponent implements OnInit {
 
   private interval: any;
 
-  private myLatestTap: any;
-
   public constructor() { }
 
   public ngOnInit(): void {

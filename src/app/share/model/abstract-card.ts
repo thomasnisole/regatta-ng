@@ -1,13 +1,13 @@
+
 import {JsonProperty} from 'json-typescript-mapper';
-import {OptionCard} from './option-card.enum';
-import {CardType} from './card-type.enum';
+
 import {enumConverter} from '../converter/enum-converter';
-import * as _ from 'underscore/underscore';
-import {noUndefined} from '@angular/compiler/src/util';
+import {CardType} from './card-type.enum';
+
+import {OptionCard} from './option-card.enum';
 import {Orientation} from './orientation.enum';
-import {Line} from './line';
+
 import {Trajectory} from './trajectory';
-import {Player} from './player';
 
 export abstract class AbstractCard {
   @JsonProperty('name')

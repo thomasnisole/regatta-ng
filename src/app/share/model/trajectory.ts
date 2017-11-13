@@ -1,5 +1,5 @@
-import {Line} from './line';
 import {JsonProperty} from 'json-typescript-mapper';
+import {Line} from './line';
 
 export class Trajectory extends Line {
 

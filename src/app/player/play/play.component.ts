@@ -1,22 +1,22 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {GameService} from '../../share/service/game.service';
-import {UserService} from '../../share/service/user.service';
-import {Observable} from 'rxjs/Rx';
-import {Game} from '../../share/model/game';
-import {User} from '../../share/model/user';
-import {Player} from '../../share/model/player';
-import {CardService} from '../../share/service/card.service';
-import {PlayerService} from '../../share/service/player.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import * as _ from 'underscore/underscore';
-import {GameFlowService} from '../../share/service/game-flow.service';
 import {environment} from '../../../environments/environment';
-import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component';
 import { AbstractCard } from '../../share/model/abstract-card';
 import { CloudCard } from '../../share/model/cloud-card';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { QuitGameComponent } from '../quit-game/quit-game.component';
-import { PlatformLocation } from '@angular/common';
+import {Game} from '../../share/model/game';
+import {Player} from '../../share/model/player';
+import {User} from '../../share/model/user';
+import { BoardService } from '../../share/service/board.service';
+import {CardService} from '../../share/service/card.service';
+import {GameFlowService} from '../../share/service/game-flow.service';
+import {GameService} from '../../share/service/game.service';
+import {PlayerService} from '../../share/service/player.service';
+import {UserService} from '../../share/service/user.service';
+import {ActionNavBarComponent} from '../action-nav-bar/action-nav-bar.component';
+
 
 
 @Component({
@@ -42,12 +42,12 @@ export class PlayComponent implements OnInit {
   public constructor(
     private activatedRoute: ActivatedRoute,
     private gameService: GameService,
+    private boardService: BoardService,
     private userService: UserService,
     private cardService: CardService,
     private playerService: PlayerService,
     protected gameFlowService: GameFlowService,
     private modalService: NgbModal,
-    private location: PlatformLocation,
     private router: Router) {}
 
   public ngOnInit(): void {
@@ -97,7 +97,10 @@ export class PlayComponent implements OnInit {
 
   public tack(degres: number, modalContent): void {
     const boatTacked = _.clone(this.player.boat);
-    this.playerService.tack()
+    this.playerService.moveBoat(boatTacked, 0, 0, degres);
+    if (!this.boardService.checkBoatPosition(this.game, boatTacked)) {
+      return;
+    }
 
     this.modalService.open(modalContent, {backdrop: 'static'}).result.then((result: string) => {
       if (result === 'no') {
@@ -227,13 +230,16 @@ export class PlayComponent implements OnInit {
   }
 
   public leave(modalContent): void {
-    this.modalService.open(modalContent).result.then((result: boolean) => {
-      if (!result) {
+    this.modalService.open(modalContent).result.then((result: number) => {
+      if (result === 0) {
         return;
       }
 
-      this.player.isLeft = true;
-      this.location.back();
+      if (result === 2) {
+        this.gameService.deletePlayer(this.player, this.game);
+      }
+
+      this.router.navigate(['/player']);
     }).catch((err: Error) => void 0);
   }
 }

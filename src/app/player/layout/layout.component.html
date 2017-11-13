@@ -3,8 +3,11 @@
   <a routerLink="/player" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="sideNav.sideBarOpened = false">
     <span class="fa fa-home mr-2"></span>Accueil
   </a>
-  <a routerLink="/player/games" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="sideNav.sideBarOpened = false">
+  <a routerLink="/player/games/join" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="sideNav.sideBarOpened = false">
     <span class="fa fa-sign-in mr-2"></span>Rejoindre une partie
+  </a>
+  <a routerLink="/player/games/resume" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="sideNav.sideBarOpened = false">
+    <span class="fa fa-sign-in mr-2"></span>Reprendre une partie
   </a>
   <a routerLink="/player/games/create" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="sideNav.sideBarOpened = false">
     <span class="fa fa-magic mr-2"></span>Créer une partie

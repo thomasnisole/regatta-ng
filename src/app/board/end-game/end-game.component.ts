@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { GameService } from '../../share/service/game.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Game } from '../../share/model/game';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'underscore/underscore';
+import { Game } from '../../share/model/game';
 import { Player } from '../../share/model/player';
+import { GameService } from '../../share/service/game.service';
 
 @Component({
   selector: 'app-end-game',

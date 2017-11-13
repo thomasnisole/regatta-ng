@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import * as _ from 'underscore/underscore';
-import {Player} from '../../share/model/player';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { Game } from '../../share/model/game';
+import * as _ from 'underscore/underscore';
 import { AbstractCard } from '../../share/model/abstract-card';
+import { Game } from '../../share/model/game';
+import {Player} from '../../share/model/player';
 
 @Component({
   selector: 'app-card-to-play',

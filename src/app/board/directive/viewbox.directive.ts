@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
 import {environment} from '../../../environments/environment';
 
 @Directive({

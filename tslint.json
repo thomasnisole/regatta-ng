@@ -66,6 +66,7 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
@@ -119,11 +120,9 @@
     ],
     "component-selector": [
       true,
-      "element",
+      ["element", "attribute"],
       "app",
-      "kebab-case",
-      "camelCase",
-      "attribute"
+      ["kebab-case", "camelCase"]
     ],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
@@ -136,6 +135,7 @@
     "directive-class-suffix": true,
     "no-access-missing-member": true,
     "templates-use-public": true,
-    "invoke-injectable": true
+    "invoke-injectable": true,
+    "ordered-imports": true
   }
 }

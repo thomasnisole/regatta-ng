@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as firebase from 'firebase/app';
 import {AngularFireAuth} from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
 
-  user: Observable<firebase.User>;
+  public user: Observable<firebase.User>;
 
   public constructor(private afAuth: AngularFireAuth) {
-    this.user = afAuth.authState;
+    this.user = afAuth.authState.share();
   }
 
   public authenticateWithGoogle(): Promise<any> {

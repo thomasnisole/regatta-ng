@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {GameService} from '../../share/service/game.service';
-import {Observable} from 'rxjs/Observable';
-import {Game} from '../../share/model/game';
+
 import 'rxjs/operator/mergeMap';
-import {environment} from '../../../environments/environment';
 import * as _ from 'underscore/underscore';
+import {environment} from '../../../environments/environment';
+import { AbstractCard } from '../../share/model/abstract-card';
+import {Boat} from '../../share/model/boat';
+import {Buoy} from '../../share/model/buoy';
+import {Game} from '../../share/model/game';
 import {Player} from '../../share/model/player';
 import {Point} from '../../share/model/point';
-import {Buoy} from '../../share/model/buoy';
 import {SeaElement} from '../../share/model/sea-element';
-import {Boat} from '../../share/model/boat';
-import { AbstractCard } from '../../share/model/abstract-card';
 import { BoardService } from '../../share/service/board.service';
+import {GameService} from '../../share/service/game.service';
 
 @Component({
   selector: 'app-game',

@@ -1,7 +1,7 @@
 import {Directive, Input} from '@angular/core';
-import {Game} from '../../share/model/game';
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from '@angular/forms';
 import * as _ from 'underscore/underscore';
+import {Game} from '../../share/model/game';
 import {Player} from '../../share/model/player';
 
 @Directive({

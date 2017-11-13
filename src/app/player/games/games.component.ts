@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Game} from '../../share/model/game';
-import {GameService} from '../../share/service/game.service';
 
 @Component({
   selector: 'app-games',
@@ -10,11 +9,28 @@ import {GameService} from '../../share/service/game.service';
 })
 export class GamesComponent implements OnInit {
 
-  public games: Observable<Game[]>;
+  private _games: Observable<Game[]>;
 
-  public constructor(private gameService: GameService) { }
+  @Input()
+  public noMessage: string;
 
-  public ngOnInit(): void {
-    this.games = this.gameService.findAllWaiting().share();
+  @Input()
+  public routeSuffix: string;
+
+  public constructor() { }
+
+  public ngOnInit(): void { }
+
+  @Input()
+  public set games(values: Observable<Game[]>) {
+    if (!values) {
+      return;
+    }
+
+    this._games = values.share();
+  }
+
+  public get games(): Observable<Game[]> {
+    return this._games;
   }
 }

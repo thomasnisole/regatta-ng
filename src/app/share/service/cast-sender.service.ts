@@ -63,10 +63,6 @@ export class CastSenderService {
     console.log('init success ', e);
   }
 
-  private onRequestSuccess(e): void {
-    console.log('request success', e);
-  }
-
   private onError(err): void {
     console.log('on error', err);
   }
