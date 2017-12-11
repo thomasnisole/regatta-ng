@@ -9,7 +9,7 @@ export class AuthService {
   public user: Observable<firebase.User>;
 
   public constructor(private afAuth: AngularFireAuth) {
-    this.user = afAuth.authState.share();
+    this.user = afAuth.authState;
   }
 
   public authenticateWithGoogle(): Promise<any> {

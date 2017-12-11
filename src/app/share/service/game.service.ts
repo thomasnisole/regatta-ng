@@ -104,7 +104,6 @@ export class GameService {
     if (playersNotArriving.length === 1) {
       playersNotArriving[0].arrivingOrder = game.players.length;
       game.status = GameStatus.FINISHED;
-      this.calculateStatistics(game);
       return;
     }
 
@@ -144,15 +143,9 @@ export class GameService {
       if (playersNotArriving.length === 1) {
         playersNotArriving[0].arrivingOrder = game.players.length;
         game.status = GameStatus.FINISHED;
-        this.calculateStatistics(game);
       }
     }
 
     this.update(game);
-  }
-
-  private calculateStatistics(game: Game): void {
-    const firstPlayerArrived: Player = _.filter(game.players, (p: Player) => p.arrivingOrder = 0);
-    console.log(this.db.object('/users/' + firstPlayerArrived.userId + '/'));
   }
 }

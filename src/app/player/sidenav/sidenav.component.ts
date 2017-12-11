@@ -16,11 +16,19 @@ export class SidenavComponent implements OnInit {
   @Input()
   public direction: string = 'left';
 
-  public sideBarOpened: boolean = false;
+  public _sideBarOpened: boolean = false;
 
   public constructor(private userService: UserService) {}
 
   public ngOnInit(): void {
     this.user = this.userService.findUserAccount();
+  }
+
+  public set sideBarOpened(value: boolean) {
+    this._sideBarOpened = value;
+  }
+
+  public get sideBarOpened() {
+    return this._sideBarOpened;
   }
 }

@@ -110,9 +110,6 @@ export class PlayComponent implements OnInit {
       this.clearPreview();
       this.playerService.tack(this.player, degres);
       this.playerService.update(this.player, this.game);
-
-      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
-      this.gameService.update(this.game);
     });
   }
 
@@ -128,8 +125,6 @@ export class PlayComponent implements OnInit {
       this.playerService.dropCards(this.player, this.game, cardsToDrop);
       this.playerService.takeCards(this.player, this.game, cardsToDrop.length);
 
-      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
-      this.gameService.update(this.game);
       this.actionNavBar.changeToPlayMode();
     });
   }
@@ -194,8 +189,6 @@ export class PlayComponent implements OnInit {
         } else {
           this.playerService.dropCards(this.player, this.game, this.player.cards);
         }
-
-        this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
       } else {
         this.actionNavBar.changeToTrapMode();
       }
@@ -213,8 +206,6 @@ export class PlayComponent implements OnInit {
       this.playerService.trap(this.player, this.game);
 
       this.playerService.takeCards(this.player, this.game, environment.cardsCountPerPlayer - this.player.cards.length);
-      this.gameService.changeCurrentPlayer(this.player.nextPlayer, this.game);
-      this.gameService.update(this.game);
       this.actionNavBar.changeToPlayMode();
     });
   }

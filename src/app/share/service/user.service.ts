@@ -18,21 +18,17 @@ export class UserService {
   public constructor(private authService: AuthService, private db: AngularFireDatabase) { }
 
   public findUserAccount(): Observable<User> {
-    if (this.user) {
-      return this.user;
-    }
-
-    this.user = Observable.create(observer => this.authService.user.subscribe((user) => {
-        if (!user) {
-          this.authService.authenticateWithGoogle()
-            .then((userInformations) => this.makeUser(userInformations).subscribe((u: User) => observer.next(u)));
-        } else {
-          this.makeUser(user).subscribe((u: User) => observer.next(u));
-        }
-      })
-    );
-
-    return this.user;
+    return this.authService.user.flatMap(user => {
+      if (!user) {
+        return Observable
+          .fromPromise(this.authService.authenticateWithGoogle())
+          .flatMap((userInformations) => {
+            return this.makeUser(userInformations);
+          });
+      } else {
+        return this.makeUser(user);
+      }
+    });
   }
 
   private makeUser(userInformation: any): Observable<User> {
