@@ -20,7 +20,7 @@ export const environment = {
       height: 10
     }
   },
-  svgServerUrl: 'http://localhost:8056/svg-regatta.php?svgfile=',
+  svgServerUrl: 'http://localhost/svg-regatta.php?svgfile=',
   cardsCountPerPlayer: 5,
   cast: {
     applicationId: '023A162F',

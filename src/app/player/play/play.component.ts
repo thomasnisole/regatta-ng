@@ -97,6 +97,7 @@ export class PlayComponent implements OnInit {
 
   public tack(degres: number, modalContent): void {
     const boatTacked = _.clone(this.player.boat);
+
     this.playerService.moveBoat(boatTacked, 0, 0, degres);
     if (!this.boardService.checkBoatPosition(this.game, boatTacked)) {
       return;
