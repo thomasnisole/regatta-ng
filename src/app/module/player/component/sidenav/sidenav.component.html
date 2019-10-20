@@ -1,0 +1,15 @@
+<ng-container *ngIf="user$|async as user">
+  <div class="overlay" *ngIf="sideBarOpened" (click)="sideBarOpened = false">
+  </div>
+  <nav class="sidenav from-{{ direction }}" [ngClass]="{open: sideBarOpened}">
+    <div class="header-account">
+      <img src="{{ user.avatar }}" />
+      <p>
+        {{ user.displayName }}
+        <br/>
+        <span>{{ user.username }}</span>
+      </p>
+    </div>
+    <ng-content></ng-content>
+  </nav>
+</ng-container>

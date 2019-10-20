@@ -1,0 +1,57 @@
+<ng-container *ngIf="player$|async as player">
+  <div *ngIf="game$|async as game" class="play-board d-flex flex-column">
+    <app-sidenav #sideNav [direction]="'right'">
+      <div class="section-title">Menu</div>
+      <a (click)="startGame(game);sideNav.sideBarOpened = false" *ngIf="player.userUid === game.createdBy && game.isWaiting()">
+        <span class="fa fa-play mr-2"></span>Démarrer la partie
+      </a>
+      <a (click)="deleteGame(game);sideNav.sideBarOpened = false" *ngIf="player.userUid === game.createdBy || game.userUids.length === 0">
+        <span class="fa fa-times mr-2"></span>Supprimer la partie
+      </a>
+      <a (click)="leave(confirmLeave);sideNav.sideBarOpened = false" *ngIf="game.userUids.length > 1">
+        <span class="fa fa-sign-out mr-2"></span>Quitter la partie
+      </a>
+      <ng-container *ngIf="players$|async as players">
+        <div class="section-title" *ngIf="players.length > 0">Supprimer un joueur</div>
+        <ng-container *ngFor="let p of players">
+          <a (click)="deletePlayer(p)">
+            {{ p.name }}
+          </a>
+        </ng-container>
+      </ng-container>
+    </app-sidenav>
+
+    <app-card-preview [cards]="[]" (clickOnParameters)="sideNav.sideBarOpened = true"></app-card-preview>
+
+    <swiper class="flex-grow-2">
+      <div class="swiper-wrapper">
+        <!--app-card-to-play class="swiper-slide" *ngFor="let card of player.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
+                          [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(card, actionNavBar.mode)"
+                          [isInTrapMode]="actionNavBar.mode === 'trap'" [game]="game"
+                          (clickOnPossibility)="previewCard($event)"></app-card-to-play-->
+      </div>
+    </swiper>
+
+    <app-action-nav-bar  #actionNavBar
+                         [flagIsVisible]="player.isWaitingToStart() && game.isStarted()"
+                         (moveMap)="moveRemoteIsVisible.isVisible = true;"></app-action-nav-bar>
+
+    <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
+    <!--app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="player"></app-place-boat-remote-->
+  </div>
+</ng-container>
+
+
+<ng-template #confirmLeave let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title">Quitter</h4>
+  </div>
+  <div class="modal-body">
+    <p>De quelle manière voulez-vous quitter la partie ?</p>
+  </div>
+  <div class="modal-footer flex-wrap flex-column align-middle">
+    <button type="button" class="btn btn-secondary w-50 m-0 mb-1" (click)="c(0)">Ne pas quitter</button>
+    <button type="button" class="btn btn-primary-regatta w-50 m-0 mb-1" (click)="c(1)">Temporairement</button>
+    <button type="button" class="btn btn-primary-regatta w-50 m-0" (click)="c(2)">Définitivement</button>
+  </div>
+</ng-template>

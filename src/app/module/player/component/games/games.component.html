@@ -1,0 +1,19 @@
+<ul class="list-group" *ngIf="games$|async as games">
+  <li class="list-group-item d-flex" *ngFor="let game of games">
+    <a [routerLink]="['/player/games', game.id, routeSuffix]">
+      {{ game.name }}
+      <span class="text-muted d-block mt-1">
+        <span class="fa fa-map-o mr-2"></span>
+        Baie de St Malo
+      </span>
+      <span class="text-muted d-block">
+        <span class="fa fa-users mr-2"></span>
+        {{ game.players ? game.players.length + ' joueur(s)' : 'Aucun joueur' }}
+      </span>
+    </a>
+    <span class="fa fa-chevron-right ml-auto my-auto text-muted" style="font-size: 25px;"></span>
+  </li>
+  <li class="list-group-item" *ngIf="games?.length === 0" >
+    {{ noMessage }}
+  </li>
+</ul>

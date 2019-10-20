@@ -1,0 +1,14 @@
+@import '~src/styles/variables';
+
+.title-bar {
+  background-color: $primaryColor;
+  color: $textLightColor;
+
+  a.btn {
+    cursor: pointer;
+
+    span {
+      font-size: 24px;
+    }
+  }
+}

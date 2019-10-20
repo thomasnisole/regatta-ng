@@ -1,23 +1,15 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {ChoiceComponent} from './choice/choice.component';
-import {UserGuard} from './user.guard';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChoiceComponent
+    pathMatch: 'full',
+    redirectTo: 'player'
   },
   {
     path: 'player',
-    canActivate: [
-      UserGuard
-    ],
-    loadChildren: 'app/player/player.module#PlayerModule'
-  },
-  {
-    path: 'board',
-    loadChildren: 'app/board/board.module#BoardModule'
+    loadChildren: './module/player/player.module#PlayerModule'
   }
 ];
 

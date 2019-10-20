@@ -1,38 +1,30 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {SwiperModule} from 'angular2-useful-swiper';
-import {AngularFireModule} from 'angularfire2';
-import {AngularFireAuthModule} from 'angularfire2/auth';
-import {AngularFireDatabaseModule} from 'angularfire2/database';
-import {ToastModule} from 'ng2-toastr';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {AppComponent} from './component/app/app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {CoreModule} from './module/@core/core.module';
+import {SystemModule} from './module/@system/system.module';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ChoiceComponent } from './choice/choice.component';
-import {ShareModule} from './share/share.module';
-import {UserGuard} from './user.guard';
+import {NgxTsSerializerModule} from 'ngx-ts-serializer';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ChoiceComponent
+    AppComponent
   ],
   imports: [
     AngularFireAuthModule,
-    AngularFireDatabaseModule,
+    AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     BrowserModule,
-    NgbModule.forRoot(),
-    ShareModule,
-    SwiperModule,
-    ToastModule.forRoot()
+    CoreModule,
+    NgxTsSerializerModule,
+    SystemModule,
   ],
-  providers: [
-    UserGuard
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

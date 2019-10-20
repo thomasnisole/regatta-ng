@@ -1,3 +1,0 @@
-export function removeUndefined(obj: any) {
-  return JSON.parse(JSON.stringify(obj));
-}

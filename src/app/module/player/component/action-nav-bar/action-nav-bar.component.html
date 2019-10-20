@@ -1,0 +1,51 @@
+<nav class="action-bar">
+  <ul class="actions">
+    <li *ngIf="flagIsVisible" (click)="start.emit()">
+      <i class="fa fa-flag"></i>
+    </li>
+    <li (click)="moveMap.emit()">
+      <i class="fa fa-arrows"></i>
+    </li>
+    <li *ngIf="tackIsVisible">
+      <i class="fa fa-exchange" [ngbPopover]="tackPopover" #tackPopoverInstance="ngbPopover"
+        (document:click)="tackPopoverInstance.close()" (click)="$event.stopPropagation()"></i>
+      <ng-template #tackPopover>
+        <ul class="list-group list-unstyled text-muted">
+          <li class="list-group-item border-0">
+            <a (click)="tackBabord.emit();tackPopoverInstance.close();">
+              <i class="fa fa-long-arrow-left mr-1"></i>Virer à gauche
+            </a>
+          </li>
+          <li class="list-group-item border-0">
+            <a (click)="tackTribord.emit();tackPopoverInstance.close();">
+              <i class="fa fa-long-arrow-right mr-1"></i>Virer à droite
+            </a>
+          </li>
+        </ul>
+      </ng-template>
+    </li>
+    <li *ngIf="!flagIsVisible && (playIsVisible || trashIsVisible || trapIsVisible)">
+      <i class="fa fa-bars" [ngbPopover]="modePopover" #modePopoverInstance="ngbPopover"
+        (document:click)="modePopoverInstance.close()" (click)="$event.stopPropagation()"></i>
+      <ng-template #modePopover>
+        <ul class="list-group list-unstyled text-muted">
+          <li class="list-group-item border-0" *ngIf="playIsVisible" [ngClass]="{'active': mode === 'play'}">
+            <a (click)="changeToPlayMode();modePopoverInstance.close();"><i class="fa fa-clone mr-1"></i>Se déplacer</a>
+          </li>
+          <li class="list-group-item border-0" *ngIf="trashIsVisible" [ngClass]="{'active': mode === 'trash'}">
+            <a (click)="changeToTrashMode();modePopoverInstance.close();"><i class="fa fa-trash mr-1"></i>Se défausser</a>
+          </li>
+          <li class="list-group-item border-0" *ngIf="trapIsVisible" [ngClass]="{'active': mode === 'trap'}">
+            <a (click)="changeToTrapMode();modePopoverInstance.close();"><i class="fa fa-sun-o mr-1"></i>Piéger</a>
+          </li>
+        </ul>
+      </ng-template>
+    </li>
+    <li *ngIf="clearIsVisible" (click)="clearPreview.emit()">
+      <i class="fa fa-times"></i>
+    </li>
+    <li  *ngIf="terminateIsVisible" (click)="currentAction.emit();">
+      <i class="fa fa-check"></i>
+    </li>
+  </ul>
+</nav>
