@@ -16,6 +16,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GameService} from '../../../@core/service/game.service';
 import {CurrentUserState} from '../../state/current-user/current-user.state';
 import {User} from '../../../@core/model/user.model';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-play',
@@ -78,14 +79,21 @@ export class PlayComponent implements OnDestroy {
     ).subscribe();
   }
 
-  public leave(content: any): void {
+  public canStartGame(game: Game, player: Player, playersLength: number): boolean {
+    return game.isWaiting() && player.userUid === game.createdBy && playersLength > 0;
+  }
 
+  public leave(game: Game): void {
+    const modal: NgbModalRef = this.openModal('Quitter la partie', 'Êtes-vous sûr de vouloir quitter la partie ?');
+    modal.result.then(() => {
+
+    }).catch(() => void 0);
   }
 
   public startGame(game: Game): void {
     const modal: NgbModalRef = this.openModal('Démarrer la partie', 'Êtes-vous sûr de vouloir démarrer la partie ?');
     modal.result.then(() => {
-
+      this.store.dispatch(new SetCurrentGameAction(game)).subscribe();
     });
   }
 
@@ -114,13 +122,6 @@ export class PlayComponent implements OnDestroy {
     const modal: NgbModalRef = this.openModal('Piéger', 'Êtes-vous sûr de vouloir jouer ces cartes de piège ?');
     modal.result.then(() => {
 
-    });
-  }
-
-  public deleteGame(game: Game): void {
-    const modal: NgbModalRef = this.openModal('Supprimer la partie', 'Êtes-vous sûr de vouloir supprimer la partie ?');
-    modal.result.then(() => {
-      this.gameService.delete(game);
     });
   }
 

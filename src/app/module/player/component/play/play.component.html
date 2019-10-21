@@ -2,21 +2,18 @@
   <div *ngIf="game$|async as game" class="play-board d-flex flex-column">
     <app-sidenav #sideNav [direction]="'right'">
       <div class="section-title">Menu</div>
-      <a (click)="startGame(game);sideNav.sideBarOpened = false" *ngIf="player.userUid === game.createdBy && game.isWaiting()">
+      <button class="btn btn-link" (click)="startGame(game);sideNav.sideBarOpened = false" *ngIf="canStartGame(game, player, (players$|async)?.length)">
         <span class="fa fa-play mr-2"></span>Démarrer la partie
-      </a>
-      <a (click)="deleteGame(game);sideNav.sideBarOpened = false" *ngIf="player.userUid === game.createdBy || game.userUids.length === 0">
-        <span class="fa fa-times mr-2"></span>Supprimer la partie
-      </a>
-      <a (click)="leave(confirmLeave);sideNav.sideBarOpened = false" *ngIf="game.userUids.length > 1">
+      </button>
+      <button class="btn btn-link" (click)="leave(game);sideNav.sideBarOpened = false">
         <span class="fa fa-sign-out mr-2"></span>Quitter la partie
-      </a>
+      </button>
       <ng-container *ngIf="players$|async as players">
         <div class="section-title" *ngIf="players.length > 0">Supprimer un joueur</div>
         <ng-container *ngFor="let p of players">
-          <a (click)="deletePlayer(p)">
+          <button class="btn btn-link" (click)="deletePlayer(p)">
             {{ p.name }}
-          </a>
+          </button>
         </ng-container>
       </ng-container>
     </app-sidenav>

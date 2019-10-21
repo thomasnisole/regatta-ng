@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  CollectionReference,
-  QueryDocumentSnapshot,
-  QuerySnapshot
-} from '@angular/fire/firestore';
 import {NgxTsSerializerService} from 'ngx-ts-serializer';
-import {from, Observable} from 'rxjs';
-import {first, map, mergeMap, toArray} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {Player} from '../model/player.model';
 import {Card} from '../model/card.model';
 import {DataService} from '../../@system/service/data.service';
@@ -15,8 +8,7 @@ import {DataService} from '../../@system/service/data.service';
 @Injectable()
 export class CardService {
 
-  public constructor(private db: AngularFirestore,
-                     private dataService: DataService,
+  public constructor(private dataService: DataService,
                      private serializer: NgxTsSerializerService) { }
 
   public takeCards(cardCount: number, player: Player): Observable<void> {

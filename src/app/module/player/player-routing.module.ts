@@ -8,8 +8,6 @@ import {LoginComponent} from './component/login/login.component';
 import {UserGuard} from './guard/user.guard';
 import {RegisterComponent} from './component/register/register.component';
 import {PlayComponent} from './component/play/play.component';
-import {SetCurrentGameResolve} from './resolve/set-current-game.resolve';
-import {SetCurrentPlayerResolve} from './resolve/set-current-player.resolve';
 
 const routes: Route[] = [
   {

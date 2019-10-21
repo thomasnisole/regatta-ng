@@ -25,7 +25,7 @@ import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import {SetCurrentPlayerResolve} from './resolve/set-current-player.resolve';
 import {CardPreviewComponent} from './component/card-preview/card-preview.component';
 import {ActionNavBarComponent} from './component/action-nav-bar/action-nav-bar.component';
-import {NgbPopoverModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbPopoverModule} from '@ng-bootstrap/ng-bootstrap';
 import {MoveMapRemoteComponent} from './component/move-map-remote/move-map-remote.component';
 import {RemoteComponent} from './component/remote/remote.component';
 
@@ -50,7 +50,7 @@ import {RemoteComponent} from './component/remote/remote.component';
   imports: [
     CommonModule,
     FormsModule,
-    NgbPopoverModule,
+    NgbModule,
     NgxsModule.forRoot(
       [
         CurrentGameState,
