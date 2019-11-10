@@ -1,47 +1,55 @@
 import {Injectable} from '@angular/core';
 import {Game} from '../model/game.model';
-import {from, Observable} from 'rxjs';
+import {forkJoin, from, Observable, throwError} from 'rxjs';
 import {NgxTsDeserializerService, NgxTsSerializerService} from 'ngx-ts-serializer';
-import {filter, first, map, mergeMap, tap, toArray} from 'rxjs/operators';
+import {filter, first, map, switchMap, tap, toArray} from 'rxjs/operators';
 import {GameStatus} from '../model/game-status.enum';
 import {User} from '../model/user.model';
-import {LevelService} from './level.service';
-import {BuoyService} from './buoy.service';
+import {LevelRepository} from '../repository/level.repository';
 import {Level} from '../model/level.model';
 import {Buoy} from '../model/buoy.model';
 import {Board} from '../model/board.model';
 import {environment} from '../../../../environments/environment';
-import {ObstacleService} from './obstacle.service';
-import {CheckLineService} from './check-line.service';
 import {Obstacle} from '../model/obstacle.model';
 import {CheckLine} from '../model/check-line.model';
 import {Card} from '../model/card.model';
 import {cloneDeep, shuffle} from 'lodash';
-import {CardService} from './card.service';
-import {DataService} from '../../@system/service/data.service';
+import {GameRepository} from '../repository/game.repository';
+import {Select} from '@ngxs/store';
+import {CurrentGameIdState} from '../state/current-game-id/current-game-id.state';
+import {hotShareReplay} from '../../@system/rx-operator/hot-share-replay.operator';
+import {Memoize} from '../../@system/decorator/memoize.decorator';
+import {CardRepository} from '../repository/card.repository';
+import {CheckLineRepository} from '../repository/check-line.repository';
+import {ObstacleRepository} from '../repository/obstacle.repository';
+import {BuoyRepository} from '../repository/buoy.repository';
 
 @Injectable()
 export class GameService {
 
-  public constructor(private dataService: DataService,
+  @Select(CurrentGameIdState)
+  private currentGameId$: Observable<string>;
+
+  public constructor(private gameRepository: GameRepository,
                      private serializer: NgxTsSerializerService,
                      private deserializer: NgxTsDeserializerService,
-                     private levelService: LevelService,
-                     private buoyService: BuoyService,
-                     private obstacleService: ObstacleService,
-                     private checkLineService: CheckLineService,
-                     private cardService: CardService) {}
+                     private levelRepository: LevelRepository,
+                     private buoyRepository: BuoyRepository,
+                     private obstacleRepository: ObstacleRepository,
+                     private checkLineRepository: CheckLineRepository,
+                     private cardRepository: CardRepository) {}
 
-  public findById(id: string): Observable<Game> {
-    return this.dataService.findOne(`/games/${id}`).pipe(
-      map((data: {id: string}) => this.deserializer.deserialize(Game, data))
+  @Memoize()
+  public findCurrentGame(): Observable<Game> {
+    return this.currentGameId$.pipe(
+      switchMap((gameId: string) => this.gameRepository.findById(gameId)),
+      hotShareReplay(1)
     );
   }
 
   public findAllWaiting(user: User): Observable<Game[]> {
-    return this.dataService.findAll('/games', [{field: 'status', operator: '==', value: GameStatus.WAITING}]).pipe(
-      mergeMap((datas: {id: string}[]) => from(datas).pipe(
-        map((data: {id: string}) => this.deserializer.deserialize(Game, data)),
+    return this.gameRepository.findByStatus(GameStatus.WAITING).pipe(
+      switchMap((games: Game[]) => from(games).pipe(
         filter((game: Game) => game.userUids.indexOf(user.uid) === -1),
         toArray()
       ))
@@ -49,27 +57,34 @@ export class GameService {
   }
 
   public findAllResuming(user: User): Observable<Game[]> {
-    return this.dataService.findAll(
-      '/games',
-      [{field: 'userUids', operator: 'array-contains', value: user.uid}]
-    ).pipe(
-      mergeMap((datas: {id: string}[]) => from(datas).pipe(
-        map((data: {id: string}) => this.deserializer.deserialize(Game, data)),
-        toArray()
-      ))
+    return this.gameRepository.findByUserUidIn(user);
+  }
+
+  public moveBoard(deltaX: number, deltaY: number, deltaZoom: number): Observable<void> {
+    return this.findCurrentGame().pipe(
+      tap((game: Game) => game.board.x += deltaX),
+      tap((game: Game) => game.board.y += deltaY),
+      tap((game: Game) => game.board.zoom += deltaZoom),
+      switchMap((game: Game) => this.gameRepository.update(game))
     );
   }
 
-  public create(game: Game): Observable<string> {
-    return this.dataService.add('/games', this.serializer.serialize(game));
+  public resetBoardOnPosition(x: number, y: number, zoom: number): Observable<void> {
+    return this.findCurrentGame().pipe(
+      tap((game: Game) => game.board.x = x),
+      tap((game: Game) => game.board.y = y),
+      tap((game: Game) => game.board.zoom = zoom),
+      switchMap((game: Game) => this.gameRepository.update(game))
+    );
   }
 
-  public update(game: Game): Observable<void> {
-    return this.dataService.update(`/games/${game.id}`, this.serializer.serialize(game));
-  }
+  public start(game: Game): Observable<void> {
+    if (game.userUids.length <= 0) {
+      return throwError(new Error('Not enough player in game'));
+    }
 
-  public delete(game: Game): Observable<void> {
-    return  this.dataService.delete(`/games/${game.id}`);
+    game.status = GameStatus.STARTED;
+    return this.gameRepository.update(game);
   }
 
   public newGame(game: Game): Observable<string> {
@@ -77,7 +92,7 @@ export class GameService {
 
     let checkLineCount: number = 0;
 
-    return this.levelService.findById('hqD1b6eS8B0gvLwRB6i1').pipe(
+    return this.levelRepository.findById('hqD1b6eS8B0gvLwRB6i1').pipe(
       first(),
       tap((level: Level) => game.board = new Board({
         x: 0,
@@ -86,36 +101,40 @@ export class GameService {
         height: environment.board.viewboxHeight,
         zoom: environment.board.viewboxHeight,
         departureArea: level.departureArea,
-        boatOrientation: level.boatOrientation
+        boatOrientation: level.boatOrientation,
+        boatLength: level.boatLength,
+        boatWidth: level.boatWidth
       })),
-      mergeMap((level: Level) => this.create(game).pipe(
-        mergeMap((gameId: string) => this.makeLineBuoy([level.departure.buoy1, level.departure.buoy2], gameId, checkLineCount)),
-        mergeMap((gameId: string) => from(level.buoys.sort((a: Buoy, b: Buoy) => a.order - b.order)).pipe(
+      switchMap((level: Level) => this.gameRepository.create(game).pipe(
+        switchMap((gameId: string) => this.makeLineBuoy([level.departure.buoy1, level.departure.buoy2], gameId, checkLineCount)),
+        switchMap((gameId: string) => from(level.buoys.sort((a: Buoy, b: Buoy) => a.order - b.order)).pipe(
           tap((buoy: Buoy) => buoy.gameId = gameId),
-          mergeMap((buoy: Buoy) => this.buoyService.create(buoy).pipe(
-            mergeMap(() => buoy.checkLines),
+          map((buoy: Buoy) => this.buoyRepository.create(buoy).pipe(
+            switchMap(() => buoy.checkLines),
             tap((checkLine: CheckLine) => checkLine.gameId = gameId),
             tap((checkLine: CheckLine) => checkLine.order = checkLineCount),
             tap(() => checkLineCount++),
-            mergeMap((checkLine: CheckLine) => this.checkLineService.create(checkLine)),
-            toArray()
+            map((checkLine: CheckLine) => this.checkLineRepository.createInGame(checkLine)),
+            toArray(),
+            switchMap((obs$: Observable<string>[]) => forkJoin(obs$))
           )),
           toArray(),
+          switchMap((obs$: Observable<string[]>[]) => forkJoin(obs$)),
           map(() => gameId)
         )),
-        mergeMap((gameId: string) => this.makeLineBuoy([level.arrival.buoy1, level.arrival.buoy2], gameId, checkLineCount)),
-        mergeMap((gameId: string) => from(level.obstacles).pipe(
+        switchMap((gameId: string) => this.makeLineBuoy([level.arrival.buoy1, level.arrival.buoy2], gameId, checkLineCount)),
+        switchMap((gameId: string) => from(level.obstacles).pipe(
           tap((obstacle: Obstacle) => obstacle.gameId = gameId),
-          mergeMap((obstacle: Obstacle) => this.obstacleService.create(obstacle)),
+          switchMap((obstacle: Obstacle) => this.obstacleRepository.create(obstacle)),
           toArray(),
           map(() => gameId)
         )),
-        mergeMap((gameId: string) => from(level.cardTypes).pipe(
-          mergeMap((cardType: any) => this.deserializeCard(cardType)),
+        switchMap((gameId: string) => from(level.cardTypes).pipe(
+          switchMap((cardType: any) => this.deserializeCard(cardType)),
           tap((card: Card) => card.gameId = gameId),
           toArray(),
-          mergeMap((cards: Card[]) => shuffle(cards)),
-          mergeMap((card: Card) => this.cardService.create(card)),
+          switchMap((cards: Card[]) => shuffle(cards)),
+          switchMap((card: Card) => this.cardRepository.create(card)),
           toArray(),
           map(() => gameId)
         ))
@@ -126,9 +145,9 @@ export class GameService {
   private makeLineBuoy([buoy1, buoy2]: Buoy[], gameId: string, checkLineCount: number): Observable<string> {
     return from([buoy1, buoy2]).pipe(
       tap((buoy: Buoy) => buoy.gameId = gameId),
-      mergeMap((buoy: Buoy) => this.buoyService.create(buoy)),
+      switchMap((buoy: Buoy) => this.buoyRepository.create(buoy)),
       toArray(),
-      mergeMap(() => this.checkLineService.create(new CheckLine({
+      switchMap(() => this.checkLineRepository.createInGame(new CheckLine({
         order: checkLineCount,
         pointA: buoy1,
         pointB: buoy2,

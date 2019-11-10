@@ -19,7 +19,7 @@ $sidenav-header-image-width: 60px;
 .sidenav {
   height: 100%;
   width: 0;
-  position: fixed;
+  position: absolute;
   z-index: 3;
   top: 0;
   background-color: $sidenav-background-color;
@@ -37,7 +37,6 @@ $sidenav-header-image-width: 60px;
 
   &.from-right {
     right: 0;
-    max-width: 100%;
 
     &.open {
       width: $sidenav-width;
@@ -69,16 +68,19 @@ $sidenav-header-image-width: 60px;
     }
   }
 
-  &::ng-deep a {
-    padding: 8px 8px 8px 20px;
-    text-decoration: none;
-    font-size: 15px;
-    color: #818181;
-    display: block;
-    white-space: nowrap;
+  &::ng-deep {
 
-    &:hover, &.active {
-      color: #f1f1f1;
+    a, button {
+      padding: 8px 8px 8px 20px;
+      text-decoration: none;
+      font-size: 15px;
+      color: #818181;
+      display: block;
+      white-space: nowrap;
+
+      &:hover, &.active {
+        color: #f1f1f1;
+      }
     }
   }
 
@@ -89,6 +91,7 @@ $sidenav-header-image-width: 60px;
     padding: 0px 8px;
     background-color: #818181;
     color: $sidenav-background-color;
+    white-space: nowrap;
   }
 }
 

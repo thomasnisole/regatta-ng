@@ -1,15 +1,19 @@
 import {Injectable} from '@angular/core';
+import {ObstacleRepository} from '../repository/obstacle.repository';
 import {Observable} from 'rxjs';
-import {NgxTsSerializerService} from 'ngx-ts-serializer';
 import {Obstacle} from '../model/obstacle.model';
-import {DataService} from '../../@system/service/data.service';
+import {Memoize} from '../../@system/decorator/memoize.decorator';
+import {hotShareReplay} from '../../@system/rx-operator/hot-share-replay.operator';
 
 @Injectable()
 export class ObstacleService {
 
-  public constructor(private dataService: DataService, private serializer: NgxTsSerializerService) {}
+  public constructor(private obstacleRepository: ObstacleRepository) {}
 
-  public create(obstacle: Obstacle): Observable<string> {
-    return this.dataService.add(`/games/${obstacle.gameId}/obstacles`, this.serializer.serialize(obstacle));
+  @Memoize()
+  public findByGameId(gameId: string): Observable<Obstacle[]> {
+    return this.obstacleRepository.findByGameId(gameId).pipe(
+      hotShareReplay(1)
+    );
   }
 }

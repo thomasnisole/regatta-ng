@@ -20,9 +20,6 @@ const routes: Route[] = [
     canActivate: [
       UserGuard
     ],
-    canActivateChild: [
-      UserGuard
-    ],
     children: [
       {
         path: '',

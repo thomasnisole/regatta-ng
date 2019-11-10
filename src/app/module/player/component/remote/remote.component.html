@@ -1,5 +1,5 @@
-<div class="movepad-container" *ngIf="isVisible">
-  <a class="closebutton" (click)="close()"><span class="fa fa-times"></span></a>
+<div class="movepad-container">
+  <a class="closebutton" (click)="onClose()"><span class="fa fa-times"></span></a>
   <div class="movepad-actions">
     <div class="mp-action top">
       <div class="btn-mp-ac"><span (click)="onRotateLeftButton()" *ngIf="isButtonVisible(rotateLeft);" class="fa fa-rotate-left"></span></div>
@@ -13,7 +13,7 @@
       <figcaption><span (click)="valid.emit()" *ngIf="isButtonVisible(valid);" class="fa fa-flag"></span></figcaption>
     </figure>
     <div class="mp-action bottom">
-      <div class="btn-mp-ac"><span (click)="reset.emit()" *ngIf="isButtonVisible(reset);" class="fa fa-crosshairs"></span></div>
+      <div class="btn-mp-ac"><span (click)="clear.emit()" *ngIf="isButtonVisible(clear);" class="fa fa-crosshairs"></span></div>
       <div class="zoom">
         <div class="btn-mp-ac"><span  (touchstart)="onZoomInButton()" (touchend)="onStop()" *ngIf="isButtonVisible(zoomIn);" class="fa fa-search-plus"></span></div>
         <div class="btn-mp-ac"><span (touchstart)="onZoomOutButton()" (touchend)="onStop()" *ngIf="isButtonVisible(zoomOut);" class="fa fa-search-minus"></span></div>

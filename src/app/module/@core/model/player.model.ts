@@ -16,11 +16,33 @@ export class Player {
   @JsonProperty({name: 'boat', type: Boat})
   public boat: Boat;
 
+  @JsonProperty('isTrapped')
+  public isTrapped: boolean;
+
   @JsonProperty({name: 'gameId', excludeToJson: true})
   public gameId: string;
 
   @JsonProperty('status')
   public status: PlayerStatus;
+
+  @JsonProperty('arrivingOrder')
+  public arrivingOrder: number;
+
+  public get x(): number {
+    if (!this.boat) {
+      return 0;
+    }
+
+    return this.boat.x;
+  }
+
+  public get y(): number {
+    if (!this.boat) {
+      return 0;
+    }
+
+    return this.boat.y;
+  }
 
   public isWaitingToStart(): boolean {
     return this.status === PlayerStatus.WAITING_TO_START;

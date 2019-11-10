@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {filter, map, mergeMap} from 'rxjs/operators';
+import {filter, map, switchMap} from 'rxjs/operators';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {NgxTsDeserializerService} from 'ngx-ts-serializer';
 import {Level} from '../../../@core/model/level.model';
@@ -26,7 +26,7 @@ export class LayoutComponent {
         return route;
       }),
       filter((route) => route.outlet === 'primary'),
-      mergeMap((route) => route.data)
+      switchMap((route) => route.data)
     ).subscribe((event: any) => this.title = event.title);
 
 

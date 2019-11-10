@@ -6,23 +6,20 @@ import * as firebase from 'firebase/app';
 import {hotShareReplay} from '../rx-operator/hot-share-replay.operator';
 import {NgxTsDeserializerService} from 'ngx-ts-serializer';
 import {LoggedUserInformation} from '../model/logged-user-information.model';
+import {Cacheable} from 'ngx-cacheable';
+import {Memoize} from '../decorator/memoize.decorator';
 
 @Injectable()
 export class AuthService {
 
-  private loggedUserUid$: Observable<string>;
-
   public constructor(private afAuth: AngularFireAuth, private deserializer: NgxTsDeserializerService) {}
 
+  @Memoize()
   public getLoggedUserUid(): Observable<string|null> {
-    if (!this.loggedUserUid$) {
-      this.loggedUserUid$ = this.afAuth.user.pipe(
-        map((user: firebase.User) => user ? user.uid : null),
-        hotShareReplay(1)
-      );
-    }
-
-    return this.loggedUserUid$;
+    return this.afAuth.user.pipe(
+      map((user: firebase.User) => user ? user.uid : null),
+      hotShareReplay(1)
+    );
   }
 
   public authenticateWithGoogle(): Observable<any> {

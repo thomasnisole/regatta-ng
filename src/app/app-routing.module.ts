@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'player',
     loadChildren: './module/player/player.module#PlayerModule'
+  },
+  {
+    path: 'board',
+    loadChildren: './module/board/board.module#BoardModule'
   }
 ];
 

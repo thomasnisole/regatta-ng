@@ -7,11 +7,15 @@
   max-width: 100%;
   background-color: $bgColor;
 
+  button {
+    display: block;
+  }
+
   app-card-preview {
     height: 10%;
   }
 
-  swiper {
+  app-cards {
     height: 80%;
   }
 }

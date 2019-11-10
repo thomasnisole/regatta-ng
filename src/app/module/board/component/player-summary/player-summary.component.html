@@ -1,0 +1,28 @@
+<ul class="players">
+  <li class="player" *ngFor="let player of players$|async">
+    <div class="img-container" [ngStyle]="{'background-image': 'url(' + user.avatar + ')'}"
+         *ngIf="getUser(player.id)|async as user">
+        <div class="player-informations">
+            <p>{{ user.displayName }}</p>
+            <div class="key-value-container">
+              <div class="key-value">
+                <span class="key" [ngStyle]="{'background-color': player.boat.color, 'border-color': player.boat.color}"><span class="ion-md-boat"></span></span>
+                <span class="value" [ngStyle]="{'border-color': player.boat.color}">{{ player.boat.boatNumber }}</span>
+              </div>
+              <div class="key-value">
+                <span class="key" [ngStyle]="{'background-color': player.boat.color, 'border-color': player.boat.color}"><span class="fa fa-trophy"></span></span>
+                <span class="value" [ngStyle]="{'border-color': player.boat.color}">{{ user.victoryCount }}</span>
+              </div>
+              <div class="key-value">
+                <span class="key" [ngStyle]="{'background-color': player.boat.color, 'border-color': player.boat.color}"><span class="ion-md-podium"></span></span>
+                <span class="value" [ngStyle]="{'border-color': player.boat.color}">{{ user.podiumCount }}</span>
+              </div>
+              <div class="key-value">
+                <span class="key" [ngStyle]="{'background-color': player.boat.color, 'border-color': player.boat.color}"><span class="fa fa-flag-checkered"></span></span>
+                <span class="value" [ngStyle]="{'border-color': player.boat.color}">{{ user.partyCount }}</span>
+              </div>
+            </div>
+          </div>
+    </div>
+  </li>
+</ul>

@@ -9,7 +9,10 @@ export class CheckLine extends Line {
   @JsonProperty('order')
   public order: number;
 
+  @JsonProperty('gameId')
   public gameId: string;
+
+  public playerId: string;
 
   public constructor(values?: Partial<CheckLine>) {
     super();

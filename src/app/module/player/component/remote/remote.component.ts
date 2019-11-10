@@ -1,17 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-remote',
   templateUrl: './remote.component.html',
   styleUrls: ['./remote.component.scss']
 })
-export class RemoteComponent implements OnInit {
-
-  @Input()
-  public isVisible: boolean;
+export class RemoteComponent {
 
   @Output()
-  public isVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public exit: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
   public left: EventEmitter<void> = new EventEmitter<void>();
@@ -38,7 +35,7 @@ export class RemoteComponent implements OnInit {
   public zoomOut: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
-  public reset: EventEmitter<void> = new EventEmitter<void>();
+  public clear: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
   public valid: EventEmitter<void> = new EventEmitter<void>();
@@ -46,12 +43,6 @@ export class RemoteComponent implements OnInit {
   private touchActionInterval: number = 60;
 
   private interval: any;
-
-  public constructor() { }
-
-  public ngOnInit(): void {
-
-  }
 
   public onStop(): void {
     clearInterval(this.interval);
@@ -99,8 +90,7 @@ export class RemoteComponent implements OnInit {
     return emitter.observers.length > 0;
   }
 
-  public close() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
+  public onClose() {
+    this.exit.emit();
   }
 }

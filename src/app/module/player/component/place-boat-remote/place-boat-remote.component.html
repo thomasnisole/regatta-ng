@@ -1,0 +1,12 @@
+<ng-container *ngIf="game$|async as game">
+  <app-remote *ngIf="player$|async as player"
+              (left)="onMoveLeft()"
+              (right)="onMoveRight()"
+              (top)="onMoveTop()"
+              (bottom)="onMoveBottom()"
+              (rotateLeft)="onRotateLeft()"
+              (rotateRight)="onRotateRight()"
+              (valid)="onValidPosition(player, game)"
+              (exit)="onClose()">
+  </app-remote>
+</ng-container>

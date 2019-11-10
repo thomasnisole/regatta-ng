@@ -1,0 +1,57 @@
+<ng-container *ngIf="game$|async as game">
+    <div class="podium">
+      <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/hugo-boss.svg" style="height: 40px" class="mb-4"/>
+        </div>
+        <div class="base-step base-step-two">
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/helly-hansen.svg" />
+        </div>
+        <div class="base-step base-step-one">
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="pub-step">
+          <img src="assets/images/volvo.svg" />
+        </div>
+        <div class="base-step base-step-three">
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-6 offset-3">
+        <h1 class="h3">Classement</h1>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nom</th>
+              <th>Numéro de voile</th>
+              <th>Nombre de carte jouée</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+</ng-container>
+
+
+
+<ng-template #podiumPlayer let-player>
+    <div class="head-step" *ngIf="player" >
+      <img src="{{ player.photoUrl }}" />
+      <p>{{ player?.name }}</p>
+    </div>
+</ng-template>

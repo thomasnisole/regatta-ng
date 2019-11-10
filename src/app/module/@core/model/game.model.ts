@@ -1,6 +1,7 @@
 import {JsonProperty, DateConverter} from 'ts-serializer-core';
 import {GameStatus} from './game-status.enum';
 import {Board} from './board.model';
+import {Player} from './player.model';
 
 export class Game {
 
@@ -25,7 +26,10 @@ export class Game {
   @JsonProperty('userUids')
   public userUids: string[] = [];
 
-  @JsonProperty('board')
+  @JsonProperty('currentPlayer')
+  public currentPlayer: string;
+
+  @JsonProperty({name: 'board', type: Board})
   public board: Board;
 
   public constructor() {
@@ -46,5 +50,13 @@ export class Game {
 
   public isFinished(): boolean {
     return this.isStatus(GameStatus.FINISHED);
+  }
+
+  public isCurrentPlayer(player: Player): boolean {
+    if (!this.currentPlayer) {
+      return false;
+    }
+
+    return this.currentPlayer === player.id;
   }
 }

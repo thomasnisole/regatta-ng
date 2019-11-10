@@ -1,8 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Observable} from 'rxjs';
 import {User} from '../../../@core/model/user.model';
-import {CurrentUserState} from '../../state/current-user/current-user.state';
-import {Select} from '@ngxs/store';
+import {UserService} from '../../../@core/service/user.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -11,11 +10,15 @@ import {Select} from '@ngxs/store';
 })
 export class SidenavComponent {
 
-  @Select(CurrentUserState)
   public user$: Observable<User>;
 
   @Input()
   public direction: string = 'left';
 
   public sideBarOpened: boolean = false;
+
+  public constructor(userService: UserService) {
+    this.user$ = userService.findUserAccount();
+  }
+
 }

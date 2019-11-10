@@ -9,8 +9,8 @@ export class Obstacle extends Rectangle {
   @JsonProperty('src')
   public src: string;
 
-  @JsonProperty('heightCoefficient')
-  public heightCoefficient: number;
+  @JsonProperty('coefHeight')
+  public coefHeight: number;
 
   public gameId: string;
 }

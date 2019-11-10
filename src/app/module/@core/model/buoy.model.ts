@@ -1,8 +1,9 @@
 import {JsonProperty} from 'ts-serializer-core';
 import {Point} from './point';
 import {CheckLine} from './check-line.model';
+import {Rectangle} from './rectangle';
 
-export class Buoy extends Point {
+export class Buoy extends Rectangle {
 
   @JsonProperty({name: 'id', excludeToJson: true})
   public id: string;
@@ -17,4 +18,8 @@ export class Buoy extends Point {
   public checkLines: CheckLine[];
 
   public gameId: string;
+
+  public readonly width: number = 1;
+
+  public readonly height: number = 1;
 }

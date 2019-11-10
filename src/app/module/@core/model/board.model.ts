@@ -12,7 +12,13 @@ export class Board extends Rectangle {
   @JsonProperty('boatOrientation')
   public boatOrientation: number;
 
-  @JsonProperty('departureArea')
+  @JsonProperty('boatWidth')
+  public boatWidth: number;
+
+  @JsonProperty('boatLength')
+  public boatLength: number;
+
+  @JsonProperty({name: 'departureArea', type: Rectangle})
   public departureArea: Rectangle;
 
   public constructor(values?: Partial<Board>) {

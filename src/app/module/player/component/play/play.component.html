@@ -20,21 +20,12 @@
 
     <app-card-preview [cards]="[]" (clickOnParameters)="sideNav.sideBarOpened = true"></app-card-preview>
 
-    <swiper class="flex-grow-2">
-      <div class="swiper-wrapper">
-        <!--app-card-to-play class="swiper-slide" *ngFor="let card of player.cards" [isInTrashMode]="actionNavBar.mode === 'trash'"
-                          [card]="card" [canDisplayPossibilities]="canDisplayPossibilities(card, actionNavBar.mode)"
-                          [isInTrapMode]="actionNavBar.mode === 'trap'" [game]="game"
-                          (clickOnPossibility)="previewCard($event)"></app-card-to-play-->
-      </div>
-    </swiper>
+    <app-cards class="flex-grow-2" [disabled]="moveRemoteIsVisible ||placeBoatRemoteIsVisible"></app-cards>
 
-    <app-action-nav-bar  #actionNavBar
-                         [flagIsVisible]="player.isWaitingToStart() && game.isStarted()"
-                         (moveMap)="moveRemoteIsVisible.isVisible = true;"></app-action-nav-bar>
+    <app-action-nav-bar (moveMap)="onMoveMap(true)" (launch)="onStart(true)"></app-action-nav-bar>
 
-    <app-move-map-remote #moveRemoteIsVisible [game]="game"></app-move-map-remote>
-    <!--app-place-boat-remote #placeRemoteIsVisible [game]="game" [player]="player"></app-place-boat-remote-->
+    <app-move-map-remote *ngIf="moveRemoteIsVisible" (exit)="onMoveMap(false)"></app-move-map-remote>
+    <app-place-boat-remote *ngIf="placeBoatRemoteIsVisible" (exit)="onStart(false)"></app-place-boat-remote>
   </div>
 </ng-container>
 

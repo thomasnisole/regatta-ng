@@ -1,4 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Select, Store} from '@ngxs/store';
+import {Observable} from 'rxjs';
+import {Game} from '../../../@core/model/game.model';
+import {Player} from '../../../@core/model/player.model';
+import {ModeState} from '../../state/mode/mode.state';
+import {ChangeModeAction} from '../../state/mode/change-mode.action';
+import {GameService} from '../../../@core/service/game.service';
+import {PlayerService} from '../../../@core/service/player.service';
+import {UserService} from '../../../@core/service/user.service';
 
 @Component({
   selector: 'app-action-nav-bar',
@@ -7,10 +16,12 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class ActionNavBarComponent implements OnInit {
 
-  public mode: string;
+  @Select(ModeState)
+  public mode$: Observable<'perform'|'trap'|'trash'>;
 
-  @Input()
-  public flagIsVisible: boolean;
+  public player$: Observable<Player>;
+
+  public game$: Observable<Game>;
 
   @Input()
   public clearIsVisible: boolean;
@@ -31,7 +42,7 @@ export class ActionNavBarComponent implements OnInit {
   public terminateIsVisible: boolean;
 
   @Output()
-  public start: EventEmitter<void> = new EventEmitter<void>();
+  public launch: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
   public moveMap: EventEmitter<void> = new EventEmitter<void>();
@@ -46,7 +57,7 @@ export class ActionNavBarComponent implements OnInit {
   public trash: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
-  public play: EventEmitter<void> = new EventEmitter<void>();
+  public perform: EventEmitter<void> = new EventEmitter<void>();
 
   @Output()
   public trap: EventEmitter<void> = new EventEmitter<void>();
@@ -54,34 +65,42 @@ export class ActionNavBarComponent implements OnInit {
   @Output()
   public clearPreview: EventEmitter<void> = new EventEmitter<void>();
 
-  @Output()
-  public modeChange: EventEmitter<string> = new EventEmitter<string>();
-
   public currentAction: EventEmitter<void>;
 
-  public constructor() { }
+  public constructor(private store: Store,
+                     gameService: GameService,
+                     userService: UserService,
+                     playerService: PlayerService) {
+    this.game$ = gameService.findCurrentGame();
+
+    this.player$ = playerService.findCurrentPayer();
+  }
 
   public ngOnInit(): void {
-    this.currentAction = this.play;
-    this.mode = 'play';
-    this.modeChange.emit(this.mode);
+    this.currentAction = this.perform;
+    this.store.dispatch(new ChangeModeAction('play'));
   }
 
   public changeToPlayMode(): void {
-    this.mode = 'play';
-    this.currentAction = this.play;
-    this.modeChange.emit(this.mode);
+    this.currentAction = this.perform;
+    this.store.dispatch(new ChangeModeAction('play'));
   }
 
   public changeToTrashMode(): void {
-    this.mode = 'trash';
     this.currentAction = this.trash;
-    this.modeChange.emit(this.mode);
+    this.store.dispatch(new ChangeModeAction('trash'));
   }
 
   public changeToTrapMode(): void {
-    this.mode = 'trap';
     this.currentAction = this.trap;
-    this.modeChange.emit(this.mode);
+    this.store.dispatch(new ChangeModeAction('trap'));
+  }
+
+  public onClear(): void {
+    this.clearPreview.emit();
+  }
+
+  public onTerminate(): void {
+    this.currentAction.emit();
   }
 }

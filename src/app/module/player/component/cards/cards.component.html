@@ -1,0 +1,3 @@
+<swiper [disabled]="disabled" [index]="0">
+  <app-card *ngFor="let card of cards$|async" [card]="card"></app-card>
+</swiper>

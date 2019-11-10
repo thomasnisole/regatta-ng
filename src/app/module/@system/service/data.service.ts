@@ -6,8 +6,8 @@ import {
   DocumentReference,
   DocumentSnapshot, QueryDocumentSnapshot, QueryFn, QuerySnapshot
 } from '@angular/fire/firestore';
-import {from, iif, Observable, of, throwError} from 'rxjs';
-import {first, map, mergeMap, toArray} from 'rxjs/operators';
+import {forkJoin, from, iif, Observable, of, throwError} from 'rxjs';
+import {first, map, switchMap, tap, toArray} from 'rxjs/operators';
 import WhereFilterOp = firebase.firestore.WhereFilterOp;
 
 interface Query {
@@ -15,6 +15,7 @@ interface Query {
   operator: WhereFilterOp;
   value: string;
 }
+
 
 @Injectable()
 export class DataService {
@@ -34,9 +35,9 @@ export class DataService {
       return q;
     };
 
-    return this.db.collection(path, queryFn).snapshotChanges().pipe(
-      mergeMap((dcas: DocumentChangeAction<any>[]) => from(dcas).pipe(
-        map((dca: DocumentChangeAction<any>) => ({id: dca.payload.doc.id, ...dca.payload.doc.data()})),
+    return this.db.collection(path, queryFn).valueChanges({idField: 'id'}).pipe(
+      switchMap((dcas: {id: string}[]) => from(dcas).pipe(
+        map((dca: {id: string}) => ({id: dca.id, ...dca})),
         toArray()
       ))
     );
@@ -44,7 +45,7 @@ export class DataService {
 
   public findOne(path: string): Observable<{id: string}> {
     return this.db.doc(path).snapshotChanges().pipe(
-      mergeMap((action: Action<DocumentSnapshot<any>>) => iif(
+      switchMap((action: Action<DocumentSnapshot<any>>) => iif(
         () => action.payload.exists,
         of(action.payload),
         throwError(`Item at ${path}  not found`)
@@ -54,24 +55,24 @@ export class DataService {
   }
 
   public moveAll(originalPath: string, destinationPath: string, queries: Query[] = [], limit: number = null): Observable<void> {
-    const queryFn: QueryFn = (ref: CollectionReference) => {
-      let q: firebase.firestore.Query = ref;
-
-      if (limit) {
-        q = q.limit(limit);
-      }
-
-      queries.forEach((query: Query) => q = q.where(query.field, query.operator, query.value));
-
-      return q;
-    };
-
-    return from(this.db.collection(originalPath, queryFn).get()).pipe(
-      mergeMap((query: QuerySnapshot<any>) => query.docs),
-      mergeMap((queryDoc: QueryDocumentSnapshot<any>) => from(queryDoc.ref.delete()).pipe(
-        map(() => queryDoc.data())
+    return from(this.db.collection(originalPath, this.makeQueryFn(queries, limit)).get()).pipe(
+      switchMap((query: QuerySnapshot<any>) => query.docs),
+      map((queryDoc: QueryDocumentSnapshot<any>) => from(queryDoc.ref.delete()).pipe(
+        map(() => queryDoc.data()),
+        switchMap((data: any) => from(this.add(destinationPath, data)))
       )),
-      mergeMap((data: any) => from(this.add(destinationPath, data))),
+      toArray(),
+      switchMap((obs$: Observable<string>[]) => forkJoin(obs$)),
+      map(() => void 0),
+      first()
+    );
+  }
+
+  public duplicate(originalPath: string, destinationPath: string, queries: Query[] = [], limit: number = null): Observable<void> {
+    return from(this.db.collection(originalPath, this.makeQueryFn(queries, limit)).get()).pipe(
+      switchMap((query: QuerySnapshot<any>) => query.docs),
+      map((queryDoc: QueryDocumentSnapshot<any>) => queryDoc.data()),
+      switchMap((data: any) => from(this.add(destinationPath, data))),
       toArray(),
       map(() => void 0),
       first()
@@ -103,5 +104,19 @@ export class DataService {
       first(),
       map(() => void 0)
     );
+  }
+
+  private makeQueryFn(queries: Query[], limit: number): QueryFn {
+    return (ref: CollectionReference) => {
+      let q: firebase.firestore.Query = ref;
+
+      if (limit) {
+        q = q.limit(limit);
+      }
+
+      queries.forEach((query: Query) => q = q.where(query.field, query.operator, query.value));
+
+      return q;
+    };
   }
 }

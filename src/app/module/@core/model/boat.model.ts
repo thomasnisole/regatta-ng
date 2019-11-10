@@ -1,6 +1,8 @@
 import {JsonProperty} from 'ts-serializer-core';
 import {Rectangle} from './rectangle';
 import {Orientation} from './orientation.enum';
+import {Point} from './point';
+import {Line} from './line.model';
 
 export class Boat extends Rectangle {
 
@@ -40,8 +42,8 @@ export class Boat extends Rectangle {
     return this.isInLeftOrientation() || this.isInRightOrientation();
   }
 
-  public getCongestion(): Rectangle {
-    const rect = new Rectangle();
+  public getRectangle(): Rectangle {
+    const rect: Rectangle = new Rectangle();
 
     switch (this.orientation) {
       case Orientation.LEFT:

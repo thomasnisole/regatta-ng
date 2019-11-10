@@ -1,16 +1,20 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {CheckLine} from '../model/check-line.model';
-import {NgxTsSerializerService} from 'ngx-ts-serializer';
-import {DataService} from '../../@system/service/data.service';
+import {Player} from '../model/player.model';
+import {Game} from '../model/game.model';
+import {CheckLineRepository} from '../repository/check-line.repository';
 
 @Injectable()
 export class CheckLineService {
 
-  public constructor(private dataService: DataService,
-                     private serializer: NgxTsSerializerService) {}
+  public constructor(private checkLineRepository: CheckLineRepository) {}
 
-  public create(checkLine: CheckLine): Observable<string> {
-    return this.dataService.add(`/games/${checkLine.gameId}/check-lines`, this.serializer.serialize(checkLine));
+  public findByPlayer(player: Player): Observable<CheckLine[]> {
+    return this.checkLineRepository.findByPlayer(player);
+  }
+
+  public findByGame(game: Game): Observable<CheckLine[]> {
+    return this.checkLineRepository.findByGame(game);
   }
 }

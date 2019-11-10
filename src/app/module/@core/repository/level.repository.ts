@@ -6,7 +6,7 @@ import {Level} from '../model/level.model';
 import {DataService} from '../../@system/service/data.service';
 
 @Injectable()
-export class LevelService {
+export class LevelRepository {
 
   public constructor(private dataService: DataService,
                      private deserializer: NgxTsDeserializerService) {}

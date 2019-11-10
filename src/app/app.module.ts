@@ -9,6 +9,8 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {NgxTsSerializerModule} from 'ngx-ts-serializer';
+import {FilterPipeModule} from 'ngx-filter-pipe';
+import {OrderModule} from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {NgxTsSerializerModule} from 'ngx-ts-serializer';
     AppRoutingModule,
     BrowserModule,
     CoreModule,
+    FilterPipeModule,
     NgxTsSerializerModule,
+    OrderModule,
     SystemModule,
   ],
   providers: [],

@@ -1,82 +1,55 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
 import {Player} from '../../../@core/model/player.model';
-import {CurrentPlayerState} from '../../state/current-player/current-player.state';
-import {Select, Store} from '@ngxs/store';
-import {forkJoin, Observable, Subscription} from 'rxjs';
+import {from, Observable} from 'rxjs';
 import {Game} from '../../../@core/model/game.model';
-import {CurrentGameState} from '../../state/current-game/current-game.state';
 import {PlayerService} from '../../../@core/service/player.service';
-import {filter, first, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import {hotShareReplay} from '../../../@system/rx-operator/hot-share-replay.operator';
-import {SetCurrentGameAction} from '../../state/current-game/set-current-game.action';
-import {SetCurrentPlayerAction} from '../../state/current-player/set-current-player.action';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {GameService} from '../../../@core/service/game.service';
-import {CurrentUserState} from '../../state/current-user/current-user.state';
-import {User} from '../../../@core/model/user.model';
-import {environment} from '../../../../../environments/environment';
+import {CardService} from '../../../@core/service/card.service';
 
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.scss']
 })
-export class PlayComponent implements OnDestroy {
+export class PlayComponent {
 
-  private setCurrentGameSubscription: Subscription;
+  public moveRemoteIsVisible: boolean = false;
 
-  private setCurrentPlayerSubscription: Subscription;
+  public placeBoatRemoteIsVisible: boolean = false;
 
-  @Select(CurrentPlayerState)
   public player$: Observable<Player>;
 
-  @Select(CurrentGameState)
   public game$: Observable<Game>;
-
-  @Select(CurrentUserState)
-  public user$: Observable<User>;
 
   public players$: Observable<Player[]>;
 
   public constructor(private modalService: NgbModal,
                      private gameService: GameService,
                      private playerService: PlayerService,
-                     private router: Router,
-                     private store: Store,
-                     route: ActivatedRoute) {
-    this.setCurrentGameSubscription = route.params.pipe(
-      map((params: Params) => params[`gameId`]),
-      switchMap((gameId: string) => this.gameService.findById(gameId)),
-      switchMap((game: Game) => this.store.dispatch(new SetCurrentGameAction(game)))
-    ).subscribe(
-      () => void 0,
-      () => this.router.navigate(['/', 'player'])
+                     private cardService: CardService,
+                     private router: Router) {
+    this.game$ = this.gameService.findCurrentGame().pipe(
+      catchError(() => from(this.router.navigate(['/', 'player'])).pipe(
+        map(() => void 0)
+      ))
     );
 
-    this.setCurrentPlayerSubscription = this.game$.pipe(
-      filter((game: Game) => !!game),
-      switchMap((game: Game) => this.user$.pipe(
-        switchMap((user: User) => this.playerService.findByGameIdAndUserUid(game.id, user.uid))
-      )),
-      switchMap((player: Player) => this.store.dispatch(new SetCurrentPlayerAction(player)))
-    ).subscribe();
+    this.player$ = this.playerService.findCurrentPayer().pipe(
+      catchError(() => from(this.router.navigate(['/', 'player'])).pipe(
+        map(() => void 0)
+      ))
+    );
+
 
     this.players$ = this.game$.pipe(
-      mergeMap((game: Game) => this.playerService.findByGameId(game.id)),
+      switchMap((game: Game) => this.playerService.findByGameId(game.id)),
       hotShareReplay(1)
     );
-  }
-
-  public ngOnDestroy(): void {
-    this.setCurrentGameSubscription.unsubscribe();
-    this.setCurrentPlayerSubscription.unsubscribe();
-
-    forkJoin(
-      this.store.dispatch(new SetCurrentGameAction(null)).pipe(first()),
-      this.store.dispatch(new SetCurrentPlayerAction(null)).pipe(first())
-    ).subscribe();
   }
 
   public canStartGame(game: Game, player: Player, playersLength: number): boolean {
@@ -93,7 +66,7 @@ export class PlayComponent implements OnDestroy {
   public startGame(game: Game): void {
     const modal: NgbModalRef = this.openModal('Démarrer la partie', 'Êtes-vous sûr de vouloir démarrer la partie ?');
     modal.result.then(() => {
-      this.store.dispatch(new SetCurrentGameAction(game)).subscribe();
+      this.gameService.start(game).subscribe();
     });
   }
 
@@ -128,8 +101,16 @@ export class PlayComponent implements OnDestroy {
   public deletePlayer(player: Player): void {
     const modal: NgbModalRef = this.openModal('Supprimer un joueur', 'Êtes-vous sûr de vouloir supprimer ce joueur ?');
     modal.result.then(() => {
-      this.playerService.deletePlayerFromGame(player);
+      this.playerService.deletePlayerFromGame(player).subscribe();
     });
+  }
+
+  public onMoveMap(isVisible: boolean): void {
+    this.moveRemoteIsVisible = isVisible;
+  }
+
+  public onStart(isVisible: boolean): void {
+    this.placeBoatRemoteIsVisible = isVisible;
   }
 
   private openModal(title: string, message: string): NgbModalRef {

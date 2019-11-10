@@ -1,29 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Game} from '../../../@core/model/game.model';
 import {GameService} from '../../../@core/service/game.service';
 import {hotShareReplay} from '../../../@system/rx-operator/hot-share-replay.operator';
-import {CurrentUserState} from '../../state/current-user/current-user.state';
 import {User} from '../../../@core/model/user.model';
-import {Select} from '@ngxs/store';
-import {mergeMap} from 'rxjs/operators';
+import {switchMap} from 'rxjs/operators';
+import {UserService} from '../../../@core/service/user.service';
 
 @Component({
   selector: 'app-join',
   templateUrl: './join.component.html'
 })
-export class JoinComponent implements OnInit {
-
-  @Select(CurrentUserState)
-  public user$: Observable<User>;
+export class JoinComponent {
 
   public games$: Observable<Game[]>;
 
-  public constructor(private gameService: GameService) { }
-
-  public ngOnInit(): void {
-    this.games$ = this.user$.pipe(
-      mergeMap((user: User) => this.gameService.findAllWaiting(user)),
+  public constructor(userService: UserService, gameService: GameService) {
+    this.games$ = userService.findUserAccount().pipe(
+      switchMap((user: User) => gameService.findAllWaiting(user)),
       hotShareReplay(1)
     );
   }
