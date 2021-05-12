@@ -33,7 +33,7 @@
     "ng2-toastr": "^4.1.2",
     "ngx-order-pipe": "^1.0.2",
     "rxjs": "^5.4.1",
-    "swiper": "^3.4.2",
+    "swiper": "^6.5.1",
     "underscore": "^1.8.3",
     "zone.js": "^0.8.14"
   },
